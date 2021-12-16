@@ -9,13 +9,13 @@ Node.js version 17.2.0
 
 1. node.js をインストール（Latest版：17.2.0で動作確認済み）して、パスを通す
 
-2. このリポジトリをダウンロード（gitがない場合は右上の「code」>> 「download Zip」）
+2. このリポジトリをクローン（gitがない場合は右上の「code」>> 「download Zip」で直接ダウンロード）
 
-3. people-flow-simulationのディレクトリをterminalで開く
+3. people-flow-simulationのディレクトリをterminal(なんでもいい)で開く
 
-4. ``npm i`` と入力し、必要モジュールをダウンロード
+4. ``npm i`` を実行し、必要モジュールをダウンロード
 
-5. ``npm start`` と入力し、実行 (あるいは ``node ./src/index.js`` と入力して実行)
+5. ``npm start`` を実行 (あるいは ``node ./src/index.js`` と入力して実行)
 
 ## 設定項目について
 
