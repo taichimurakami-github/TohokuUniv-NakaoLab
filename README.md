@@ -50,7 +50,7 @@ timeLength = 1000
 RAMはmaxで2.5GBほど消費するようです。  
 
 (検証環境)  
-システムの種類	Windows 10 Home
-CPU:	Intel Core i7-9700
-GPU:  NVIDIA GTX 1650
-RAM	  16.0 GB
+システムの種類	Windows 10 Home  
+CPU:	Intel Core i7-9700  
+GPU:  NVIDIA GTX 1650  
+RAM	  16.0 GB  
