@@ -12,4 +12,23 @@ const getNumArrayAverage = (target, parseMode = "default") => {
   }
 }
 
-module.exports = { getRandomFloat, getNumArrayAmount, getNumArrayAverage };
+
+const getIntArrayAmount = (arr) => {
+  let sum = 0;
+  for (const val of arr) sum += val;
+  return sum;
+}
+
+const getMaxAndMinFromIntArray = (arr) => {
+  let max = 0;
+  let min = arr[0];
+  for (const val of arr) {
+    if (val > max) max = val;
+    if (val < min) min = val;
+  }
+
+  return { min: min, max: max };
+}
+
+
+module.exports = { getRandomFloat, getNumArrayAmount, getNumArrayAverage, getIntArrayAmount, getMaxAndMinFromIntArray };

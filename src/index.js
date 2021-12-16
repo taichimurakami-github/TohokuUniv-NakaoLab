@@ -1,10 +1,12 @@
-const { getRandomFloat, getNumArrayAmount, getNumArrayAverage } = require("./calc/lib");
+const { getRandomFloat, getIntArrayAmount, getMaxAndMinFromIntArray } = require("./calc/lib");
 const { generateCoeffMatrix } = require("./calc/coeff");
 const { generateNewPeopleDist } = require("./calc/main");
 const path = require("path");
-const { readFile, writeFile } = require("./io/io");
+const { readFile, writeFile, showProgressOnConsole } = require("./io/io");
+
 
 (async () => {
+
 
   /**
    * 実行用関数
@@ -19,15 +21,28 @@ const { readFile, writeFile } = require("./io/io");
     for (let t = 1; t < timeLength; t++) {
       const coeffMatrix = generateCoeffMatrix(space, max_coeff_const);
       spaceLog.push(generateNewPeopleDist(spaceLog[t - 1], coeffMatrix));
+      config.io.showProgressBar && showProgressOnConsole(t, timeLength);
     }
 
     return spaceLog;
   }
 
   /**
-   * 設定読み込み
+   * 設定読み込み & 表示
    */
   const config = await readFile(path.resolve(__dirname, "../config.json"));
+  console.log(`
+    read simulation settings is below:
+
+    params settings:
+    ${config.params}
+
+    io mode: 
+      show progress bar : ${config.io.showCalcProgressBar ? "yes" : "no"}
+      write result file : ${config.io.writeResultAsXLSX ? "yes" : "no"}
+    
+  `);
+
 
   /**
    * 計算準備
@@ -41,27 +56,6 @@ const { readFile, writeFile } = require("./io/io");
     space.push(amount);
   }
 
-  const getIntArrayAmount = (arr) => {
-    let sum = 0;
-    for (const val of arr) sum += val;
-    return sum;
-  }
-
-  const getMaxAndMinFromIntArray = (arr) => {
-    let max = 0;
-    for (const val of arr) {
-      if (val > max) max = val;
-    }
-
-    let min = max;
-
-    for (const val of arr) {
-      if (val < min) min = val;
-    }
-
-    return { min: min, max: max };
-  }
-
 
   /**
    * 実行
@@ -70,37 +64,39 @@ const { readFile, writeFile } = require("./io/io");
 
 
   /**
-   * 結果の確認
+   * 結果の確認 (整形してconsole出力)
    */
   const beforeMinMax = getMaxAndMinFromIntArray(calcResult[0]);
   const afterMinMax = getMaxAndMinFromIntArray(calcResult[calcResult.length - 1]);
 
-  console.log("------------------before calculation------------------");
-  console.log(`total population: ${getIntArrayAmount(calcResult[0])}`);
-  console.log(`(min, max) = (${beforeMinMax.min}, ${beforeMinMax.max})`);
+  console.log(`
+    -------------------------RESULT-------------------------
+
+    ~~~~~~ before calculation ~~~~~~
+    total population: ${getIntArrayAmount(calcResult[0])}
+    (min, max) = (${beforeMinMax.min}, ${beforeMinMax.max})
+  `);
   console.log(calcResult[0]);
+  console.log("\n")
 
-  console.log("------------------after  calculation------------------");
-  console.log(`total population : ${getIntArrayAmount(calcResult[calcResult.length - 1])}`);
-  console.log(`(min, max) = (${afterMinMax.min}, ${afterMinMax.max})`);
+  console.log(`
+    ~~~~~~ after  calculation ~~~~~~
+    total population : ${getIntArrayAmount(calcResult[calcResult.length - 1])}
+    (min, max) = (${afterMinMax.min}, ${afterMinMax.max})
+  `)
   console.log(calcResult[calcResult.length - 1]);
+  console.log("\n\ncalculation finished!\n")
 
-  // console.log(calcResult[100]);
 
   /**
    * xlsxファイル出力
    */
-  // const writeFileOptions = {
-  //   dataType: "MATRIX",
-  //   writeFileType: "XLSX",
-  //   writeMode: "async"
-  // };
 
   if (config.io.writeResultAsXLSX) {
-    console.log("writing result as xlsx file...");
+    console.log("\nwriting result as xlsx file...\n");
     const writeResult = await writeFile(calcResult);
 
-    writeResult && console.log("...done!");
+    writeResult && console.log("...done!\n\n\n");
   }
 
 })();

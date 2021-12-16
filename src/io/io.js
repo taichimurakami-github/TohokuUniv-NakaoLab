@@ -1,14 +1,15 @@
 const fs = require('fs').promises;
 const path = require("path");
 const XLSX = require("xlsx");
+const readline = require("readline");
 
 const readFile = async (filePath) => {
-  console.log(`reading files: ${filePath}`);
+  console.log(`\nreading files: ${filePath}`);
   const fileType = filePath.split(".").pop()
 
   switch (fileType) {
     case 'json':
-      console.log("reading json file...")
+      console.log("reading json file...\n")
       return JSON.parse(await fs.readFile(filePath, 'utf-8'));
 
     default:
@@ -16,10 +17,45 @@ const readFile = async (filePath) => {
   }
 }
 
-const showProgressOnConsole = (now, total, barLength) => {
-  const finishedRate = now / total;
+const showProgressOnConsole = (now, total) => {
+  /**
+   * erace cursor
+   */
+  process.stdout.write('\x1B[?25l');
 
-  return
+
+  /**
+   * calc now percentage
+   * (if now === total - 1 then 100%)
+   */
+  const nowPercentage = (now === total - 1) ? 100 : Math.floor((now / total) * 100);
+
+  /**
+   * creating bar
+   */
+  let bar = '';
+  const barDetail = 2;
+  const barMaxLength = 100 / barDetail;
+  const nowBarLength = Math.floor(nowPercentage / barDetail);
+
+  for (let i = 0; i < barMaxLength; i++) {
+    bar += i <= nowBarLength ? "#" : "_";
+  }
+
+  /**
+   * move cursor and rewrite progress
+   */
+  if (now !== 1) readline.moveCursor(process.stdout, 0, -3);
+
+  process.stdout.write(`
+    now calculating ...
+    progress: ${bar} ${nowPercentage}%
+  `);
+
+  /**
+   * show cursor
+   */
+  if (now === total - 1) process.stdout.write('\x1B[?25h');
 }
 
 const writeFile = async (data) => {
@@ -71,4 +107,4 @@ const writeFile = async (data) => {
   }
 }
 
-module.exports = { readFile, writeFile }
+module.exports = { readFile, writeFile, showProgressOnConsole }

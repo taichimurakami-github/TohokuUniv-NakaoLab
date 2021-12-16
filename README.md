@@ -1,4 +1,4 @@
-# 人流拡散の簡易シミュレーションプログラム
+# 人流の簡易シミュレーションプログラム
 ## version: 2021.12.16_002
 ## author: Taichi Murakami
 
@@ -14,3 +14,23 @@ Node.js version 17.2.0
 3. people-flow-simulationのディレクトリをterminalで開く
 
 4. "npm start" と入力し、実行 (あるいは "node ./src/index.js" と入力して実行)
+
+## 設定項目について
+
+/config.json 内の項目をいじることで、プログラムの挙動や結果の出力などを管理できます。
+
+### params
+
+設定できる値はすべて整数値です
+
++ spaceLength ... シミュレートする空間の数
++ timeLength ... 空間同士の人口移動の回数
++ peopleConst ... １空間の人口の数（目安、この値に 0.001 ～ 1.0 の間からランダムに選ばれた値を乗じたものがその空間の人口になります）
+
+
+### io
+
+設定できる値はすべて真偽値（``true`` or ``false``）です
+
++ writeResultAsXLSX ... ``true``にすると、``config.json``のディレクトリ内に``result``ディレクトリを生成し、計算結果を``.xlsx``形式にて書き出します。
++ showCalcProgressBar ... ``true``にすると、terminal(console)に計算の進捗を書き出します。計算量があまりに長いと退屈なので作ってみました。
