@@ -1,0 +1,15 @@
+{
+  "name": "people-flow-simulation",
+  "version": "1.0.0",
+  "description": "中尾研卒論研究のモデル作成に関する実験",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js"
+  },
+  "author": "Taichi Murakami",
+  "license": "ISC",
+  "dependencies": {
+    "xlsx": "^0.17.4"
+  }
+}
