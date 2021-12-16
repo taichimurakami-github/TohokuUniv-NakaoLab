@@ -36,7 +36,7 @@ windows 10 64-bit (Macでも可)
 設定できる値はすべて真偽値（``true`` or ``false``）です
 
 + writeResultAsXLSX ... ``true``にすると、``config.json``のディレクトリ内に``result``ディレクトリを生成し、計算結果を``.xlsx``形式にて書き出します。
-+ showCalcProgressBar ... ``true``にすると、terminal(console)に計算の進捗を書き出します。計算時間があまりに長いと退屈なので、残り時間の目安把握のため作成。
++ showProgressBar ... ``true``にすると、terminal(console)に計算の進捗を書き出します。計算時間があまりに長いと退屈なので、残り時間の目安把握のため作成。
 
 
 ## 計算量について
