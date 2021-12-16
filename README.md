@@ -13,7 +13,7 @@ Node.js version 17.2.0
 
 3. people-flow-simulationのディレクトリをterminalで開く
 
-4. "npm start" と入力し、実行 (あるいは "node ./src/index.js" と入力して実行)
+4. ``npm start`` と入力し、実行 (あるいは ``node ./src/index.js`` と入力して実行)
 
 ## 設定項目について
 
