@@ -1,7 +1,7 @@
 {
   "params": {
-    "spaceLength": 10000,
-    "timeLength": 1000,
+    "spaceLength": 1000,
+    "timeLength": 100,
     "max_coeff_const": 1,
     "peopleConst": 1000000
   },

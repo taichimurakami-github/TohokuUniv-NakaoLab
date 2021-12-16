@@ -33,4 +33,19 @@ Node.js version 17.2.0
 設定できる値はすべて真偽値（``true`` or ``false``）です
 
 + writeResultAsXLSX ... ``true``にすると、``config.json``のディレクトリ内に``result``ディレクトリを生成し、計算結果を``.xlsx``形式にて書き出します。
-+ showCalcProgressBar ... ``true``にすると、terminal(console)に計算の進捗を書き出します。計算量があまりに長いと退屈なので作ってみました。
++ showCalcProgressBar ... ``true``にすると、terminal(console)に計算の進捗を書き出します。計算時間があまりに長いと退屈なので、残り時間の目安把握のため作成。
+
+
+## 計算量について
+``config.json``にある、timeLengthとspaceLengthを調節すると、計算量を変更できます。  
+試しに  
+
+spaceLength = 10000  
+timeLength = 1000 
+
+で実行してみましたが、この場合計算完了までに1時間ほどかかりました。 
+
+(検証環境)
+windows 10 64bit 
+core i7-9700 
+gtx 1650 
