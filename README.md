@@ -7,13 +7,15 @@ Node.js version 17.2.0
 
 ## 実行方法
 
-1. node.js をインストール（Latest版で動作確認済み）
+1. node.js をインストール（Latest版：17.2.0で動作確認済み）して、パスを通す
 
-2. パスを通す
+2. このリポジトリをダウンロード（gitがない場合は右上の「code」>> 「download Zip」）
 
 3. people-flow-simulationのディレクトリをterminalで開く
 
-4. ``npm start`` と入力し、実行 (あるいは ``node ./src/index.js`` と入力して実行)
+4. ``npm i`` と入力し、必要モジュールをダウンロード
+
+5. ``npm start`` と入力し、実行 (あるいは ``node ./src/index.js`` と入力して実行)
 
 ## 設定項目について
 
