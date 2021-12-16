@@ -1,0 +1,13 @@
+{
+  "params": {
+    "spaceLength": 20,
+    "peopleConst": 1000000,
+    "timeLength": 10,
+    "max_coeff_const": 1
+  },
+
+  "io": {
+    "writeResultAsXLSX": true,
+    "showCalcProgressBar": true
+  }
+}

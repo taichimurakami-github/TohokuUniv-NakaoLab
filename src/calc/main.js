@@ -1,3 +1,4 @@
+
 const generateNewPeopleDist = (space, coeffMatrix) => {
 
   // とりあえず引数の配列をコピー
