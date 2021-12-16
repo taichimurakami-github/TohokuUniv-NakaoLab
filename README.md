@@ -3,7 +3,8 @@
 ## author: Taichi Murakami
 
 ## 実行環境
-Node.js version 17.2.0
+Node.js version 17.2.0  
+windows 10 64-bit (Macでも可)
 
 ## 実行方法
 
@@ -26,8 +27,8 @@ Node.js version 17.2.0
 設定できる値はすべて整数値です
 
 + spaceLength ... シミュレートする空間の数
-+ timeLength ... 空間同士の人口移動の回数
-+ peopleConst ... １空間の人口の数（目安、この値に 0.001 ～ 1.0 の間からランダムに選ばれた値を乗じたものがその空間の人口になります）
++ timeLength ... 空間同士で起こる、人口移動の回数（1増えるごとに）
++ peopleConst ... １空間あたりの人口の数（この値に 0.001 ～ 1.0 の間からランダムに選ばれた値を乗じたものがその空間の人口になります）
 
 
 ### io
@@ -40,14 +41,16 @@ Node.js version 17.2.0
 
 ## 計算量について
 ``config.json``にある、timeLengthとspaceLengthを調節すると、計算量を変更できます。  
-試しに  
+目安：  
 
 spaceLength = 10000  
-timeLength = 1000 
+timeLength = 1000  
 
-で実行してみましたが、この場合計算完了までに1時間ほどかかりました。 
+で実行してみましたが、この場合計算完了までに1時間ほどかかりました。  
+RAMはmaxで2.5GBほど消費するようです。  
 
-(検証環境)
-windows 10 64bit 
-core i7-9700 
-gtx 1650 
+(検証環境)  
+システムの種類	Windows 10 Home
+CPU:	Intel Core i7-9700
+GPU:  NVIDIA GTX 1650
+RAM	  16.0 GB

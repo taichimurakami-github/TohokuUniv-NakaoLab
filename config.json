@@ -3,11 +3,11 @@
     "spaceLength": 1000,
     "timeLength": 100,
     "max_coeff_const": 1,
-    "peopleConst": 1000000
+    "populationConst": 1000000
   },
 
   "io": {
-    "writeResultAsXLSX": false,
-    "showCalcProgressBar": true
+    "writeResultAsXLSX": true,
+    "showProgressBar": true
   }
 }

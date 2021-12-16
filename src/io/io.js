@@ -1,7 +1,11 @@
+//module import
 const fs = require('fs').promises;
 const path = require("path");
 const XLSX = require("xlsx");
 const readline = require("readline");
+
+//lib import
+const { getIntArrayAmount, getMaxAndMinFromIntArray } = require("../calc/lib");
 
 const readFile = async (filePath) => {
   console.log(`\nreading files: ${filePath}`);
@@ -55,7 +59,10 @@ const showProgressOnConsole = (now, total) => {
   /**
    * show cursor
    */
-  if (now === total - 1) process.stdout.write('\x1B[?25h');
+  if (now === total - 1) {
+    process.stdout.write('\x1B[?25h');
+    console.log("\n\n");
+  }
 }
 
 const writeFile = async (data) => {
@@ -107,4 +114,52 @@ const writeFile = async (data) => {
   }
 }
 
-module.exports = { readFile, writeFile, showProgressOnConsole }
+const showConfigOnConsole = (config) => {
+  console.log(`
+    read simulation settings is below:
+
+    - params settings
+      space length      : ${config.params.spaceLength}
+      time length       : ${config.params.timeLength}
+      max_coeff_const   : ${config.params.max_coeff_const}
+      population const  : ${config.params.populationConst}
+
+    - io settings
+      show progress bar : ${config.io.showProgressBar ? "yes" : "no"}
+      write result file : ${config.io.writeResultAsXLSX ? "yes" : "no"}
+    
+  `);
+
+}
+
+const showResultOnConsole = (calcResult) => {
+  const beforeMinMax = getMaxAndMinFromIntArray(calcResult[0]);
+  const afterMinMax = getMaxAndMinFromIntArray(calcResult[calcResult.length - 1]);
+
+  console.log(`
+    -------------------------RESULT-------------------------
+
+
+    ~~~~~~~~~~~~~~~  before calculation  ~~~~~~~~~~~~~~~~~~~
+
+        total population: ${getIntArrayAmount(calcResult[0])}
+        (min, max) = (${beforeMinMax.min}, ${beforeMinMax.max})
+  `);
+  console.log(calcResult[0]);
+
+  console.log(`
+
+
+  
+    ~~~~~~~~~~~~~~~~~  after  calculation  ~~~~~~~~~~~~~~~~~~
+
+        total population : ${getIntArrayAmount(calcResult[calcResult.length - 1])}
+        (min, max) = (${afterMinMax.min}, ${afterMinMax.max})
+  `)
+  console.log(calcResult[calcResult.length - 1]);
+  console.log("\n\ncalculation finished!\n")
+
+
+}
+
+module.exports = { readFile, writeFile, showProgressOnConsole, showResultOnConsole, showConfigOnConsole }
