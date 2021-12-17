@@ -1,10 +1,10 @@
 # 人流の簡易シミュレーションプログラム
-## version: 2021.12.16_002
-## author: Taichi Murakami
+#### version: 2021.12.17_001( 1.1.0 )
+#### author: Taichi Murakami
 
 ## 実行環境
-Node.js version 17.2.0  
-windows 10 64-bit (Macでも可)
++ Node.js ver. 17.2.0  
++ windows 10 64-bit (Macでも可)
 
 ## 実行方法
 

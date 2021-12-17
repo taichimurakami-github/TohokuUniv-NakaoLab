@@ -1,8 +1,8 @@
 
 /**
  * 1フェーズ分の人流を計算し、移動後の新たな人口分布を生成する
- * @param {*} space 
- * @param {*} coeffMatrix 
+ * @param {array} space 
+ * @param {array of array} coeffMatrix 
  * @returns 
  */
 const generateNewPeopleDist = (space, coeffMatrix) => {
