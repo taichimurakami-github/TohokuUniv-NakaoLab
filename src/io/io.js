@@ -7,6 +7,13 @@ const readline = require("readline");
 //lib import
 const { getIntArrayAmount, getMaxAndMinFromIntArray } = require("../calc/lib");
 
+/**
+ * 渡されたファイルパスに該当するファイルを読み込む
+ * とりあえずjsonしか使わない
+ * 
+ * @param {string} filePath 
+ * @returns 
+ */
 const readFile = async (filePath) => {
   console.log(`\nreading files: ${filePath}`);
   const fileType = filePath.split(".").pop()
@@ -21,6 +28,12 @@ const readFile = async (filePath) => {
   }
 }
 
+
+/**
+ * 計算の進捗バーをコンソールに表示する
+ * @param {int} now 
+ * @param {int} total 
+ */
 const showProgressOnConsole = (now, total) => {
   /**
    * erace cursor
@@ -65,6 +78,11 @@ const showProgressOnConsole = (now, total) => {
   }
 }
 
+/**
+ * 計算結果をXLSX形式で書き出し
+ * @param {array of array} data 
+ * @returns 
+ */
 const writeFile = async (data) => {
   //XLSXファイル書き出し設定
   const now = new Date();
@@ -114,6 +132,10 @@ const writeFile = async (data) => {
   }
 }
 
+/**
+ * 計算前に設定をコンソールに出力
+ * @param {object} config 
+ */
 const showConfigOnConsole = (config) => {
   console.log(`
     read simulation settings is below:
@@ -132,6 +154,10 @@ const showConfigOnConsole = (config) => {
 
 }
 
+/**
+ * 計算結果を整形してコンソールに出力
+ * @param {array of array} calcResult 
+ */
 const showResultOnConsole = (calcResult) => {
   const beforeMinMax = getMaxAndMinFromIntArray(calcResult[0]);
   const afterMinMax = getMaxAndMinFromIntArray(calcResult[calcResult.length - 1]);

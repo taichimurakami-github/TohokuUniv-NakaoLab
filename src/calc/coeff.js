@@ -1,5 +1,11 @@
 const { getRandomFloat } = require("./lib");
 
+/**
+ * 人口の流出・流入をつかさどる係数を生成する
+ * @param {[int | float]} space 
+ * @param {float} max_coeff_const 
+ * @returns 
+ */
 const generateCoeffMatrix = (space, max_coeff_const) => {
   const coeffMatrix = [];
 
@@ -9,7 +15,7 @@ const generateCoeffMatrix = (space, max_coeff_const) => {
 
     for (let i_to = 0; i_to < space.length; i_to++) {
       // coeffの範囲を動的に取得（MAX_COEFF * space.length < 1を満たすように取得）
-      // とりあえず 1 / space.length / 10とした
+      // とりあえず max_coeff_const / space.lengthとした
       const COEFF_MAX = (1 / space.length) * max_coeff_const;
       const COEFF_MIN = COEFF_MAX * 0.001;
 

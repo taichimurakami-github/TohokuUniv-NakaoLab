@@ -1,4 +1,10 @@
 
+/**
+ * 1フェーズ分の人流を計算し、移動後の新たな人口分布を生成する
+ * @param {*} space 
+ * @param {*} coeffMatrix 
+ * @returns 
+ */
 const generateNewPeopleDist = (space, coeffMatrix) => {
 
   // とりあえず引数の配列をコピー
@@ -15,16 +21,13 @@ const generateNewPeopleDist = (space, coeffMatrix) => {
     for (let i_to = 0; i_to < space.length; i_to++) {
 
       if (i_from === i_to) continue;
-      else {
-        // (i_from === 0 && i_to === 1) && console.log("test", newSpace[i_from], newSpace[i_to], outflow);
-        const outflow = Math.floor(coeffMatrix[i_from][i_to] * newSpace[i_from]);
-        diff[i_from].minus += outflow;
-        diff[i_to].plus += outflow;
-        // (i_from === 0 && i_to === 1) && console.log("test2", newSpace[i_from], newSpace[i_to], outflow);
-      }
 
+      const outflow = Math.floor(coeffMatrix[i_from][i_to] * newSpace[i_from]);
+      diff[i_from].minus += outflow;
+      diff[i_to].plus += outflow;
     }
   }
+
   return newSpace.map((val, index) => {
     //とりあえずparseする
     const r = Math.round(val + diff[index].plus - diff[index].minus);
