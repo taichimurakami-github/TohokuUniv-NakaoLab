@@ -58,4 +58,5 @@ const getMaxAndMinFromIntArray = (arr) => {
 }
 
 
+
 module.exports = { getRandomFloat, getNumArrayAmount, getNumArrayAverage, getIntArrayAmount, getMaxAndMinFromIntArray };
