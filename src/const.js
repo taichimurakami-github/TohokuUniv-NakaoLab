@@ -1,4 +1,4 @@
-const eqConst = {
+const initialEqConst = {
   /**
    * S >> I_E, I_M
    */
@@ -72,4 +72,4 @@ const eqConst = {
   EPSILON_M: 0,
 }
 
-module.exports = { eqConst }
+module.exports = { initialEqConst }

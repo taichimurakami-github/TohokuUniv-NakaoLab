@@ -4,16 +4,16 @@
 // const path = require("path");
 // const { readFile, writeFile, showProgressOnConsole, showResultOnConsole, showConfigOnConsole } = require("./io/io");
 const { generateNewEquationState } = require("./calc/main");
-const initialEqState = require("./state");
-const initialEqConst = require("./const");
+const { initialEqState } = require("./state");
+const { initialEqConst } = require("./const");
 
 
 
 
 (async () => {
 
-  const state = [{ ...initialEqState.initialEqState }];
-  const eqConst = { ...initialEqConst.eqConst };
+  const state = [{ ...initialEqState }];
+  const eqConst = { ...initialEqConst };
   console.log("calc start");
   console.log(state[0]);
 
