@@ -63,24 +63,41 @@ const generateNewPeopleDist = (space, coeffMatrix) => {
  */
 const simulateInfection = (space, C) => {
   const space_afterInfected = [];
+  const diff_logArray = [];
 
   for (let i = 0; i < space.length; i++) {
     //差分配列を用意
     const diff = { S: 0, I: 0, R: 0 };
     const now = { ...space[i] };
-    const next = {};
 
-    diff.S = (now.R * C.sigma) - (now.S * C.beta);
-    diff.I = (now.S * C.beta) - (now.I * C.gamma);
-    diff.R = (now.I * C.gamma) - (now.R * C.sigma);
+    diff.S = Math.round((now.R * C.sigma) - (C.beta + C.mu_S) * now.S);
+    diff.I = Math.round((now.S * C.beta) - (C.gamma + C.mu_I) * now.I);
+    diff.R = Math.round((now.I * C.gamma) - (C.sigma + C.mu_R) * now.R);
 
-    for (const [key, value] of Object.entries(diff)) {
-      next[key] = Math.round(now[key] + value);
+    // const next = {};
+    // for (const [key, value] of Object.entries(diff)) {
+    //   next[key] = Math.round(now[key] + value);
+    // }
+
+    space_afterInfected[i] = {
+      S: now.S + diff.S,
+      I: now.I + diff.I,
+      R: now.R + diff.R,
+    };
+
+    if (
+      space_afterInfected[i].S < 0 ||
+      space_afterInfected[i].I < 0 ||
+      space_afterInfected[i].R < 0
+    ) {
+      console.log(i);
+      console.log(space_afterInfected[i]);
+      throw new Error("invalid value calculation result.");
     }
 
-    space_afterInfected[i] = { ...next };
+    diff_logArray[i] = { ...diff }
   }
-  return space_afterInfected;
+  return [space_afterInfected, diff_logArray];
 }
 
 

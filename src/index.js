@@ -18,12 +18,13 @@ const { exit } = require("process");
     const spaceLog = [space.map(val => val)];
     const timeLength = config.params.timeLength;
     const max_coeff_const = config.params.max_coeff_const;
+    const diffLogArr = [[{ S: 0, I: 0, R: 0 }]];
 
     // console.log(spaceLog);
     // console.log(spaceLog[0]);
     const initialEqConst = {
-      beta: 0.4,
-      gamma: 0.7,
+      beta: 0.05,
+      gamma: 0.8,
       sigma: 0,
       mu_S: 0,
       mu_I: 0,
@@ -31,15 +32,20 @@ const { exit } = require("process");
     }
 
     for (let t = 1; t < timeLength; t++) {
+
       const coeffMatrix = generateCoeffMatrix(space, max_coeff_const);
       const newPeopleDistSpace = generateNewPeopleDist(spaceLog[t - 1], coeffMatrix);
-      spaceLog.push(simulateInfection(newPeopleDistSpace, initialEqConst));
+      const [infectionSimulatedResult, diffLogArrFromSimulate] = simulateInfection(newPeopleDistSpace, initialEqConst);
+      spaceLog.push(infectionSimulatedResult);
+      diffLogArr.push(diffLogArrFromSimulate);
+
+
 
       config.io.showProgressBar && showProgressOnConsole(t, timeLength);
     }
 
 
-    return spaceLog;
+    return [spaceLog, diffLogArr];
   }
 
   /**
@@ -58,8 +64,8 @@ const { exit } = require("process");
   for (let i = 0; i < spaceLength; i++) {
     const amount = Math.round(populationConst * getRandomFloat(0.001, 1));
     space.push({
-      S: amount,
-      I: 0,
+      S: 0,
+      I: amount,
       R: 0
     });
   }
@@ -67,19 +73,34 @@ const { exit } = require("process");
   /**
    * 実行
    */
-  const calcResult = execute(space);
+  const [calcResult, diffLogArr] = execute(space);
+  console.log(calcResult);
+  console.log(diffLogArr);
 
   /**
    * 結果の確認 (整形してconsole出力)
    */
-  showResultOnConsole(calcResult);
+  // showResultOnConsole(calcResult);
 
   /**
    * xlsxファイル出力
    */
   if (config.io.writeResultAsXLSX) {
     console.log("\nwriting result as xlsx file...\n");
-    const writeResult = await writeFile(calcResult);
+
+    const parsedCalcResult = [["S_0", "I_0", "R_0", "diff_S0", "diff_I0", "diff_R0"]];
+
+    for (let i = 0; i < calcResult.length; i++) {
+      const pushValue = [
+        calcResult[i][0].S, calcResult[i][0].I, calcResult[i][0].R,
+        diffLogArr[i][0].S, diffLogArr[i][0].I, diffLogArr[i][0].R
+      ]
+      i < 10 && console.log(pushValue);
+      parsedCalcResult.push(pushValue);
+    }
+
+
+    const writeResult = await writeFile(parsedCalcResult);
 
     writeResult && console.log("...done!\n\n\n");
   }
