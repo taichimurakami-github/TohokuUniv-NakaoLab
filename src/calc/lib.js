@@ -40,6 +40,15 @@ const getIntArrayAmount = (arr) => {
   return sum;
 }
 
+const getObjectArrayAmount = (objArr) => {
+  let sum = 0;
+  for (const obj of objArr) {
+    for (const prop in obj) sum += obj[prop];
+  }
+
+  return sum;
+}
+
 
 /**
  * float | int 配列内の要素の中から、最大値と最小値を返す
@@ -57,5 +66,33 @@ const getMaxAndMinFromIntArray = (arr) => {
   return { min: min, max: max };
 }
 
+const getMaxAndMinFromObjectArray = (objArr) => {
+  let max = 0;
+  let min = calcObjSum(objArr[0]);
 
-module.exports = { getRandomFloat, getNumArrayAmount, getNumArrayAverage, getIntArrayAmount, getMaxAndMinFromIntArray };
+  for (const obj of objArr) {
+    const sum = calcObjSum(obj);
+    if (sum > max) max = sum;
+    if (sum < min) min = sum;
+  }
+
+  return { min: min, max: max }
+}
+
+const calcObjSum = (obj) => {
+  let result = 0;
+  for (const prop in obj) result += obj[prop];
+
+  return result;
+}
+
+
+module.exports = {
+  getRandomFloat,
+  getNumArrayAmount,
+  getNumArrayAverage,
+  getIntArrayAmount,
+  getObjectArrayAmount,
+  getMaxAndMinFromIntArray,
+  getMaxAndMinFromObjectArray
+};

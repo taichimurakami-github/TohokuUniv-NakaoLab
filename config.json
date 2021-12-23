@@ -7,7 +7,7 @@
   },
 
   "io": {
-    "writeResultAsXLSX": true,
+    "writeResultAsXLSX": false,
     "showProgressBar": true
   }
 }

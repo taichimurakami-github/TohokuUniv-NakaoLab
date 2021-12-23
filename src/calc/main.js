@@ -8,12 +8,12 @@
 const generateNewPeopleDist = (space, coeffMatrix) => {
 
   // とりあえず引数の配列をコピー
-  const newSpace = space.map(val => val);
+  const newSpace = [...space];
 
   //diff arrayを生成 >> 人流移動を考えるとき、すべての空間から同時に流出と流入が起こると仮定するため、ベースの数字を固定する
   const diff = [];
 
-  for (let i = 0; i < space.length; i++) diff.push({ plus: 0, minus: 0 });
+  for (let i = 0; i < space.length; i++) diff.push({ S: 0, I: 0, R: 0 });
 
   for (let i_from = 0; i_from < space.length; i_from++) {
 
@@ -22,22 +22,66 @@ const generateNewPeopleDist = (space, coeffMatrix) => {
 
       if (i_from === i_to) continue;
 
-      const outflow = Math.floor(coeffMatrix[i_from][i_to] * newSpace[i_from]);
-      diff[i_from].minus += outflow;
-      diff[i_to].plus += outflow;
+      const outflow = {};
+      outflow.S = Math.floor(coeffMatrix[i_from][i_to] * newSpace[i_from].S);
+      outflow.I = Math.floor(coeffMatrix[i_from][i_to] * newSpace[i_from].I);
+      outflow.R = Math.floor(coeffMatrix[i_from][i_to] * newSpace[i_from].R);
+
+      diff[i_from].S -= outflow.S;
+      diff[i_from].I -= outflow.I;
+      diff[i_from].R -= outflow.R;
+
+      diff[i_to].S += outflow.S;
+      diff[i_to].I += outflow.I;
+      diff[i_to].R += outflow.R;
     }
   }
 
   return newSpace.map((val, index) => {
     //とりあえずparseする
-    const r = Math.round(val + diff[index].plus - diff[index].minus);
+    const r = {
+      S: Math.round(val.S + diff[index].S),
+      R: Math.round(val.I + diff[index].I),
+      I: Math.round(val.R + diff[index].R),
+    };
 
     //もし負の値になったら計算中止
-    if (r < 0) throw new Error(`計算結果が不正です：${index} 番目の値が ${r} でした`);
+    if (r.S < 0 || r.I < 0 || r.R < 0) {
+      throw new Error(`計算結果が不正です：${index} 番目の値は ${r} でした`);
+    }
 
     return r;
   });
 }
 
+/**
+ * 各空間内それぞれに対して、
+ * 基本的なSIRモデルに基づいた感染シミュレーションを行う
+ * 
+ * @param {array} space 
+ * @param {object} C 
+ */
+const simulateInfection = (space, C) => {
+  const space_afterInfected = [];
 
-module.exports = { generateNewPeopleDist };
+  for (let i = 0; i < space.length; i++) {
+    //差分配列を用意
+    const diff = { S: 0, I: 0, R: 0 };
+    const now = { ...space[i] };
+    const next = {};
+
+    diff.S = (now.R * C.sigma) - (now.S * C.beta);
+    diff.I = (now.S * C.beta) - (now.I * C.gamma);
+    diff.R = (now.I * C.gamma) - (now.R * C.sigma);
+
+    for (const [key, value] of Object.entries(diff)) {
+      next[key] = Math.round(now[key] + value);
+    }
+
+    space_afterInfected[i] = { ...next };
+  }
+  return space_afterInfected;
+}
+
+
+module.exports = { generateNewPeopleDist, simulateInfection };

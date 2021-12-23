@@ -5,7 +5,7 @@ const XLSX = require("xlsx");
 const readline = require("readline");
 
 //lib import
-const { getIntArrayAmount, getMaxAndMinFromIntArray } = require("../calc/lib");
+const { getIntArrayAmount, getObjectArrayAmount, getMaxAndMinFromIntArray, getMaxAndMinFromObjectArray } = require("../calc/lib");
 
 /**
  * 渡されたファイルパスに該当するファイルを読み込む
@@ -159,8 +159,8 @@ const showConfigOnConsole = (config) => {
  * @param {array of array} calcResult 
  */
 const showResultOnConsole = (calcResult) => {
-  const beforeMinMax = getMaxAndMinFromIntArray(calcResult[0]);
-  const afterMinMax = getMaxAndMinFromIntArray(calcResult[calcResult.length - 1]);
+  const beforeMinMax = getMaxAndMinFromObjectArray(calcResult[0]);
+  const afterMinMax = getMaxAndMinFromObjectArray(calcResult[calcResult.length - 1]);
 
   console.log(`
     -------------------------RESULT-------------------------
@@ -168,9 +168,11 @@ const showResultOnConsole = (calcResult) => {
 
     ~~~~~~~~~~~~~~~  before calculation  ~~~~~~~~~~~~~~~~~~~
 
-        total population: ${getIntArrayAmount(calcResult[0])}
+        total population: ${getObjectArrayAmount(calcResult[0])}
         (min, max) = (${beforeMinMax.min}, ${beforeMinMax.max})
+
   `);
+
   console.log(calcResult[0]);
 
   console.log(`
@@ -179,10 +181,13 @@ const showResultOnConsole = (calcResult) => {
   
     ~~~~~~~~~~~~~~~~~  after  calculation  ~~~~~~~~~~~~~~~~~~
 
-        total population : ${getIntArrayAmount(calcResult[calcResult.length - 1])}
+        total population : ${getObjectArrayAmount(calcResult[calcResult.length - 1])}
         (min, max) = (${afterMinMax.min}, ${afterMinMax.max})
+
   `)
+
   console.log(calcResult[calcResult.length - 1]);
+
   console.log("\n\ncalculation finished!\n")
 
 

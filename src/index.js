@@ -1,8 +1,9 @@
 const { getRandomFloat } = require("./calc/lib");
 const { generateCoeffMatrix } = require("./calc/coeff");
-const { generateNewPeopleDist } = require("./calc/main");
+const { generateNewPeopleDist, simulateInfection } = require("./calc/main");
 const path = require("path");
 const { readFile, writeFile, showProgressOnConsole, showResultOnConsole, showConfigOnConsole } = require("./io/io");
+const { exit } = require("process");
 
 
 (async () => {
@@ -18,11 +19,25 @@ const { readFile, writeFile, showProgressOnConsole, showResultOnConsole, showCon
     const timeLength = config.params.timeLength;
     const max_coeff_const = config.params.max_coeff_const;
 
+    // console.log(spaceLog);
+    // console.log(spaceLog[0]);
+    const initialEqConst = {
+      beta: 0.4,
+      gamma: 0.7,
+      sigma: 0,
+      mu_S: 0,
+      mu_I: 0,
+      mu_R: 0,
+    }
+
     for (let t = 1; t < timeLength; t++) {
       const coeffMatrix = generateCoeffMatrix(space, max_coeff_const);
-      spaceLog.push(generateNewPeopleDist(spaceLog[t - 1], coeffMatrix));
+      const newPeopleDistSpace = generateNewPeopleDist(spaceLog[t - 1], coeffMatrix);
+      spaceLog.push(simulateInfection(newPeopleDistSpace, initialEqConst));
+
       config.io.showProgressBar && showProgressOnConsole(t, timeLength);
     }
+
 
     return spaceLog;
   }
@@ -42,9 +57,12 @@ const { readFile, writeFile, showProgressOnConsole, showResultOnConsole, showCon
 
   for (let i = 0; i < spaceLength; i++) {
     const amount = Math.round(populationConst * getRandomFloat(0.001, 1));
-    space.push(amount);
+    space.push({
+      S: amount,
+      I: 0,
+      R: 0
+    });
   }
-
 
   /**
    * 実行
