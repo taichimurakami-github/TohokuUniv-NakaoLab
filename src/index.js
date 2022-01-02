@@ -41,7 +41,7 @@ const { initialEqConst } = require("./const");
       nowState.R_E -= nowState.R_E * eqConst.beta_RE_E;
       eqConst = {
         ...eqConst,
-        // sigma_RE_S: 0.05,
+        sigma_RE_S: 0.05,
       };
     }
 
@@ -52,30 +52,37 @@ const { initialEqConst } = require("./const");
       //equation paramater を調整
       eqConst = {
         ...eqConst,
-        beta_M: 0.85,
+        beta_M: 0.7,
         epsilon_EM: 0.05,
       };
 
       //nowSpaceの値を変更
       nowState.I_M += eqConst.EPSILON_M !== 0 ? eqConst.EPSILON_M : 0;
-      nowState.I_RE_M += nowState.R_M * 0.01;
-      nowState.R_E -= nowState.R_M * 0.01;
+      nowState.I_RE_M += 100;
+      nowState.R_E -= 100;
+      // nowState.I_RE_M += nowState.R_M * 0.1;
+      // nowState.R_E -= nowState.R_M * 0.1;
     }
 
     //ウイルス変異に伴うパラメータの調整（I_REM_M, I_REM_E）
     //R_EM -> R_E, R_Mへの遷移開始
     //変異が起きた次のステップで発生する
-    if (t - 1 === config.params.mutationBeginTime) {
-      // console.log("add new Infection people");
-      nowState.I_RM_E += nowState.R_M * eqConst.beta_RM_E * 0.2;
-      nowState.I_RM_M += nowState.R_M * eqConst.beta_RM_M * 0.2;
-      nowState.R_M -=
-        nowState.R_M * (eqConst.beta_RM_E + eqConst.beta_RM_M) * 0.2;
+    if (t - 5 === config.params.mutationBeginTime) {
+      nowState.I_RM_E += 100;
+      nowState.I_RM_M += 100;
+      nowState.I_REM_E += 100;
+      nowState.I_REM_M += 100;
 
-      nowState.I_REM_E += nowState.R_EM * eqConst.beta_REM_E * 0.1;
-      nowState.I_REM_M += nowState.R_EM * eqConst.beta_REM_M * 0.1;
-      nowState.R_EM -=
-        nowState.R_EM * (eqConst.beta_REM_E + eqConst.beta_REM_M) * 0.1;
+      // console.log("add new Infection people");
+      // nowState.I_RM_E += nowState.R_M * eqConst.beta_RM_E * 0.2;
+      // nowState.I_RM_M += nowState.R_M * eqConst.beta_RM_M * 0.2;
+      // nowState.R_M -=
+      //   nowState.R_M * (eqConst.beta_RM_E + eqConst.beta_RM_M) * 0.2;
+
+      // nowState.I_REM_E += nowState.R_EM * eqConst.beta_REM_E * 0.1;
+      // nowState.I_REM_M += nowState.R_EM * eqConst.beta_REM_M * 0.1;
+      // nowState.R_EM -=
+      //   nowState.R_EM * (eqConst.beta_REM_E + eqConst.beta_REM_M) * 0.1;
       // console.log(
       //   eqConst.beta_RM_E + eqConst.beta_RM_M,
       //   eqConst.beta_REM_E + eqConst.beta_REM_M
@@ -83,11 +90,11 @@ const { initialEqConst } = require("./const");
 
       eqConst = {
         ...eqConst,
-        beta_RE_M: 0.55,
+        beta_RE_M: 0.2,
 
-        // sigma_RM_S: 0.05,
-        // sigma_REM_RE: 0.05,
-        // sigma_REM_RM: 0.05,
+        sigma_RM_S: 0.05,
+        sigma_REM_RE: 0.05,
+        sigma_REM_RM: 0.05,
       };
     }
 

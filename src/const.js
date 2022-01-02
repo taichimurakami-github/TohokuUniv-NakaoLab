@@ -9,7 +9,7 @@ const initialEqConst = {
    * I_E, I_M >> R_E, R_M
    */
   gamma_E: 0.3,
-  gamma_M: 0.3,
+  gamma_M: 0.2,
 
   /**
    * R_E >> I_RE_M
@@ -19,7 +19,7 @@ const initialEqConst = {
    */
   beta_RE_M: 0,
   gamma_RE_M: 0.3,
-  beta_RE_E: 0.4,
+  beta_RE_E: 0.2,
   gamma_RE_E: 0.3,
 
   /**
@@ -28,10 +28,12 @@ const initialEqConst = {
    * &&
    * R_M <=>  I_RM_M
    */
-  beta_RM_E: 0.4,
+  beta_RM_E: 0.2,
   gamma_RM_E: 0.3,
-  beta_RM_M: 0.5,
+  beta_RM_M: 0.2,
   gamma_RM_M: 0.3,
+  // beta_RM_M: 0.4,
+  // gamma_RM_M: 0.3,
 
   /**
    * R_EM <=> I_REM_E, I_REM_M
@@ -69,7 +71,7 @@ const initialEqConst = {
    * mutation coefficient & const
    */
   epsilon_EM: 0,
-  EPSILON_M: 0,
+  EPSILON_M: 100,
 
   /**
    * 免疫による感染力減少

@@ -1,8 +1,7 @@
 {
   "params": {
-    "timeLength": 1000,
+    "timeLength": 500,
     "max_coeff_const": 1,
-    "populationConst": 1000000,
     "mutationBeginTime": 200
   },
 

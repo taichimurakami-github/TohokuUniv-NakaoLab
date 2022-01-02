@@ -1,5 +1,5 @@
 const initialEqState = {
-  S: 100000,
+  S: 1000000,
   I_E: 100,
   I_M: 0,
   R_E: 0,

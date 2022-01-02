@@ -32,7 +32,6 @@ const generateNewEquationState = (nowState, C, sum, options = {}) => {
     (C.mu_E + C.gamma_E + C.epsilon_EM) * now.I_E;
 
   diff.I_M =
-    C.EPSILON_M +
     C.epsilon_EM * now.I_E +
     (C.beta_M * now.S * CALC.SUM_M_infected) / sum -
     (C.gamma_M + C.mu_M) * now.I_M;
@@ -57,13 +56,13 @@ const generateNewEquationState = (nowState, C, sum, options = {}) => {
     (C.beta_RE_E * now.R_E * CALC.SUM_E_infected) / sum -
     (C.gamma_RE_E + C.mu_RE_E) * now.I_RE_E;
 
-  diff.I_RM_M =
-    (C.beta_RM_M * now.R_M * CALC.SUM_M_infected) / sum -
-    (C.gamma_RM_M + C.mu_RM_M) * now.I_RM_M;
-
   diff.I_RE_M =
     (C.beta_RE_M * now.R_E * CALC.SUM_M_infected) / sum -
     (C.gamma_RE_M + C.mu_RE_M) * now.I_RE_M;
+
+  diff.I_RM_M =
+    (C.beta_RM_M * now.R_M * CALC.SUM_M_infected) / sum -
+    (C.gamma_RM_M + C.mu_RM_M) * now.I_RM_M;
 
   diff.I_RM_E =
     (C.beta_RM_E * now.R_M * CALC.SUM_E_infected) / sum -
@@ -107,11 +106,16 @@ const generateNewEquationState = (nowState, C, sum, options = {}) => {
   }
 
   // options.t >= options.mutationBeginTime &&
-  if (nextSum > sum + C.EPSILON_M) {
+  if (nextSum > sum) {
     // console.log("\n\nconst: ");
     // console.log(C);
     console.log("ERROR AT t =", options.t, "\n");
-    console.log(CALC.SUM_M_infected / sum, CALC.SUM_E_infected / sum, "\n");
+    console.log(
+      "(E_SUM, M_SUM) =",
+      CALC.SUM_E_infected / sum,
+      CALC.SUM_M_infected / sum,
+      "\n"
+    );
     console.log(now);
     console.log("nowSum =", sum, "\n\n");
     console.log(diff);
@@ -121,15 +125,15 @@ const generateNewEquationState = (nowState, C, sum, options = {}) => {
     throw new Error("invalid calculation: surpass before population amount");
   }
 
-  if (
-    C.epsilon_EM > 0 &&
-    options.t > options.mutationBeginTime &&
-    options.t < options.mutationBeginTime + 10
-  ) {
-    console.log("\n\n", now.I_E, C.epsilon_EM, C.epsilon_EM * now.I_E);
-    console.log("now: ");
-    console.log(now);
-  }
+  // if (
+  //   C.epsilon_EM > 0 &&
+  //   options.t > options.mutationBeginTime &&
+  //   options.t < options.mutationBeginTime + 10
+  // ) {
+  //   console.log("\n\n", now.I_E, C.epsilon_EM, C.epsilon_EM * now.I_E);
+  //   console.log("now: ");
+  //   console.log(now);
+  // }
 
   //M系、E系の感染者の総和を格納
   next.SUM_I_EX = next.I_E + next.I_RE_E + next.I_RM_E + next.I_REM_E;
