@@ -1,7 +1,7 @@
 {
   "params": {
-    "spaceLength": 1,
-    "timeLength": 1000,
+    "spaceLength": 10,
+    "timeLength": 100,
     "max_coeff_const": 1,
     "populationConst": 1000000
   },
@@ -9,5 +9,18 @@
   "io": {
     "writeResultAsXLSX": true,
     "showProgressBar": false
+  },
+
+  "eqSettings": {
+    "reduceInfectorCoeff": 0.2
+  },
+
+  "eqConst": {
+    "beta": 0.75,
+    "gamma": 0.3,
+    "sigma": 0,
+    "mu_S": 0,
+    "mu_I": 0,
+    "mu_R": 0
   }
 }
