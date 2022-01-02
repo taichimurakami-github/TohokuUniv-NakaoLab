@@ -1,14 +1,13 @@
 {
   "params": {
-    "spaceLength": 1000,
-    "timeLength": 100,
+    "timeLength": 1000,
     "max_coeff_const": 1,
-    "populationConst": 1000000
+    "populationConst": 1000000,
+    "mutationBeginTime": 200
   },
 
   "io": {
     "writeResultAsXLSX": true,
-    "showProgressBar": true
+    "showProgressBar": false
   }
-
 }
