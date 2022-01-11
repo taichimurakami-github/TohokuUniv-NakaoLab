@@ -1,12 +1,12 @@
 {
   "params": {
-    "timeLength": 500,
+    "timeLength": 300,
     "max_coeff_const": 1,
     "mutationBeginTime": 200
   },
 
   "io": {
-    "writeResultAsXLSX": true,
+    "writeResultAsXLSX": false,
     "showProgressBar": false
   }
 }

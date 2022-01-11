@@ -2,7 +2,7 @@ const initialEqConst = {
   /**
    * S >> I_E, I_M
    */
-  beta_E: 0.4,
+  beta_E: 0.5,
   beta_M: 0,
 
   /**
@@ -40,7 +40,7 @@ const initialEqConst = {
    */
   beta_REM_E: 0.3,
   gamma_REM_E: 0.3,
-  beta_REM_M: 0.5,
+  beta_REM_M: 0.4,
   gamma_REM_M: 0.3,
 
   /**
@@ -48,7 +48,7 @@ const initialEqConst = {
    */
   sigma_REM_RE: 0,
   sigma_REM_RM: 0,
-  sigma_RE_S: 0,
+  sigma_RE_S: 0.05,
   sigma_RM_S: 0,
 
   /**

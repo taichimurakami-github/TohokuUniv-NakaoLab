@@ -12,6 +12,7 @@ const {
 const { generateNewEquationState } = require("./calc/main");
 const { initialEqState } = require("./state");
 const { initialEqConst } = require("./const");
+const { changeEqStateAndConst } = require("./calc/coeff");
 
 (async () => {
   /**
@@ -34,69 +35,62 @@ const { initialEqConst } = require("./const");
   for (let t = 0; t < config.params.timeLength; t++) {
     let nowState = { ...state[t] };
 
-    //流行型への再感染者の発生
-    //RE -> Sへの遷移開始
-    if (t === 1) {
-      nowState.I_RE_E += nowState.R_E * eqConst.beta_RE_E;
-      nowState.R_E -= nowState.R_E * eqConst.beta_RE_E;
-      eqConst = {
-        ...eqConst,
-        sigma_RE_S: 0.05,
-      };
-    }
+    const eqConstChangedDiff = changeEqStateAndConst(t, {
+      eqConst: eqConst,
+      nowState: nowState,
+      config: config,
+    });
 
-    //ウイルス変異に伴うパラメータ群の調整
-    //RM -> Sへの遷移開始
-    if (t === config.params.mutationBeginTime) {
-      console.log("begin mutation");
-      //equation paramater を調整
-      eqConst = {
-        ...eqConst,
-        beta_M: 0.7,
-        epsilon_EM: 0.05,
-      };
+    eqConst = { ...eqConst, ...eqConstChangedDiff };
 
-      //nowSpaceの値を変更
-      nowState.I_M += eqConst.EPSILON_M !== 0 ? eqConst.EPSILON_M : 0;
-      nowState.I_RE_M += 100;
-      nowState.R_E -= 100;
-      // nowState.I_RE_M += nowState.R_M * 0.1;
-      // nowState.R_E -= nowState.R_M * 0.1;
-    }
+    // //流行型への再感染者の発生
+    // //RE -> Sへの遷移開始
+    // if (t === 1) {
+    //   nowState.I_RE_E += nowState.R_E * eqConst.beta_RE_E;
+    //   nowState.R_E -= nowState.R_E * eqConst.beta_RE_E;
+    //   eqConst = {
+    //     ...eqConst,
+    //     sigma_RE_S: 0.05,
+    //   };
+    // }
 
-    //ウイルス変異に伴うパラメータの調整（I_REM_M, I_REM_E）
-    //R_EM -> R_E, R_Mへの遷移開始
-    //変異が起きた次のステップで発生する
-    if (t - 5 === config.params.mutationBeginTime) {
-      nowState.I_RM_E += 100;
-      nowState.I_RM_M += 100;
-      nowState.I_REM_E += 100;
-      nowState.I_REM_M += 100;
+    // //ウイルス変異に伴うパラメータ群の調整
+    // //RM -> Sへの遷移開始
+    // if (t === config.params.mutationBeginTime) {
+    //   console.log("begin mutation");
+    //   //equation paramater を調整
+    //   eqConst = {
+    //     ...eqConst,
+    //     beta_M: 0.7,
+    //     epsilon_EM: 0.05,
+    //   };
 
-      // console.log("add new Infection people");
-      // nowState.I_RM_E += nowState.R_M * eqConst.beta_RM_E * 0.2;
-      // nowState.I_RM_M += nowState.R_M * eqConst.beta_RM_M * 0.2;
-      // nowState.R_M -=
-      //   nowState.R_M * (eqConst.beta_RM_E + eqConst.beta_RM_M) * 0.2;
+    //   //nowSpaceの値を変更
+    //   nowState.I_M += eqConst.EPSILON_M !== 0 ? eqConst.EPSILON_M : 0;
+    //   nowState.I_RE_M += 100;
+    //   nowState.R_E -= 100;
+    //   // nowState.I_RE_M += nowState.R_M * 0.1;
+    //   // nowState.R_E -= nowState.R_M * 0.1;
+    // }
 
-      // nowState.I_REM_E += nowState.R_EM * eqConst.beta_REM_E * 0.1;
-      // nowState.I_REM_M += nowState.R_EM * eqConst.beta_REM_M * 0.1;
-      // nowState.R_EM -=
-      //   nowState.R_EM * (eqConst.beta_REM_E + eqConst.beta_REM_M) * 0.1;
-      // console.log(
-      //   eqConst.beta_RM_E + eqConst.beta_RM_M,
-      //   eqConst.beta_REM_E + eqConst.beta_REM_M
-      // );
+    // //ウイルス変異に伴うパラメータの調整（I_REM_M, I_REM_E）
+    // //R_EM -> R_E, R_Mへの遷移開始
+    // //変異が起きた次のステップで発生する
+    // if (t - 5 === config.params.mutationBeginTime) {
+    //   nowState.I_RM_E += 100;
+    //   nowState.I_RM_M += 100;
+    //   nowState.I_REM_E += 100;
+    //   nowState.I_REM_M += 100;
 
-      eqConst = {
-        ...eqConst,
-        beta_RE_M: 0.2,
+    //   eqConst = {
+    //     ...eqConst,
+    //     beta_RE_M: 0.2,
 
-        sigma_RM_S: 0.05,
-        sigma_REM_RE: 0.05,
-        sigma_REM_RM: 0.05,
-      };
-    }
+    //     sigma_RM_S: 0.05,
+    //     sigma_REM_RE: 0.05,
+    //     sigma_REM_RM: 0.05,
+    //   };
+    // }
 
     let sum = 0;
     for (const prop in nowState) sum += nowState[prop];
@@ -108,25 +102,6 @@ const { initialEqConst } = require("./const");
       }),
     };
     state.push(result);
-
-    // if (
-    //   config.params.mutationBeginTime - 1 <= t &&
-    //   t < config.params.mutationBeginTime + 1
-    // ) {
-    //   console.log("\n\n\nnowTime: ", t);
-    //   console.log("nowstate:");
-    //   console.log(nowState);
-    //   console.log("\nresult:");
-    //   console.log(result);
-    // }
-
-    // if (t < 10) {
-    //   console.log("\n\n\nnowTime: ", t);
-    //   console.log("nowstate:");
-    //   console.log(nowState);
-    //   console.log("\nresult:");
-    //   console.log(result);
-    // }
   }
 
   console.log(state[state.length - 1]);
