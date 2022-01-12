@@ -29,40 +29,6 @@ class Infectious extends BasicPeopleState {
           "error at " + this.ID + ".getDiff : invalid target type"
         );
     }
-
-    // switch (target.ID) {
-    //   /**
-    //    * I_E
-    //    */
-    //   case "R_E": //I_E >> R_E
-    //     if (this.ID === "I_E") return this.pop * this.gamma_E;
-    //     if (this.ID === "I_RE_E") return this.pop * this.gamma_RE_E;
-    //     throw new Error("error at Infectious getDiff case R_E");
-
-    //   case "I_M": //I_E >> I_M
-    //     return this.pop * this.epsilon_EM;
-
-    //   /**
-    //    * I_M
-    //    */
-    //   case "R_M":
-    //     return this.pop * this.gamma_M;
-
-    //   /**
-    //    * I_RE_M or I_RM_E
-    //    */
-    //   case "R_EM":
-    //     if (this.ID === "I_RE_M") return this.pop * this.gamma;
-    //     if (this.ID === "I_RM_E") return this.pop * this.gamma;
-    //     throw new Error("error at Infectious getDiff case R_EM");
-
-    //   /**
-    //    *
-    //    */
-
-    //   default:
-    //     throw new Error(this.type + " : target.typeが不正です。");
-    // }
   }
 }
 

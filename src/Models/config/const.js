@@ -48,8 +48,8 @@ const initialEqConst = {
    */
   sigma_REM_RE: 0,
   sigma_REM_RM: 0,
-  sigma_RE_S: 0.05,
-  sigma_RM_S: 0,
+  sigma_RE_S: 0.02,
+  sigma_RM_S: 0.02,
 
   /**
    * mutual coefficient

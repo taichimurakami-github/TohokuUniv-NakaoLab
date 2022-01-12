@@ -1,17 +1,7 @@
-// const { getRandomFloat } = require("./calc/lib");
-// const { generateCoeffMatrix } = require("./calc/coeff");
-// const { generateNewPeopleDist } = require("./calc/main");
 const path = require("path");
-const {
-  readFile,
-  writeFile,
-  showProgressOnConsole,
-  showResultOnConsole,
-  showConfigOnConsole,
-} = require("./io/io");
+const { readFile, writeFile } = require("./io/io");
 const { generateNewEquationState } = require("./calc/main");
-const { changeEqStateAndConst } = require("./calc/coeff");
-const { PeopleStates } = require("./Models/people/PeopleState");
+const { People } = require("./Models/People/People");
 
 (async () => {
   /**
@@ -22,14 +12,11 @@ const { PeopleStates } = require("./Models/people/PeopleState");
   /**
    * 計算準備
    */
-  const p = new PeopleStates(config);
-  // console.log(p);
+  const p = new People(config);
 
   /**
    * 計算
    */
-  console.log("calc start");
-
   for (let t = 0; t < config.params.timeLength; t++) {
     //1. 時間を設定
     //2. 各フェーズ特有のイベントを実行、人口分布の変化も行う

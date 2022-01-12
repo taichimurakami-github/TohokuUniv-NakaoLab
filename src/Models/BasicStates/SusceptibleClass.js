@@ -16,16 +16,6 @@ class Susceptible extends BasicPeopleState {
 
   changeTo(target, sum, sum_infected) {
     return (this.pop * this.beta[target.strainType] * sum_infected) / sum;
-    // switch (target.type) {
-    //   case "I_E": //S >> I_E
-    //     return (this.beta_E * this.pop * sum_infected) / sum;
-
-    //   case "I_M": //S >> I_M
-    //     return (this.beta_M * this.pop * sum_infected) / sum;
-
-    //   default:
-    //     throw new Error(this.type + " : target.typeが不正です。");
-    // }
   }
 }
 
