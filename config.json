@@ -4,9 +4,8 @@
     "max_coeff_const": 1,
     "mutationBeginTime": 200
   },
-
   "io": {
-    "writeResultAsXLSX": false,
+    "writeResultAsXLSX": true,
     "showProgressBar": false
   }
 }

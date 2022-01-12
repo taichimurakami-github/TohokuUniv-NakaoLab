@@ -13,4 +13,11 @@ const initialEqState = {
   I_REM_M: 0,
 };
 
-module.exports = { initialEqState };
+const initialActivityDist = {
+  high: 1,
+  mid: 0,
+  low: 0,
+  zero: 0,
+};
+
+module.exports = { initialEqState, initialActivityDist };
