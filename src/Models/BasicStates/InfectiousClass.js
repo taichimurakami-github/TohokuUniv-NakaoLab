@@ -10,10 +10,9 @@ const { BasicPeopleState } = require("./BasicPeopleState");
  *
  */
 class Infectious extends BasicPeopleState {
-  constructor(ID, initialPopulation, strainType, immunizedType, eqConsts) {
+  constructor(ID, initialPopulation, strainType, eqConsts) {
     super(ID, initialPopulation, eqConsts);
     this.strainType = strainType; //変異型
-    this.immunizedType = immunizedType;
   }
 
   changeTo(target, sum, sum_infected) {
