@@ -1,32 +1,5 @@
 const { DefinePeopleStates } = require("./DefinePeopleStates");
 
-// const getInfectionCoeff = (beta, activityDist) => {
-//   //感染率をそれぞれ定義
-//   const high = (beta * (1 - beta)) / 2;
-//   const mid = beta;
-//   const low = beta * 0.2;
-
-//   //beta * activityDist.stateの和を返す
-//   return (
-//     high * activityDist.high + mid * activityDist.mid + low * activityDist.low
-//   );
-// };
-
-// const getActivityDist = () => {
-//   return {
-//     high: 0,
-//     mid: 0,
-//     low: 0,
-//   };
-// };
-
-const societyConfig = {
-  alertLevel: {
-    max: 10,
-    min: 0,
-  },
-};
-
 /**
  * class People
  * PeopleStatesHolderに各種関数を実装
@@ -35,10 +8,8 @@ const societyConfig = {
  */
 class People extends DefinePeopleStates {
   constructor(config) {
+    super();
     this.config = config;
-    this.society = {
-      alertLevel: 0,
-    };
   }
 
   //変異株の出現を実行
@@ -82,10 +53,15 @@ class People extends DefinePeopleStates {
           : [...this.struct.S, ...this.struct.I, ...this.struct.R];
     }
 
-    return IdGroupArr.reduce(
-      (prevResult, current) => prevResult + this[current].pop,
-      0
-    );
+    return IdGroupArr.reduce((prevResult, current) => {
+      //immunizedTypeが指定されていて、かつ感染抑制係数thetaを持っている場合はthetaをかける
+      const v =
+        this[current]?.immunized && this[theta]
+          ? this.theta[this[current].immunized]
+          : 1;
+
+      return prevResult + this[current].pop * v;
+    }, 0);
   }
 
   recordNowState() {
@@ -117,26 +93,6 @@ class People extends DefinePeopleStates {
     //sum_E, sum_Mを入れたものをresult.ArrayOf~~に代入
     this.result.ArrayOfPop.push(thisTimeArrayOfPop);
     this.result.ArrayOfObj.push(thisTimeArrayOfObj);
-  }
-
-  changeSocietyVars() {
-    const recentInfectiousNumbers = [];
-
-    //直近 config.societyCheckDepth 回分の感染者合計結果を取得
-    for (let i = this.config.societyCheckDepth; i >= 0; i--) {
-      recentInfectiousNumbers.push(
-        this.result.ArrayOfObj[id].sum_I_EX +
-          this.result.ArrayOfObj[id].sum_I_MX
-      );
-    }
-
-    //それぞれの差分を出す -> recentInfectiousDiffs[]に保存
-    const recentInfectiousDiffs = [];
-    for (let i = recentInfectiousNumbers.length; i > 0; i--) {
-      recentInfectiousDiffs.push(
-        recentInfectiousNumbers[i] - recentInfectiousNumbers[i - 1]
-      );
-    }
   }
 
   updateWithCycleStart() {

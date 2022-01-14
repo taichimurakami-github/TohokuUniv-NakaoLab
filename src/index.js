@@ -2,6 +2,7 @@ const path = require("path");
 const { readFile, writeFile } = require("./io/io");
 const { generateNewEquationState } = require("./calc/main");
 const { People } = require("./Models/People/People");
+const { Society } = require("./Models/Society/Society");
 
 (async () => {
   /**
@@ -13,6 +14,7 @@ const { People } = require("./Models/People/People");
    * 計算準備
    */
   const p = new People(config);
+  const s = new Society(p, config);
 
   /**
    * 計算
@@ -29,6 +31,12 @@ const { People } = require("./Models/People/People");
     //2. 差分適用後の状態を記録
     p.updateWithCycleEnd();
   }
+
+  console.log("\n\ncalc before:");
+  console.log(p.result.ArrayOfObj[0]);
+  console.log("\n calc result:");
+  console.log(p.result.ArrayOfObj[p.result.ArrayOfObj.length - 1]);
+  console.log("\n");
 
   /**
    * xlsxファイル出力

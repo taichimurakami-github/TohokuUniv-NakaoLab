@@ -18,12 +18,17 @@ class Infectious extends BasicPeopleState {
 
   changeTo(target, sum, sum_infected) {
     switch (target.type) {
-      case "I": //今のところI_E -> I_M のみ
-        return (this.pop * this.beta[target.strainType] * sum_infected) / sum;
-
-      case "R":
+      //今のところI_E -> I_M のみ
+      case "I": {
+        const beta = this.getVariableBeta(
+          sum.ALL,
+          sum.I
+        )(this.beta[target.strainType]);
+        return (this.pop * beta * sum_infected) / sum.ALL;
+      }
+      case "R": {
         return this.pop * this.gamma[target.immunizedType];
-
+      }
       default:
         throw new Error(
           "error at " + this.ID + ".getDiff : invalid target type"

@@ -13,7 +13,10 @@ const generateNewEquationState = (p) => {
 
 const calculateEquation = (p) => {
   const diff = {};
-  const sum = p.getSum();
+  const sum = {
+    ALL: p.getSum(),
+    I: p.getSum("I"),
+  };
   const sum_E = p.getSum("E");
   const sum_M = p.getSum("M");
 

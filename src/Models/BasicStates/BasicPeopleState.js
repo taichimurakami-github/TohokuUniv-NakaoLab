@@ -84,6 +84,34 @@ class BasicPeopleState {
     //ただし、this.pupulation + this.diff < 0の場合はエラー
     if (this.pop < 0) throw new Error("計算結果が負になりました。");
   }
+
+  getVariableBeta(sum_I, sum_all) {
+    return (beta) => beta;
+
+    const thresholds = {
+      max: 0.05,
+      min: 0.001,
+    };
+
+    const nowInfectuiousRatio = sum_I / sum_all;
+
+    if (nowInfectuiousRatio <= thresholds.min) {
+      //alertLevel : min
+      //beta : max
+      console.log("MIN");
+      return (beta) => beta + (1 - beta) / 3;
+    } else if (nowInfectuiousRatio >= thresholds.max) {
+      //alertLevel : max
+      //beta : min
+      console.log("MAX");
+      return (beta) => beta * 0.5;
+    } else {
+      //alertLevel : mid
+      //beta : standard
+      console.log("MID");
+      return (beta) => beta;
+    }
+  }
 }
 
 module.exports = { BasicPeopleState };

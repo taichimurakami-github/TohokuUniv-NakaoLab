@@ -15,7 +15,11 @@ class Susceptible extends BasicPeopleState {
   }
 
   changeTo(target, sum, sum_infected) {
-    return (this.pop * this.beta[target.strainType] * sum_infected) / sum;
+    const beta = this.getVariableBeta(
+      sum.I,
+      sum.ALL
+    )(this.beta[target.strainType]);
+    return (this.pop * beta * sum_infected) / sum.ALL;
   }
 }
 

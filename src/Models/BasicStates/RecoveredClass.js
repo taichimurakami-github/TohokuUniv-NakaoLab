@@ -17,13 +17,18 @@ class Recovered extends BasicPeopleState {
   changeTo(target, sum, sum_infected) {
     switch (target.type) {
       //感染状態への移行
-      case "I":
-        return (this.pop * this.beta[target.strainType] * sum_infected) / sum;
-
+      case "I": {
+        const beta = this.getVariableBeta(
+          sum.I,
+          sum.ALL
+        )(this.beta[target.strainType]);
+        return (this.pop * beta * sum_infected) / sum.ALL;
+      }
       //sigmaによるフィードバック分
       case "S":
-      case "R":
+      case "R": {
         return this.pop * this.sigma[target.ID];
+      }
 
       default:
         throw new Error(

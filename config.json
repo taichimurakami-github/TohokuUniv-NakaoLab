@@ -1,12 +1,12 @@
 {
   "params": {
-    "timeLength": 300,
+    "timeLength": 1000,
     "max_coeff_const": 1,
     "mutationBeginTime": 200,
     "societyCheckDepth": 10
   },
   "io": {
-    "writeResultAsXLSX": true,
+    "writeResultAsXLSX": false,
     "showProgressBar": false
   }
 }
