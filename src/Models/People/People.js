@@ -12,6 +12,46 @@ class People extends DefinePeopleStates {
     this.config = config;
   }
 
+  //1. 時間を設定
+  //2. 各フェーズ特有のイベントを実行、人口分布の変化も行う
+  updateWithCycleStart() {
+    //時間をセットする
+    this.t += 1;
+    const t_m = this.config.params.mutationBeginTime;
+
+    //モデルに定義されるイベントを実行する
+    switch (this.t) {
+      //ウイルス変異に伴うパラメータ群の調整
+      //RM -> Sへの遷移開始
+      case t_m: {
+        this.beginMutate();
+        break;
+      }
+
+      //ウイルス変異に伴うパラメータの調整（I_REM_M, I_REM_E）
+      //R_EM -> R_E, R_Mへの遷移開始
+      //変異が起きた次のステップで発生する
+      case t_m + 5: {
+        this.beginNewStrainFeedback();
+        break;
+      }
+
+      default:
+    }
+  }
+
+  //1. 計算結果である差分を適用
+  //2. 差分適用後の状態を記録
+  updateWithCycleEnd() {
+    //記録していた差分を反映する
+    for (const ID of this.getAllIDsArr()) {
+      this[ID].applyDiff();
+    }
+
+    //記録を行う
+    this.recordNowState();
+  }
+
   //変異株の出現を実行
   beginMutate() {
     //外部からの流入を開始
@@ -101,42 +141,6 @@ class People extends DefinePeopleStates {
     //sum_E, sum_Mを入れたものをresult.ArrayOf~~に代入
     this.result.ArrayOfPop.push(thisTimeArrayOfPop);
     this.result.ArrayOfObj.push(thisTimeArrayOfObj);
-  }
-
-  updateWithCycleStart() {
-    //時間をセットする
-    this.t += 1;
-    const t_m = this.config.params.mutationBeginTime;
-
-    //モデルに定義されるイベントを実行する
-    switch (this.t) {
-      //ウイルス変異に伴うパラメータ群の調整
-      //RM -> Sへの遷移開始
-      case t_m: {
-        this.beginMutate();
-        break;
-      }
-
-      //ウイルス変異に伴うパラメータの調整（I_REM_M, I_REM_E）
-      //R_EM -> R_E, R_Mへの遷移開始
-      //変異が起きた次のステップで発生する
-      case t_m + 5: {
-        this.beginNewStrainFeedback();
-        break;
-      }
-
-      default:
-    }
-  }
-
-  updateWithCycleEnd() {
-    //記録していた差分を反映する
-    for (const ID of [...this.struct.S, ...this.struct.I, ...this.struct.R]) {
-      this[ID].applyDiff();
-    }
-
-    //記録を行う
-    this.recordNowState();
   }
 }
 

@@ -40,7 +40,7 @@
  *        >> S, Rのみ実装、現在の人口分布に基づいてactivationDistを計算・取得する
  *
  *    (2) getDiff(target, sum, infectedSum)
- *        >> targetに渡された基底クラスのtypeに基づき、
+ *        >> targetに渡された基底クラスのtypeに基づき、sum, infectedSumを用いて流出量を定義する
  */
 
 class BasicPeopleState {
@@ -56,7 +56,7 @@ class BasicPeopleState {
   }
 
   //diffを定義 : muを自動的に反映
-  setDiff(diffVal) {
+  setDiff(diffVal, withoutMu = false) {
     if (isNaN(diffVal))
       throw new Error(`error at ${this.ID}.setDiff() : diffVal が NaN です。`);
 
@@ -83,6 +83,9 @@ class BasicPeopleState {
 
     //ただし、this.pupulation + this.diff < 0の場合はエラー
     if (this.pop < 0) throw new Error("計算結果が負になりました。");
+
+    //diffをリセット
+    this.diff = 0;
   }
 
   getVariableBeta(sum_I, sum_all) {

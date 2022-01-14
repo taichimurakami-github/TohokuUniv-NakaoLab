@@ -1,13 +1,14 @@
-const generateNewEquationState = (p) => {
-  //diff state を管理するdiff objを生成後、すべてのdiffの値を0に初期化
-  //計算
-  const diff = calculateEquation(p);
+const generateNewEquationState = (s) => {
+  //空間内に存在する全てのPeopleインスタンスに対して計算を実行
+  for (const p of s.state) {
+    //計算
+    const diff = calculateEquation(p);
 
-  //diffを保存
-  for (const [key, value] of Object.entries(diff)) {
-    p[key].setDiff(value);
+    //diffを保存
+    for (const [key, value] of Object.entries(diff)) {
+      p[key].setDiff(value);
+    }
   }
-
   return;
 };
 

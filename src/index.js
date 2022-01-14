@@ -1,8 +1,7 @@
 const path = require("path");
 const { readFile, writeFile } = require("./io/io");
 const { generateNewEquationState } = require("./calc/main");
-const { People } = require("./Models/People/People");
-const { Society } = require("./Models/Society/Society");
+const { Space } = require("./Models/Space/Space");
 
 (async () => {
   /**
@@ -13,28 +12,26 @@ const { Society } = require("./Models/Society/Society");
   /**
    * 計算準備
    */
-  const p = new People(config);
+  const s = new Space(config);
 
   /**
-   * 計算
+   * 計算 >> Spaceインスタンスを主軸に計算を行う
    */
   for (let t = 0; t < config.params.timeLength; t++) {
-    //1. 時間を設定
-    //2. 各フェーズ特有のイベントを実行、人口分布の変化も行う
-    p.updateWithCycleStart();
+    s.updateWithCycleStart();
 
-    //計算を実行し、PeopleStatesを変化させる
-    generateNewEquationState(p);
+    //計算を実行し、Space.PeopleStatesを変化させる
+    generateNewEquationState(s);
 
-    //1. 計算結果である差分を適用
-    //2. 差分適用後の状態を記録
-    p.updateWithCycleEnd();
+    s.updateWithCycleEnd();
   }
 
+  const results = s.getResults();
+
   console.log("\n\ncalc before:");
-  console.log(p.result.ArrayOfObj[0]);
+  console.log(results[0]);
   console.log("\n calc result:");
-  console.log(p.result.ArrayOfObj[p.result.ArrayOfObj.length - 1]);
+  console.log(results[results.length - 1]);
   console.log("\n");
 
   /**
