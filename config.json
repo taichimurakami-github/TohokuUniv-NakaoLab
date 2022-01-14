@@ -6,7 +6,7 @@
     "societyCheckDepth": 10
   },
   "io": {
-    "writeResultAsXLSX": false,
+    "writeResultAsXLSX": true,
     "showProgressBar": false
   }
 }

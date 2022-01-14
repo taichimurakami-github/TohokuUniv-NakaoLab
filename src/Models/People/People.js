@@ -17,14 +17,13 @@ class People extends DefinePeopleStates {
     //外部からの流入を開始
     const fromOutside = 100;
     this.I_M.pop += fromOutside;
-    this.R_E.pop -= fromOutside;
     this.I_RE_M.pop += fromOutside;
 
     //I_E -> I_Mの変異開始(変異率：1%)
     this.I_E.epsilon = 0.01;
 
     //S -> I_Mの遷移開始
-    this.S.beta.M = 0.85;
+    this.S.beta.M = 0.75;
 
     //R_E -> I_RE_Mの遷移開始
     this.R_E.beta.M = 0.6;
