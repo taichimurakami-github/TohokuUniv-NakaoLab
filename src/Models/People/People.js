@@ -35,6 +35,15 @@ class People extends DefinePeopleStates {
     this.R_EM.sigma.R_M = 0.05;
   }
 
+  getAllIDsArr() {
+    const r = [];
+    //this.structのid配列を全て展開する
+    for (const idArr of Object.values(this.struct)) {
+      for (const id of idArr) r.push(id);
+    }
+    return r;
+  }
+
   getSum(group = "") {
     let IdGroupArr;
     switch (group) {
@@ -49,7 +58,7 @@ class People extends DefinePeopleStates {
       default:
         IdGroupArr = this.struct[group]
           ? [...this.struct[group]]
-          : [...this.struct.S, ...this.struct.I, ...this.struct.R];
+          : this.getAllIDsArr();
     }
 
     return IdGroupArr.reduce((prevResult, current) => {
@@ -64,7 +73,7 @@ class People extends DefinePeopleStates {
   }
 
   recordNowState() {
-    const IdStructArr = [...this.struct.S, ...this.struct.I, ...this.struct.R];
+    const IdStructArr = this.getAllIDsArr();
     const thisTimeArrayOfPop = [];
     const thisTimeArrayOfObj = {};
     let sum_E = 0,

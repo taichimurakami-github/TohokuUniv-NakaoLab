@@ -14,7 +14,6 @@ const { Society } = require("./Models/Society/Society");
    * 計算準備
    */
   const p = new People(config);
-  const s = new Society(p, config);
 
   /**
    * 計算
