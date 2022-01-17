@@ -10,7 +10,7 @@ const strainTypes = {
 const PeopleStateDefaults = {
   S: {
     beta: {
-      [strainTypes["001"]]: 0.5, //beta.E
+      [strainTypes["001"]]: 0.4, //beta.E
       [strainTypes["002"]]: 0, //beta.M
     },
     mu: 0,
@@ -30,7 +30,7 @@ const PeopleStateDefaults = {
       [strainTypes["001"]]: 0.3, //gamma_RE_E >> recover to R_E
     },
     mu: 0,
-    theta: 0.85,
+    theta: 0.3,
     immunizedType: strainTypes["001"],
   },
   I_RE_M: {
@@ -53,7 +53,7 @@ const PeopleStateDefaults = {
       [strainTypes["002"]]: 0.3, //gamma_RM_M >> recover to R_M
     },
     mu: 0,
-    theta: 0.7,
+    theta: 0.3,
     immunizedType: strainTypes["002"],
   },
   I_RM_E: {
@@ -61,7 +61,7 @@ const PeopleStateDefaults = {
       [strainTypes["001"] + strainTypes["002"]]: 0.3, //gamma_RM_E >> recover to R_EM
     },
     mu: 0,
-    theta: 0.65,
+    theta: 0.55,
     immunizedType: strainTypes["002"],
   },
   I_REM_E: {
@@ -69,7 +69,7 @@ const PeopleStateDefaults = {
       [strainTypes["001"] + strainTypes["002"]]: 0.3, //gamma_REM_E >> recover to R_EM
     },
     mu: 0,
-    theta: 0.5,
+    theta: 0.3,
     immunizedType: strainTypes["001"] + strainTypes["002"],
   },
   I_REM_M: {
@@ -77,7 +77,7 @@ const PeopleStateDefaults = {
       [strainTypes["001"] + strainTypes["002"]]: 0.3, //gamma_REM_M >> recover to R_EM
     },
     mu: 0,
-    theta: 0.5,
+    theta: 0.3,
     immunizedType: strainTypes["001"] + strainTypes["002"],
   },
   R_E: {

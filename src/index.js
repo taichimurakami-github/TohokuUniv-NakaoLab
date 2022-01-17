@@ -45,9 +45,9 @@ const { Space } = require("./Models/Space/Space");
     console.log("\nwriting result as xlsx file...\n");
 
     const axisNames = [
-      ...s.state[0].struct.S,
-      ...s.state[0].struct.I,
-      ...s.state[0].struct.R,
+      ...s.state[0].people.struct.S,
+      ...s.state[0].people.struct.I,
+      ...s.state[0].people.struct.R,
       "SUM_I_EX",
       "SUM_I_MX",
     ];

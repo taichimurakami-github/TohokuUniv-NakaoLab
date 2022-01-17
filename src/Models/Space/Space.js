@@ -1,6 +1,7 @@
 const { generateCoeffMatrix } = require("../../calc/coeff");
 const { getRandomFloat } = require("../../calc/lib");
 const { People } = require("../People/People");
+const { Society } = require("../Society/Society");
 
 /**
  * 空間を定義し、管理する
@@ -24,9 +25,21 @@ class Space {
         ),
         I_E: 100,
       };
-      //Peopleインスタンスを作成
-      this.state.push(new People(config, initialPop));
+
+      //各空間に属するインスタンスを作成
+      this.state.push({
+        people: new People(config, initialPop),
+        society: new Society(config),
+      });
     }
+  }
+
+  getInstanceArrByID(instanceID) {
+    return this.state.map((v) => {
+      if (!v[instanceID])
+        throw new Error("Space.getInstanceArrByID >> instanceIDが不正です。");
+      return v[instanceID];
+    });
   }
 
   updateWithCycleStart() {
@@ -37,21 +50,21 @@ class Space {
     this.calcMove();
 
     //Peopleインスタンスで定義されたイベント開始
-    for (const p of this.state) {
-      p.updateWithCycleStart();
+    for (const state of this.state) {
+      state.people.updateWithCycleStart();
     }
   }
 
   updateWithCycleEnd() {
     //Peopleインスタンスで定義されたイベント開始
-    for (const p of this.state) {
-      p.updateWithCycleEnd();
+    for (const state of this.state) {
+      state.people.updateWithCycleEnd();
     }
   }
 
   renewMvCoeff() {
     return (this.mvCoeff = generateCoeffMatrix(
-      this.state,
+      this.getInstanceArrByID("people"),
       this.config.params.maxCoeffConst
     ));
   }
@@ -59,12 +72,12 @@ class Space {
   calcMove() {
     for (let i_from = 0; i_from < this.state.length; i_from++) {
       //移動元のインスタンスを取得
-      const outflowFromSpaceInstance = this.state[i_from];
+      const outflowFromSpaceInstance = this.state[i_from].people;
 
       for (let i_to = 0; i_to < this.state.length; i_to++) {
         if (i_from === i_to) continue;
         //流出先のインスタンスを定義
-        const outflowToSpaceInstance = this.state[i_to];
+        const outflowToSpaceInstance = this.state[i_to].people;
 
         //移動係数を取得
         const mvCoeff = this.mvCoeff[i_from][i_to];
@@ -107,12 +120,12 @@ class Space {
    * @returns {[{[String]: Array}]}
    */
   getResults() {
-    return this.state.reduce((prevResult, p) => {
+    return this.state.reduce((prevResult, state) => {
       return [
         ...prevResult,
         {
-          ArrayOfObj: p.result.ArrayOfObj,
-          ArrayOfPop: p.result.ArrayOfPop,
+          ArrayOfObj: state.people.result.ArrayOfObj,
+          ArrayOfPop: state.people.result.ArrayOfPop,
         },
       ];
     }, []);

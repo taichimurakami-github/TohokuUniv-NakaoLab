@@ -1,6 +1,6 @@
 const generateNewEquationState = (s) => {
   //空間内に存在する全てのPeopleインスタンスに対して計算を実行
-  for (const p of s.state) {
+  for (const p of s.getInstanceArrByID("people")) {
     //計算
     const diff = calculateEquation(p);
 

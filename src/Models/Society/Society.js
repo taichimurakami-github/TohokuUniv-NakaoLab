@@ -6,8 +6,7 @@
  */
 
 class Society {
-  constructor(People, config) {
-    this.p = People;
+  constructor(config) {
     this.config = config;
     this.alertLevel = "MIN";
     // this.policy =
@@ -18,15 +17,14 @@ class Society {
     };
   }
 
-  analizeInfectious() {
+  analizeInfectious(p) {
     const depth = this.config.societyCheckDepth;
 
     // 直近 config.societyCheckDepth 回分の感染者合計結果を取得
     const recentInfectiousNumbers = [];
     for (let i = depth; i >= 0; i--) {
       recentInfectiousNumbers.push(
-        this.p.result.ArrayOfObj[i].sum_I_EX +
-          this.p.result.ArrayOfObj[i].sum_I_MX
+        p.result.ArrayOfObj[i].sum_I_EX + p.result.ArrayOfObj[i].sum_I_MX
       );
     }
     // それぞれの差分を出す -> recentInfectiousDiffs[]に保存
