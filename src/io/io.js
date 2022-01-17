@@ -1,5 +1,5 @@
 //module import
-const fs = require('fs').promises;
+const fs = require("fs").promises;
 const path = require("path");
 const XLSX = require("xlsx");
 const readline = require("readline");
@@ -10,47 +10,46 @@ const { getIntArrayAmount, getMaxAndMinFromIntArray } = require("../calc/lib");
 /**
  * 渡されたファイルパスに該当するファイルを読み込む
  * とりあえずjsonしか使わない
- * 
- * @param {string} filePath 
- * @returns 
+ *
+ * @param {string} filePath
+ * @returns
  */
 const readFile = async (filePath) => {
   console.log(`\nreading files: ${filePath}`);
-  const fileType = filePath.split(".").pop()
+  const fileType = filePath.split(".").pop();
 
   switch (fileType) {
-    case 'json':
-      console.log("reading json file...\n")
-      return JSON.parse(await fs.readFile(filePath, 'utf-8'));
+    case "json":
+      console.log("reading json file...\n");
+      return JSON.parse(await fs.readFile(filePath, "utf-8"));
 
     default:
-      return await fs.readFile(filePath, 'utf-8');
+      return await fs.readFile(filePath, "utf-8");
   }
-}
-
+};
 
 /**
  * 計算の進捗バーをコンソールに表示する
- * @param {int} now 
- * @param {int} total 
+ * @param {int} now
+ * @param {int} total
  */
 const showProgressOnConsole = (now, total) => {
   /**
    * erace cursor
    */
-  process.stdout.write('\x1B[?25l');
-
+  process.stdout.write("\x1B[?25l");
 
   /**
    * calc now percentage
    * (if now === total - 1 then 100%)
    */
-  const nowPercentage = (now === total - 1) ? 100 : Math.floor((now / total) * 100);
+  const nowPercentage =
+    now === total - 1 ? 100 : Math.floor((now / total) * 100);
 
   /**
    * creating bar
    */
-  let bar = '';
+  let bar = "";
   const barDetail = 2;
   const barMaxLength = 100 / barDetail;
   const nowBarLength = Math.floor(nowPercentage / barDetail);
@@ -73,68 +72,74 @@ const showProgressOnConsole = (now, total) => {
    * show cursor
    */
   if (now === total - 1) {
-    process.stdout.write('\x1B[?25h');
+    process.stdout.write("\x1B[?25h");
     console.log("\n\n");
   }
-}
+};
 
 /**
  * 計算結果をXLSX形式で書き出し
- * @param {array of array} data 
- * @returns 
+ * @param {array of array} data
+ * @returns
  */
-const writeFile = async (data) => {
+const writeFile = async (data, axisNames) => {
   //XLSXファイル書き出し設定
   const now = new Date();
-  const fileNameDateString = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${now.getHours()}${now.getMinutes()}-${now.getSeconds()}${now.getMilliseconds()}`;
+  const fileNameDateString = `${now.getFullYear()}.${
+    now.getMonth() + 1
+  }.${now.getDate()}-${now.getHours()}${now.getMinutes()}-${now.getSeconds()}${now.getMilliseconds()}`;
   const writeFileType = "xlsx";
   const writeFilePath = path.resolve(__dirname, "../../result");
-  const writeFileName = path.resolve(writeFilePath, "result-" + fileNameDateString + `.${writeFileType}`);
+  const writeFileName = path.resolve(
+    writeFilePath,
+    "result-" + fileNameDateString + `.${writeFileType}`
+  );
 
   //書き込み対象のディレクトリが存在するか確認
   try {
-
     await fs.lstat(writeFilePath);
-
   } catch (e) {
-
     if (e.errno === -4058) fs.mkdir(writeFilePath);
     else throw new Error(e);
-
   }
 
   try {
-
     //XLSXのworkbookオブジェクト準備
     const wb = XLSX.utils.book_new();
-    const sheetName = "result";
 
+    for (let i = 0; i < data.length; i++) {
+      const thisSpaceArrayOfPop = data[i];
+      const parsedResult = [axisNames, ...thisSpaceArrayOfPop];
+      const sheetName = `Space no.${i}`;
+      wb.SheetNames.push(sheetName);
+      wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(parsedResult);
+    }
+
+    // console.log(wb.Sheets);
+
+    //XLSXファイル設定&書き出し
     wb.Props = {
       Title: "people-flow-simulation result",
       Subject: "",
       Author: "",
-      CreatedDate: new Date(now.getFullYear(), now.getMonth() + 1, now.getDate())
+      CreatedDate: new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate()
+      ),
     };
-
-    wb.SheetNames.push(sheetName);
-    wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(data);
-
-    //XLSXファイル書き出し
     XLSX.writeFile(wb, writeFileName);
     return true;
-
   } catch (e) {
-
     console.log("failed to write XLSX result file due to below error.");
     console.error(e);
     return false;
-
   }
-}
+};
 
 /**
  * 計算前に設定をコンソールに出力
- * @param {object} config 
+ * @param {object} config
  */
 const showConfigOnConsole = (config) => {
   console.log(`
@@ -151,16 +156,17 @@ const showConfigOnConsole = (config) => {
       write result file : ${config.io.writeResultAsXLSX ? "yes" : "no"}
     
   `);
-
-}
+};
 
 /**
  * 計算結果を整形してコンソールに出力
- * @param {array of array} calcResult 
+ * @param {array of array} calcResult
  */
 const showResultOnConsole = (calcResult) => {
   const beforeMinMax = getMaxAndMinFromIntArray(calcResult[0]);
-  const afterMinMax = getMaxAndMinFromIntArray(calcResult[calcResult.length - 1]);
+  const afterMinMax = getMaxAndMinFromIntArray(
+    calcResult[calcResult.length - 1]
+  );
 
   console.log(`
     -------------------------RESULT-------------------------
@@ -179,13 +185,19 @@ const showResultOnConsole = (calcResult) => {
   
     ~~~~~~~~~~~~~~~~~  after  calculation  ~~~~~~~~~~~~~~~~~~
 
-        total population : ${getIntArrayAmount(calcResult[calcResult.length - 1])}
+        total population : ${getIntArrayAmount(
+          calcResult[calcResult.length - 1]
+        )}
         (min, max) = (${afterMinMax.min}, ${afterMinMax.max})
-  `)
+  `);
   console.log(calcResult[calcResult.length - 1]);
-  console.log("\n\ncalculation finished!\n")
+  console.log("\n\ncalculation finished!\n");
+};
 
-
-}
-
-module.exports = { readFile, writeFile, showProgressOnConsole, showResultOnConsole, showConfigOnConsole }
+module.exports = {
+  readFile,
+  writeFile,
+  showProgressOnConsole,
+  showResultOnConsole,
+  showConfigOnConsole,
+};

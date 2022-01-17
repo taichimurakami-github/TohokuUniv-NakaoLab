@@ -28,11 +28,15 @@ const { Space } = require("./Models/Space/Space");
 
   const results = s.getResults();
 
-  console.log("\n\ncalc before:");
-  console.log(results[0]);
-  console.log("\n calc result:");
-  console.log(results[results.length - 1]);
-  console.log("\n");
+  // console.log("\n\ncalc before:");
+  // console.log(results[0]["01"][0]);
+  // console.log("\n calc result:");
+  // console.log(
+  //   results[results.length - 1]["01"][
+  //     results[results.length - 1]["01"].length - 1
+  //   ]
+  // );
+  // console.log("\n");
 
   /**
    * xlsxファイル出力
@@ -40,12 +44,17 @@ const { Space } = require("./Models/Space/Space");
   if (config.io.writeResultAsXLSX) {
     console.log("\nwriting result as xlsx file...\n");
 
-    const parsedResult = [
-      [...p.struct.S, ...p.struct.I, ...p.struct.R, "SUM_I_EX", "SUM_I_MX"],
-      ...p.result.ArrayOfPop,
+    const axisNames = [
+      ...s.state[0].struct.S,
+      ...s.state[0].struct.I,
+      ...s.state[0].struct.R,
+      "SUM_I_EX",
+      "SUM_I_MX",
     ];
 
-    const writeResult = await writeFile(parsedResult);
+    const parsedResultOfEverySpace = results.map((r) => r.ArrayOfPop);
+
+    const writeResult = await writeFile(parsedResultOfEverySpace, axisNames);
 
     writeResult && console.log("...done!\n\n\n");
   }

@@ -7,9 +7,13 @@ const { DefinePeopleStates } = require("./DefinePeopleStates");
  * 計算には基本的にこれを用いる
  */
 class People extends DefinePeopleStates {
-  constructor(config) {
+  constructor(config, initialPop) {
     super();
     this.config = config;
+    //渡された初期人口を設定
+    for (const [id, value] of Object.entries(initialPop)) {
+      this[id].pop = value;
+    }
   }
 
   //1. 時間を設定
@@ -76,12 +80,11 @@ class People extends DefinePeopleStates {
   }
 
   getAllIDsArr() {
-    const r = [];
     //this.structのid配列を全て展開する
-    for (const idArr of Object.values(this.struct)) {
-      for (const id of idArr) r.push(id);
-    }
-    return r;
+    return Object.values(this.struct).reduce(
+      (prevResult, currentVal) => [...prevResult, ...currentVal],
+      []
+    );
   }
 
   getSum(group = "") {
@@ -113,26 +116,18 @@ class People extends DefinePeopleStates {
   }
 
   recordNowState() {
-    const IdStructArr = this.getAllIDsArr();
     const thisTimeArrayOfPop = [];
     const thisTimeArrayOfObj = {};
-    let sum_E = 0,
-      sum_M = 0;
-    for (const ID of IdStructArr) {
+
+    for (const ID of this.getAllIDsArr()) {
       const targetPop = this[ID].pop;
       thisTimeArrayOfPop.push(targetPop);
       thisTimeArrayOfObj[ID] = targetPop;
-
-      //sum_E, sum_Mの合計を計算
-      if (this[ID].type === "I" && this[ID].strainType === "E") {
-        sum_E += targetPop;
-      }
-      if (this[ID].type === "I" && this[ID].strainType === "M") {
-        sum_M += targetPop;
-      }
     }
 
     //sum_E, sum_Mを追加
+    const sum_E = this.getSum("E");
+    const sum_M = this.getSum("M");
     thisTimeArrayOfPop.push(sum_E);
     thisTimeArrayOfPop.push(sum_M);
     thisTimeArrayOfObj.sum_I_EX = sum_E;

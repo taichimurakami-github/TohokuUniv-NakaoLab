@@ -33,7 +33,7 @@ class DefinePeopleStates {
     /**
      * Susceptible class instance generation
      */
-    this.S = new Susceptible("S", 1000000, { ...PeopleStateDefaults.S });
+    this.S = new Susceptible("S", 0, { ...PeopleStateDefaults.S });
 
     /**
      * Infection class instance generation
@@ -42,7 +42,7 @@ class DefinePeopleStates {
     //E系
     this.I_E = new Infectious(
       "I_E",
-      100,
+      0,
       strainTypes["001"], //strain E
       { ...PeopleStateDefaults.I_E }
     );

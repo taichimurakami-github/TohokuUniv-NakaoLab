@@ -1,4 +1,5 @@
 const { generateCoeffMatrix } = require("../../calc/coeff");
+const { getRandomFloat } = require("../../calc/lib");
 const { People } = require("../People/People");
 
 /**
@@ -15,7 +16,16 @@ class Space {
 
     //Peopleインスタンスを空間の個数分生成
     for (let i = 0; i < config.params.spaceLength; i++) {
-      this.state.push(new People(config));
+      //初期状態を定義
+      const initialPop = {
+        S: Math.floor(
+          // 初期人口：0.01 ~ 1.0 * max_const
+          getRandomFloat(0.1, 1.0) * config.params.maxPopulationSize
+        ),
+        I_E: 100,
+      };
+      //Peopleインスタンスを作成
+      this.state.push(new People(config, initialPop));
     }
   }
 
@@ -42,7 +52,7 @@ class Space {
   renewMvCoeff() {
     return (this.mvCoeff = generateCoeffMatrix(
       this.state,
-      this.config.params.max_coeff_const
+      this.config.params.maxCoeffConst
     ));
   }
   //現在対象の空間以外の全ての空間に一定の割合で人が流出
@@ -76,16 +86,36 @@ class Space {
     }
   }
 
+  /**
+   * 各spaceごとのPeople.resultを返す
+   *
+   * -----------------------------------
+   * + return structure:
+   *  [
+   *    <Parent Array ID = Space.state ID>
+   *    {
+   *      <Each Element has results of each Space.state>
+   *       ArrayOfObj : People.result.ArrayOfObj : formatted result as Array of Object
+   *       ArrayOfPop : People.result.ArrayOfPop : only population result as Array of Array
+   *    },
+   *    {
+   *      ...
+   *    }
+   *  ]
+   * -----------------------------------
+   *
+   * @returns {[{[String]: Array}]}
+   */
   getResults() {
-    const r = [];
-    for (let i = 0; i < this.state.length; i++) {
-      r.push([]);
-      for (const p of this.state) {
-        r[i].push(p.result.ArrayOfObj);
-      }
-    }
-
-    return r;
+    return this.state.reduce((prevResult, p) => {
+      return [
+        ...prevResult,
+        {
+          ArrayOfObj: p.result.ArrayOfObj,
+          ArrayOfPop: p.result.ArrayOfPop,
+        },
+      ];
+    }, []);
   }
 }
 

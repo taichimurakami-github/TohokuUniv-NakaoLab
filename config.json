@@ -2,12 +2,14 @@
   "params": {
     "timeLength": 1000,
     "spaceLength": 10,
-    "max_coeff_const": 1,
+    "maxCoeffConst": 1,
+    "maxPopulationSize": 1000000,
     "mutationBeginTime": 200,
     "societyCheckDepth": 10
   },
   "io": {
-    "writeResultAsXLSX": false,
-    "showProgressBar": false
+    "writeResultAsXLSX": true,
+    "showProgressBar": false,
+    "resultArrayDepth": 3
   }
 }
