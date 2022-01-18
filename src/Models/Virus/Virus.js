@@ -1,7 +1,9 @@
-class Virus {
-  constructor(options) {
-    this.strainType = options.strainType;
-    this.masterBeta = options.masterBeta;
-    this.occuredTime = options.occuredTime;
+module.exports = class Variant {
+  constructor(variantDefaults) {
+    this.state = [...variantDefaults];
   }
-}
+
+  getStrainTypesArray() {
+    return this.state.map((val) => val.strainType);
+  }
+};
