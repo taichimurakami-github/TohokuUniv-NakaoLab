@@ -1,9 +1,10 @@
 {
   "params": {
-    "timeLength": 1000,
+    "timeLength": 100,
     "spaceLength": 10,
     "maxCoeffConst": 1,
     "maxPopulationSize": 1000000,
+    "initialInfectiousRate": 0.0001,
     "mutationBeginTime": 200,
     "societyCheckDepth": 10
   },
@@ -11,5 +12,51 @@
     "writeResultAsXLSX": true,
     "showProgressBar": false,
     "resultArrayDepth": 3
-  }
+  },
+  "variantConfig_1": [
+    {
+      "strainType": "E",
+      "infectivity": 0.5,
+      "resilience": 0.3,
+      "appearanceTime": 0
+    },
+    {
+      "strainType": "M",
+      "infectivity": 0.7,
+      "resilience": 0.3,
+      "appearanceTime": 100
+    },
+    {
+      "strainType": "M_3",
+      "infectivity": 0.9,
+      "resilience": 0.3,
+      "appearanceTime": 300
+    }
+  ],
+  "variantConfig": [
+    {
+      "strainType": "E",
+      "infectivity": 0.1,
+      "resilience": 0.3,
+      "appearanceTime": 0
+    },
+    {
+      "strainType": "M_2",
+      "infectivity": 0.1,
+      "resilience": 0.3,
+      "appearanceTime": 100
+    },
+    {
+      "strainType": "M_3",
+      "infectivity": 0.1,
+      "resilience": 0.3,
+      "appearanceTime": 300
+    },
+    {
+      "strainType": "M_4",
+      "infectivity": 0.1,
+      "resilience": 0.3,
+      "appearanceTime": 500
+    }
+  ]
 }

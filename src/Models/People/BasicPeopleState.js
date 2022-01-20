@@ -1,4 +1,4 @@
-class NewBasicPeopleState {
+class BasicPeopleState {
   constructor(options, eqConsts) {
     this.p = options.p;
     this.mu = options.mu;
@@ -44,4 +44,4 @@ class NewBasicPeopleState {
   }
 }
 
-module.exports = { NewBasicPeopleState };
+module.exports = { BasicPeopleState };

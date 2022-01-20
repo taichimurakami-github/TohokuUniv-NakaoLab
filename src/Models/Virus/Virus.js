@@ -1,9 +1,23 @@
-module.exports = class Variant {
+/**
+ * Virus
+ * + 変異株設定
+ *
+ */
+class Virus {
   constructor(variantDefaults) {
-    this.state = [...variantDefaults];
+    this.config = [...variantDefaults];
   }
 
-  getStrainTypesArray() {
-    return this.state.map((val) => val.strainType);
+  getStrainTypesArr() {
+    return this.config.map((val) => val.strainType);
   }
-};
+
+  getStrainConfig(strainType) {
+    if (strainType === "_INITIAL_STRAIN_") return this.config[0];
+    for (const config of this.config) {
+      if (config.strainType === strainType) return config;
+    }
+  }
+}
+
+module.exports = { Virus };
