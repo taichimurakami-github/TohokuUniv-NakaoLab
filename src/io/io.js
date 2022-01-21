@@ -99,7 +99,11 @@ const writeFile = async (data, axisNames) => {
   try {
     await fs.lstat(writeFilePath);
   } catch (e) {
-    if (e.errno === -4058) fs.mkdir(writeFilePath);
+    /**
+     * no such file or directory Error no
+     * mac: -2 / windows: -4058
+     */
+    if (e.errno === -4058 || e.errno === -2) fs.mkdir(writeFilePath);
     else throw new Error(e);
   }
 
