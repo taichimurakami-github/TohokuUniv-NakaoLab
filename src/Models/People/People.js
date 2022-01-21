@@ -109,30 +109,6 @@ class People {
     //時間を進める
     this.t += 1;
 
-    //ライフサイクルイベント
-    switch (this.t) {
-      case 2: {
-        //最初のウイルス株を選択
-        const firstStrainType =
-          this.VirusModel.getStrainConfig("_INITIAL_STRAIN_").strainType;
-
-        //Iの初期人口生成 = 最初の感染者群発生
-        const S = this.state[0][0].NI;
-        const initial_I = this.state[1][0].I[firstStrainType];
-        const initial_I_population =
-          S.p * this.config.params.initialInfectiousRate;
-
-        //人口遷移
-        initial_I.p += initial_I_population;
-        S.p -= initial_I_population;
-        // console.log("LIFECYCLE_EVENT: INITIAL INFECTION START");
-        // console.log("initial infection pop =", initial_I.p);
-        break;
-      }
-      default:
-        break;
-    }
-
     //イベント実行後のsumを求める -> 計算にて使用
     this.getSum();
     return;

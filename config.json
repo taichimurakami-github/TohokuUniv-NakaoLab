@@ -16,15 +16,21 @@
   "variantConfig": [
     {
       "strainType": "E",
-      "infectivity": 0.5,
+      "infectivity": 0.4,
       "resilience": 0.3,
-      "appearanceTime": 0
+      "appearanceTime": 1
     },
     {
-      "strainType": "M",
+      "strainType": "M1",
       "infectivity": 0.6,
       "resilience": 0.3,
       "appearanceTime": 100
+    },
+    {
+      "strainType": "M2",
+      "infectivity": 0.8,
+      "resilience": 0.3,
+      "appearanceTime": 300
     }
   ]
 }

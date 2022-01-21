@@ -2,6 +2,7 @@ const {
   PeopleStateTransition,
 } = require("../LifeCycleEvents/PeopleStateTransition");
 const { PeopleTravel } = require("../LifeCycleEvents/PeopleTravel");
+const { VirusMutation } = require("../LifeCycleEvents/VirusMutation");
 const { People } = require("../People/People");
 const { Virus } = require("../Virus/Virus");
 
@@ -20,6 +21,7 @@ class Space {
 
     //空間内のウイルスを定義
     const v = new Virus(config.variantConfig);
+    this.VirusModel = v;
 
     //resultパース用に
     this.strainTypesArr = v.getStrainTypesArr();
@@ -52,7 +54,10 @@ class Space {
     //人流移動を実行
     new PeopleTravel(this);
 
-    //基底状態間の移動を計算
+    //ウイルス変異を実行
+    new VirusMutation(this);
+
+    //空間内での基底状態間の遷移
     new PeopleStateTransition(this);
 
     //Peopleインスタンスで定義されたイベント開始
