@@ -19,25 +19,17 @@ class People {
     this.result = [];
     this.config = config;
     this.t = 0;
-
-    const strainTypesArr = VirusModel.getStrainTypesArr();
+    this.VirusModel = VirusModel;
 
     /**
      * sumを計算
      */
-    this.sum = {
-      NI: 0,
-      All: 0,
-      S: 0,
-      I: {},
-      R: 0,
-    };
-    for (const strainType of strainTypesArr) this.sum.I[strainType] = 0;
+    this.sum = this.getInitializedSumTemplate();
 
     /**
      * nodeTreeStructureを計算
      */
-    this.nodeTree = this.getLayeredNodeTree(strainTypesArr);
+    this.nodeTree = this.getLayeredNodeTree();
 
     /**
      * PeopleStateを生成
@@ -97,14 +89,44 @@ class People {
     this.getSum();
   }
 
-  updateWithCycleStart(VirusModel) {
+  getInitializedSumTemplate() {
+    const initialTemp = {
+      NI: 0,
+      ALL: 0,
+      S: 0,
+      I: {},
+      R: 0,
+    };
+
+    //ウイルス株を解析し、Iのpropertyを生成
+    for (const strainType of this.VirusModel.strainTypesArr)
+      initialTemp.I[strainType] = 0;
+
+    return initialTemp;
+  }
+
+  updateWithCycleStart() {
+    //時間を進める
+    this.t += 1;
+
+    //ライフサイクルイベント
     switch (this.t) {
-      case 0: {
-        //Iの初期人口生成 = 最初の感染者群発生
+      case 2: {
+        //最初のウイルス株を選択
         const firstStrainType =
-          VirusModel.getStrainConfig("_INITIAL_STRAIN_").strainType;
-        this.state[1][0].I[firstStrainType].p =
-          this.state[0][0].NI.p * this.config.params.initialInfectiousRate;
+          this.VirusModel.getStrainConfig("_INITIAL_STRAIN_").strainType;
+
+        //Iの初期人口生成 = 最初の感染者群発生
+        const S = this.state[0][0].NI;
+        const initial_I = this.state[1][0].I[firstStrainType];
+        const initial_I_population =
+          S.p * this.config.params.initialInfectiousRate;
+
+        //人口遷移
+        initial_I.p += initial_I_population;
+        S.p -= initial_I_population;
+        // console.log("LIFECYCLE_EVENT: INITIAL INFECTION START");
+        // console.log("initial infection pop =", initial_I.p);
         break;
       }
       default:
@@ -121,71 +143,54 @@ class People {
     this.recordResult();
   }
 
-  getLayeredNodeTree(strainTypesArr) {
+  getLayeredNodeTree() {
     //ノードになる基底状態を自動生成
-    const r = [[]];
-    for (let i = 0; i < strainTypesArr.length; i++) {
-      r.push(calcCombination(strainTypesArr, i + 1));
+    const modelStructure = [[]];
+    for (let i = 0; i < this.VirusModel.strainTypesArr.length; i++) {
+      modelStructure.push(
+        calcCombination(this.VirusModel.strainTypesArr, i + 1)
+      );
     }
-    console.log("\nModel Structure:\n");
-    console.log(r);
-    console.log("\n\n");
-    return r;
+    return modelStructure;
   }
 
   getSum() {
+    const tmp = this.getInitializedSumTemplate();
     for (const layer of this.state) {
       for (const node of layer) {
         //layer内のNIを算出
-        this.sum.NI += node.NI.p;
-        this.all += node.NI.p;
+        tmp.NI += node.NI.p;
+        tmp.ALL += node.NI.p;
 
         //NIのうち、SとRを分離してそれぞれ合計を記録
-        if (node.NI.immunizedType.length === 0) this.S += node.NI.p;
-        else this.R += node.NI.p;
+        if (node.NI.immunizedType.length === 0) tmp.S += node.NI.p;
+        else tmp.R += node.NI.p;
 
         //layer内のIを算出
         for (const I of Object.values(node.I)) {
-          this.sum.I[I.strainType] += I.p;
-          this.all += I.p;
+          tmp.I[I.strainType] += I.p;
+          tmp.ALL += I.p;
         }
       }
     }
+
+    return (this.sum = { ...tmp });
   }
 
   applyDiffOfAllState() {
     for (const layer of this.state) {
       for (const node of layer) {
-        //layer内のNI
+        //layer内のNI探索
         node.NI.applyDiff();
-        //layer内のI
-        for (const I of Object.values(node.I)) {
-          I.applyDiff();
-        }
+
+        //layer内のI探索
+        for (const I of Object.values(node.I)) I.applyDiff();
       }
     }
   }
 
   recordResult() {
-    const recordTemplate = {
-      S: 0,
-      I: 0,
-      R: 0,
-    };
-    for (const layer of this.state) {
-      for (const node of layer) {
-        //node === Sの場合
-        if (node.NI.immunizedType.length === 0) recordTemplate.S += node.NI.p;
-        else {
-          //Rを記録
-          recordTemplate.R += node.NI.p;
-
-          //Iを記録
-          for (const I of Object.values(node.I)) recordTemplate.I += I.p;
-        }
-      }
-    }
-    this.result.push(recordTemplate);
+    return this.result.push(this.getSum());
   }
 }
 

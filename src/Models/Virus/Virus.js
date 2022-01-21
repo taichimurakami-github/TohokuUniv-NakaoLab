@@ -6,6 +6,7 @@
 class Virus {
   constructor(variantDefaults) {
     this.config = [...variantDefaults];
+    this.strainTypesArr = this.getStrainTypesArr();
   }
 
   getStrainTypesArr() {

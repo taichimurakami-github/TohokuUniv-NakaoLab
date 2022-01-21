@@ -1,8 +1,6 @@
 const path = require("path");
-const { People } = require("./Models/People/People");
-const { Virus } = require("./Models/Virus/Virus");
 const { readFile, writeFile } = require("./io/io");
-const { Transition } = require("./Models/Calculation/Transition");
+const { Space } = require("./Models/Space/Space");
 
 (async () => {
   /**
@@ -10,20 +8,24 @@ const { Transition } = require("./Models/Calculation/Transition");
    */
   const config = await readFile(path.resolve(__dirname, "../config.json"));
 
-  const v = new Virus(config.variantConfig);
-  const p = new People(config, v);
-  // console.log("\n");
-  // console.log(p.state);
-  // console.log("\nstate:\n");
-  // console.log(p.state[3][0].I);
+  const s = new Space(config);
 
   for (let t = 0; t < config.params.timeLength; t++) {
-    p.updateWithCycleStart(v);
-    new Transition(p);
-    p.updateWithCycleEnd();
+    s.updateWithCycleStart();
+    s.executeTransition();
+    s.updateWithCycleEnd();
   }
 
-  console.log(p.result);
+  const result = s.getResults();
+
   console.log("\n");
-  console.log(p.state[3][0].I);
+  if (config.io.writeResultAsXLSX) {
+    console.log("\nwriting result as xlsx file...\n");
+
+    const resultAsObjectTemplate = Object.values(result[0].asObject);
+    const resultAxis = Object.keys(resultAsObjectTemplate[0]);
+    const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
+
+    await writeFile(parsedResult, resultAxis);
+  }
 })();
