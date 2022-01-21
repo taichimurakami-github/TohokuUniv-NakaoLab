@@ -33,8 +33,8 @@ class PeopleTravel {
     //Spaceが保持するすべてのPeopleインスタンス内のlayeredNodeの構造は同じになる
     for (let i = 0; i < P_outflowFrom.state.length; i++) {
       //phase1: 各レイヤー取り出し
-      const layer_outflowFrom = P_outflowFrom.state.length[i];
-      const layer_outflowTo = P_outflowTo.state.length[i];
+      const layer_outflowFrom = P_outflowFrom.state[i];
+      const layer_outflowTo = P_outflowTo.state[i];
 
       for (let j = 0; j < layer_outflowFrom.length; j++) {
         //phase2: 各ノード取り出し
@@ -42,7 +42,7 @@ class PeopleTravel {
         const node_outflowTo = layer_outflowTo[j];
 
         //phase3: NI系の移動
-        const NI_outflow = node_outflowFrom.NI * mvCoeff;
+        const NI_outflow = node_outflowFrom.NI.p * mvCoeff;
         node_outflowFrom.NI.p -= NI_outflow;
         node_outflowTo.NI.p += NI_outflow;
 
@@ -59,10 +59,14 @@ class PeopleTravel {
     }
   }
 
-  generateMvCoeff(SpaceModel) {
-    const config = SpaceModel.config;
+  generateMvCoeff(s) {
+    //準備
+    const config = s.config;
+    const peopleInstanceArray = s.state.map((state) => state.people);
+
+    //係数の生成
     return generateCoeffMatrix(
-      this.getInstanceArrByID("people"),
+      peopleInstanceArray,
       config.params.maxCoeffConst
     );
   }

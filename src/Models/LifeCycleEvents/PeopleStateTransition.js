@@ -2,7 +2,7 @@ class PeopleStateTransition {
   constructor(SpaceModel) {
     const s = SpaceModel;
 
-    for (const state of s) {
+    for (const state of s.state) {
       this.calcByPhaseLoop(state.people);
     }
   }
