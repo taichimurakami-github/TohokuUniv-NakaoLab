@@ -4,21 +4,30 @@ const { Space } = require("./Models/Space/Space");
 
 (async () => {
   /**
-   * 設定読み込み
+   * (1)設定読み込み
    */
   const config = await readFile(path.resolve(__dirname, "../config.json"));
 
+  /**
+   * (2)計算準備
+   */
   const s = new Space(config);
 
+  /**
+   * (3)計算
+   */
   for (let t = 0; t < config.params.timeLength; t++) {
-    s.updateWithCycleStart();
-    s.executeTransition();
-    s.updateWithCycleEnd();
+    s.updateWithLifeCycle();
   }
 
+  /**
+   * (4)結果取得
+   */
   const result = s.getResults();
 
-  console.log("\n");
+  /**
+   * (5)書き出し
+   */
   if (config.io.writeResultAsXLSX) {
     console.log("\nwriting result as xlsx file...\n");
 

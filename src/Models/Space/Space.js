@@ -1,8 +1,7 @@
-const { generateCoeffMatrix } = require("../../calc/coeff");
-const { getRandomFloat } = require("../../calc/lib");
 const {
   PeopleStateTransition,
-} = require("../Calculation/PeopleStateTransition");
+} = require("../LifeCycleEvents/PeopleStateTransition");
+const { PeopleTravel } = require("../LifeCycleEvents/PeopleTravel");
 const { People } = require("../People/People");
 const { Virus } = require("../Virus/Virus");
 
@@ -16,6 +15,7 @@ class Space {
     this.state = [];
     this.mvCoeff = [];
     this.result = {};
+    this.t = 0;
     this.config = config;
 
     //空間内のウイルスを定義
@@ -42,97 +42,39 @@ class Space {
     }
   }
 
-  updateWithCycleStart() {
-    //移動係数を更新
-    // this.renewMvCoeff();
-
-    //人流移動を開始
-    // this.calcMove();
+  updateWithLifeCycle() {
+    //時間を進める
+    this.t += 1;
 
     //Peopleインスタンスで定義されたイベント開始
-    for (const state of this.state) {
-      state.people.updateWithCycleStart();
-    }
-  }
+    for (const state of this.state) state.people.updateWithCycleStart();
 
-  updateWithCycleEnd() {
+    //人流移動を実行
+    new PeopleTravel(this);
+
+    //基底状態間の移動を計算
+    new PeopleStateTransition(this);
+
     //Peopleインスタンスで定義されたイベント開始
-    for (const state of this.state) {
-      state.people.updateWithCycleEnd();
-    }
-  }
-
-  //People.transitionクラス
-  executeTransition() {
-    for (const state of this.state) {
-      new Transition(state.people);
-    }
-  }
-
-  getInstanceArrByID(instanceID) {
-    return this.state.map((v) => {
-      if (!v[instanceID])
-        throw new Error("Space.getInstanceArrByID >> instanceIDが不正です。");
-      return v[instanceID];
-    });
-  }
-
-  renewMvCoeff() {
-    return (this.mvCoeff = generateCoeffMatrix(
-      this.getInstanceArrByID("people"),
-      this.config.params.maxCoeffConst
-    ));
-  }
-
-  //現在対象の空間以外の全ての空間に一定の割合で人が流出
-  calcMove() {
-    for (let i_from = 0; i_from < this.state.length; i_from++) {
-      //移動元のインスタンスを取得
-      const outflowFromSpaceInstance = this.state[i_from].people;
-
-      for (let i_to = 0; i_to < this.state.length; i_to++) {
-        if (i_from === i_to) continue;
-        //流出先のインスタンスを定義
-        const outflowToSpaceInstance = this.state[i_to].people;
-
-        //移動係数を取得
-        const mvCoeff = this.mvCoeff[i_from][i_to];
-
-        //移動を実行
-        for (const id of outflowFromSpaceInstance.getAllIDsArr()) {
-          //流出量を計算
-          const outflow = outflowFromSpaceInstance[id].pop * mvCoeff;
-
-          //流出元に反映(-1をかける, muはdiff計算に入れない)
-          // outflowFromSpaceInstance[id].setDiff(outflow * -1, true);
-          // outflowFromSpaceInstance[id].applyDiff();
-
-          //流出先に反映
-          // outflowToSpaceInstance[id].setDiff(outflow, true);
-          // outflowToSpaceInstance[id].applyDiff();
-        }
-      }
-    }
+    for (const state of this.state) state.people.updateWithCycleEnd();
   }
 
   /**
    * 各spaceごとのPeople.resultを返す
-   *
    * -----------------------------------
    * + return structure:
    *  [
    *    <Parent Array ID = Space.state ID>
    *    {
    *      <Each Element has results of each Space.state>
-   *       ArrayOfObj : People.result.ArrayOfObj : formatted result as Array of Object
-   *       ArrayOfPop : People.result.ArrayOfPop : only population result as Array of Array
+   *       asObject : People.result.ArrayOfObj : formatted result as Array of Object
+   *       asArray : People.result.ArrayOfPop : only population result as Array of Array
    *    },
    *    {
    *      ...
    *    }
    *  ]
    * -----------------------------------
-   *
    * @returns {[{[String]: Array}]}
    */
   getResults() {

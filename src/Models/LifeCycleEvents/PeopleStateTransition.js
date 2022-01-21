@@ -1,6 +1,10 @@
 class PeopleStateTransition {
-  constructor(p) {
-    this.calcByPhaseLoop(p);
+  constructor(SpaceModel) {
+    const s = SpaceModel;
+
+    for (const state of s) {
+      this.calcByPhaseLoop(state.people);
+    }
   }
 
   calcByPhaseLoop(People) {
@@ -28,11 +32,6 @@ class PeopleStateTransition {
               const rate_I = People.sum.I[I_this.strainType] / People.sum.ALL;
               const diff = NI_prev.p * I_this.beta * rate_I;
 
-              // if (rate_I > 1) {
-              //   console.log("\n NI -> I diff=", diff);
-              //   throw new Error("diff overflow.");
-              // }
-
               NI_prev.diff -= diff;
               I_this.diff += diff;
             }
@@ -56,8 +55,16 @@ class PeopleStateTransition {
     }
   }
 
-  getTransitionTargetOfNI(I_from, layer_next) {}
-
+  /**
+   * Utility Function (1)
+   * isArrayComprehensive
+   *
+   * 引数の配列同士が全く同じ要素を保持しているかを判定
+   *
+   * @param {Array} parent
+   * @param {Array} children
+   * @returns
+   */
   isArrayComprehensive(parent, children) {
     for (const val of children) {
       //childrenの要素が1つでもparentに含まれていなければOUT -> return false
@@ -66,6 +73,16 @@ class PeopleStateTransition {
     return true;
   }
 
+  /**
+   * Utility Function (2)
+   * isArrayComprehensive
+   *
+   * 引数の配列同士の間で、要素の包括関係があるかを判定
+   *
+   * @param {Array} parent
+   * @param {Array} children
+   * @returns
+   */
   isArraySame(arr1, arr2) {
     for (const val of arr1) {
       //arr1の要素がarr2に含まれていない時点でOUT -> return false
