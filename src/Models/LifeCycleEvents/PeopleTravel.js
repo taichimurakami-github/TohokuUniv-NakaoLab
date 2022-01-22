@@ -1,11 +1,11 @@
-const { generateCoeffMatrix } = require("../../calc/coeff");
+const { getRandomFloat } = require("../../calc/lib");
 
 class PeopleTravel {
   constructor(SpaceModel) {
     const s = SpaceModel;
 
     //移動係数を計算、保存
-    this.mvCoeff = this.generateMvCoeff(s);
+    this.mvCoeff = this.generateMvCoeffMatrix(s);
 
     //移動を実行
     for (let i_from = 0; i_from < s.state.length; i_from++) {
@@ -59,16 +59,29 @@ class PeopleTravel {
     }
   }
 
-  generateMvCoeff(s) {
-    //準備
+  generateMvCoeffMatrix(s) {
     const config = s.config;
-    const peopleInstanceArray = s.state.map((state) => state.people);
+    const space = s.state.map((state) => state.people);
+    const coeffMatrix = [];
+    const max_coeff_const = config.params.maxCoeffConst;
 
-    //係数の生成
-    return generateCoeffMatrix(
-      peopleInstanceArray,
-      config.params.maxCoeffConst
-    );
+    // coeffの範囲を動的に取得（MAX_COEFF * space.length < 1を満たすように取得）
+    // とりあえず max_coeff_const / space.lengthとした
+    const COEFF_MAX = (1 / space.length) * max_coeff_const;
+    const COEFF_MIN = COEFF_MAX * 0.001;
+
+    for (let i_from = 0; i_from < space.length; i_from++) {
+      //coeffMatrixに行を追加
+      coeffMatrix.push([]);
+
+      for (let i_to = 0; i_to < space.length; i_to++) {
+        //i_From === i_toの時は係数を0にする
+        coeffMatrix[i_from][i_to] =
+          i_from === i_to ? 0 : getRandomFloat(COEFF_MIN, COEFF_MAX);
+      }
+    }
+
+    return coeffMatrix;
   }
 }
 
