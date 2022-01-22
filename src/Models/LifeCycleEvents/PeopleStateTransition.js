@@ -30,7 +30,7 @@ class PeopleStateTransition {
        * 計算(3)
        * フィードバックの計算
        */
-      // this.calcFeedback()
+      this.calcFeedback(layer_prev, layer_this);
     }
   }
 
@@ -70,11 +70,40 @@ class PeopleStateTransition {
     }
   }
 
+  calcFeedback(layer_prev, layer_this) {
+    for (const thisNode of layer_this) {
+      const NI_this = thisNode.NI;
+      const feedbackTargets = [];
+
+      //まだNI_thisに遷移されていない場合は探索終了
+      if (NI_this.p === 0) continue;
+
+      //下層レイヤーのNIクラスの持つ免疫タイプのうち、一つ以上の免疫状態を保持している上層レイヤーのNIクラスへの遷移を行う
+      //遷移先となるNIクラスを配列上に保持する
+      for (const prevNode of layer_prev) {
+        const NI_prev = prevNode.NI;
+
+        this.isArrayComprehensive(
+          NI_this.immunizedType,
+          NI_prev.immunizedType
+        ) && feedbackTargets.push(NI_prev);
+      }
+
+      //記録したfeedbackTargetsに対して、フィードバックを計算
+      //とりあえず、均等に戻るものとする
+      for (const NI_prev of feedbackTargets) {
+        const diff = 0.01 * NI_this.p;
+        NI_this.diff -= diff;
+        NI_prev.diff += diff;
+      }
+    }
+  }
+
   /**
    * Utility Function (1)
    * isArrayComprehensive
    *
-   * 引数の配列同士が全く同じ要素を保持しているかを判定
+   * 第一引数の配列同士が第二引数の配列の要素をすべて保持しているかを判定
    *
    * @param {Array} parent
    * @param {Array} children

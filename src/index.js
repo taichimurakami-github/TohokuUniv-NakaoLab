@@ -36,5 +36,10 @@ const { Space } = require("./Models/Space/Space");
     const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
 
     await writeFile(parsedResult, resultAxis);
+  } else {
+    console.log("\n");
+    console.log(result);
   }
+
+  console.log("\n....done!");
 })();
