@@ -9,28 +9,38 @@
     "societyCheckDepth": 10
   },
   "io": {
-    "writeResultAsXLSX": true,
+    "writeResultAsXLSX": false,
     "showProgressBar": false,
     "resultArrayDepth": 3
   },
   "variantConfig": [
     {
-      "strainType": "E",
+      "strainType": "alpha",
       "infectivity": 0.4,
       "resilience": 0.3,
+      "fatarity": 0.001,
       "appearanceTime": 1
     },
     {
-      "strainType": "M1",
-      "infectivity": 0.6,
+      "strainType": "beta",
+      "infectivity": 0.5,
       "resilience": 0.3,
+      "fatarity": 0.001,
       "appearanceTime": 100
     },
     {
-      "strainType": "M2",
+      "strainType": "gamma",
+      "infectivity": 0.55,
+      "resilience": 0.3,
+      "fatarity": 0.002,
+      "appearanceTime": 150
+    },
+    {
+      "strainType": "epsilon",
       "infectivity": 0.8,
       "resilience": 0.3,
-      "appearanceTime": 300
+      "fatarity": 0.0005,
+      "appearanceTime": 250
     }
   ]
 }

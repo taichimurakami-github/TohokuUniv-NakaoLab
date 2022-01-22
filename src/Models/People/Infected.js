@@ -9,6 +9,7 @@ class I extends BasicPeopleState {
     this.strainType = options.config.strainType;
     this.beta = this.getBeta(options.config.infectivity);
     this.gamma = this.getGamma(options.config.resilience);
+    this.mu = this.getMu(options.config.fatarity);
   }
 
   getBeta(initialInfectivity) {
@@ -17,6 +18,10 @@ class I extends BasicPeopleState {
 
   getGamma(initialResilience) {
     return initialResilience;
+  }
+
+  getMu(initialModarity) {
+    return initialModarity;
   }
 }
 

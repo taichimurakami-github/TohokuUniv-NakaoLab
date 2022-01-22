@@ -62,7 +62,6 @@ class People {
           const I_immunizedType = node.filter((val) => val !== strainType);
           template.I[strainType] = new I({
             p: 0,
-            mu: 0,
             immunizedType: I_immunizedType,
             config: VirusModel.getStrainConfig(strainType),
           });

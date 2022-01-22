@@ -18,39 +18,54 @@ class PeopleStateTransition {
        * 計算(1)
        * phase同士の遷移：previousLayer.NI -> thisLayer.I
        */
-      for (const prevNode of layer_prev) {
-        const NI_prev = prevNode.NI;
-        for (const thisNode of layer_this) {
-          for (const I_this of Object.values(thisNode.I)) {
-            //(遷移元のNIのimmunizedType) === (遷移先のIのimmunizedType) かつ
-            //遷移先のIのstrainTypeが遷移元のimmunizedTypeに含まれていない
-            //    >> NI -> I への遷移発生
-            if (
-              !NI_prev.immunizedType.includes(I_this.strainType) &&
-              this.isArraySame(NI_prev.immunizedType, I_this.immunizedType)
-            ) {
-              const rate_I = People.sum.I[I_this.strainType] / People.sum.ALL;
-              const diff = NI_prev.p * I_this.beta * rate_I;
+      this.calcInfection(layer_prev, layer_this, People);
 
-              NI_prev.diff -= diff;
-              I_this.diff += diff;
-            }
-          }
-        }
-      }
       /**
        * 計算(2)
        * phase内の遷移：thisLayer.I -> thisLayer.NI
        */
+      this.calcRecover(layer_this);
+
+      /**
+       * 計算(3)
+       * フィードバックの計算
+       */
+      // this.calcFeedback()
+    }
+  }
+
+  calcInfection(layer_prev, layer_this, People) {
+    for (const prevNode of layer_prev) {
+      const NI_prev = prevNode.NI;
       for (const thisNode of layer_this) {
-        const NI_this = thisNode.NI;
-        //各I -> 各NIにそのまま遷移
-        //Iは複数のstrainTypeを含んでいる可能性があるので、forループですべて処理しておく
         for (const I_this of Object.values(thisNode.I)) {
-          const diff = I_this.p * I_this.gamma;
-          I_this.diff -= diff;
-          NI_this.diff += diff;
+          //(遷移元のNIのimmunizedType) === (遷移先のIのimmunizedType) かつ
+          //遷移先のIのstrainTypeが遷移元のimmunizedTypeに含まれていない
+          //    >> NI -> I への遷移発生
+          if (
+            !NI_prev.immunizedType.includes(I_this.strainType) &&
+            this.isArraySame(NI_prev.immunizedType, I_this.immunizedType)
+          ) {
+            const rate_I = People.sum.I[I_this.strainType] / People.sum.ALL;
+            const diff = NI_prev.p * I_this.beta * rate_I;
+
+            NI_prev.diff -= diff;
+            I_this.diff += diff;
+          }
         }
+      }
+    }
+  }
+
+  calcRecover(layer_this) {
+    for (const thisNode of layer_this) {
+      const NI_this = thisNode.NI;
+      //各I -> 各NIにそのまま遷移
+      //Iは複数のstrainTypeを含んでいる可能性があるので、forループですべて処理しておく
+      for (const I_this of Object.values(thisNode.I)) {
+        const diff = I_this.p * I_this.gamma;
+        I_this.diff -= diff;
+        NI_this.diff += diff;
       }
     }
   }
