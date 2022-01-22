@@ -1,12 +1,12 @@
 const path = require("path");
-const { readFile, writeFile } = require("./io/io");
+const { IO } = require("./io/io");
 const { Space } = require("./Models/Space/Space");
 
 (async () => {
   /**
    * (1)設定読み込み
    */
-  const config = await readFile(path.resolve(__dirname, "../config.json"));
+  const config = await IO.readFile(path.resolve(__dirname, "../config.json"));
 
   /**
    * (2)計算準備
@@ -35,7 +35,7 @@ const { Space } = require("./Models/Space/Space");
     const resultAxis = Object.keys(resultAsObjectTemplate[0]);
     const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
 
-    await writeFile(parsedResult, resultAxis);
+    await IO.writeFile(parsedResult, resultAxis);
   } else {
     console.log("\n");
     console.log(result);
