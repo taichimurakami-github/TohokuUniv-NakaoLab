@@ -28,18 +28,16 @@ const { Space } = require("./Models/Space/Space");
   /**
    * (5)書き出し
    */
-  if (config.io.writeResultAsXLSX) {
-    console.log("\nwriting result as xlsx file...\n");
+  const writeFileTypes = [];
+  config.io.writeResultAsXLSX && writeFileTypes.push("xlsx");
+  config.io.writeResultAsPNG && writeFileTypes.push("png");
 
-    const resultAsObjectTemplate = Object.values(result[0].asObject);
-    const resultAxis = Object.keys(resultAsObjectTemplate[0]);
-    const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
+  //ファイル書き出し
+  if (writeFileTypes.length > 0) {
+    console.log("\nwriting result...\n");
 
-    await IO.writeFile(parsedResult, resultAxis);
-  } else {
-    console.log("\n");
-    console.log(result);
+    await IO.writeFile(writeFileTypes, result);
+
+    console.log("\n....done!");
   }
-
-  console.log("\n....done!");
 })();

@@ -10,6 +10,7 @@
   },
   "io": {
     "writeResultAsXLSX": true,
+    "writeResultAsPNG": false,
     "showProgressBar": false,
     "resultArrayDepth": 3
   },
