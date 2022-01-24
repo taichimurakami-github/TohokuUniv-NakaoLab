@@ -20,28 +20,34 @@
       "infectivity": 0.4,
       "resilience": 0.3,
       "fatarity": 0.001,
-      "appearanceTime": 1
+      "appearanceTime": 1,
+      "crossImmunity": {}
     },
     {
       "strainType": "beta",
       "infectivity": 0.5,
       "resilience": 0.3,
       "fatarity": 0.001,
-      "appearanceTime": 100
+      "appearanceTime": 100,
+      "crossImmunity": {}
     },
     {
       "strainType": "gamma",
       "infectivity": 0.55,
       "resilience": 0.3,
-      "fatarity": 0.002,
-      "appearanceTime": 150
-    },
+      "fatarity": 0,
+      "appearanceTime": 150,
+      "crossImmunity": {}
+    }
+  ],
+  "t": [
     {
       "strainType": "epsilon",
       "infectivity": 0.8,
       "resilience": 0.3,
       "fatarity": 0.0005,
-      "appearanceTime": 250
+      "appearanceTime": 250,
+      "crossImmunity": {}
     }
   ]
 }

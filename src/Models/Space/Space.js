@@ -21,22 +21,12 @@ class Space {
 
     //空間内のウイルスを定義
     const v = new Virus(config.variantConfig);
-    this.VirusModel = v;
-
-    //resultパース用に
-    this.strainTypesArr = v.getStrainTypesArr();
+    this.VirusModel = v; //Spaceモデルに記録
+    // this.strainTypesArr = v.getStrainTypesArr(); //ウイルス情報を記録
 
     //Peopleインスタンスを空間の個数分生成
     for (let i = 0; i < config.params.spaceLength; i++) {
       //初期状態を定義
-      // const initialPop = {
-      //   S: Math.floor(
-      //     // 初期人口：0.01 ~ 1.0 * max_const
-      //     getRandomFloat(0.1, 1.0) * config.params.maxPopulationSize
-      //   ),
-      //   I_E: 100,
-      // };
-
       //各空間に属するインスタンスを作成
       this.state.push({
         people: new People(config, v),
@@ -50,6 +40,8 @@ class Space {
 
     //Peopleインスタンスで定義されたイベント開始
     for (const state of this.state) state.people.updateWithCycleStart();
+
+    //ウイルスによる死亡の反映
 
     //人流移動を実行
     new PeopleTravel(this);

@@ -27,19 +27,30 @@ class People {
     this.sum = this.getInitializedSumTemplate();
 
     /**
+     * レイヤー作成アルゴリズム
      * nodeTreeStructureを計算
      */
-    this.nodeTree = this.getLayeredNodeTree();
+    this.nodeTree = this.getLayeredStrainTypesNodeTree();
 
     /**
-     * PeopleStateを生成
+     * 作成されたレイヤーを基にPeopleStateを生成
      */
     //レイヤー内の各ノードにしたがって、計算で使用するNI, Iクラスを自動で作成
     for (let i = 0; i < this.nodeTree.length; i++) {
-      //各ノードのidと１対１で対応するように出力
+      //レイヤーを生成
       this.state[i] = [];
+
+      /**
+       * レイヤーの中身を作成
+       * 渡されたnode毎に、NIとIを作成
+       *
+       * nodeの構造は以下の通り
+       * ex1) node = ["StrainType1", "StrainType2", "StrainType3"]
+       * ex2) node = [["M1","M2"], ["M2","M3"], ["M3", "M1"]]
+       */
       for (const node of this.nodeTree[i]) {
-        const template = { I: {}, NI: null };
+        //各レイヤーのテンプレート生成
+        const template = { NI: null, RI: {}, I: {} };
         /**
          * 各ノードには、一つの回復者NIが対応
          * ex: node = ["E","M1","M2"]の場合
@@ -51,26 +62,48 @@ class People {
           mu: 0,
           immunizedType: node,
         });
+
         /**
          * 各ノードには、ウイルス株の個数に応じて複数のIが対応
          * ex: node = ["E","M1","M2"]の場合
-         * (1) I_E(immunized M1, M2)
-         * (2) I_M1(immunized E, M2)
-         * (3) I_M2(immunized E, M1)
+         * + I_E(immunized M1, M2)
+         * + I_M1(immunized E, M2)
+         * + I_M2(immunized E, M1)
+         *
+         * また、再感染に対応するノードも生成
+         * + I_E(immunized E, M1), I_E(immunized E, M2)
+         * + I_M1(immunized E, M1), I_E(immunized M1, M2)
+         * + I_M2(immunized E, M2), I_E(immunized M1, M2)
          */
         for (const strainType of node) {
+          //nodeから要素１つを除外した配列を用意
           const I_immunizedType = node.filter((val) => val !== strainType);
+
+          //新規ウイルス株に対する感染クラス（I）を生成
+          //I_immunizedTypeを獲得済み免疫として設定
+          //除外されたstrainTypeを感染先のウイルス株と認定
           template.I[strainType] = new I({
             p: 0,
             immunizedType: I_immunizedType,
             config: VirusModel.getStrainConfig(strainType),
           });
+
+          //感染済みウイルス株に対する感染クラス（RI）を生成
+          //immunizedType:
+          template.RI[strainType] = new I({
+            p: 0,
+            immunizedType: node,
+            config: VirusModel.getStrainConfig(strainType),
+            reinfected: true,
+          });
         }
+
+        //テンプレートに従ってノードを生成
         this.state[i].push(template);
       }
     }
 
-    //S生成
+    //S（免疫を保持しない原点ノード）生成
     this.state[0].push({
       NI: new NI({
         p: Math.floor(
@@ -81,11 +114,26 @@ class People {
         immunizedType: [],
       }),
       I: {},
+      RI: {},
     });
 
     //初期状態を記録
     this.recordResult();
     this.getSum();
+  }
+
+  updateWithCycleStart() {
+    //時間を進める
+    this.t += 1;
+
+    //イベント実行後のsumを求める -> 計算にて使用
+    this.getSum();
+    return;
+  }
+
+  updateWithCycleEnd() {
+    this.applyDiffOfAllState();
+    this.recordResult();
   }
 
   getInitializedSumTemplate() {
@@ -104,21 +152,7 @@ class People {
     return initialTemp;
   }
 
-  updateWithCycleStart() {
-    //時間を進める
-    this.t += 1;
-
-    //イベント実行後のsumを求める -> 計算にて使用
-    this.getSum();
-    return;
-  }
-
-  updateWithCycleEnd() {
-    this.applyDiffOfAllState();
-    this.recordResult();
-  }
-
-  getLayeredNodeTree() {
+  getLayeredStrainTypesNodeTree() {
     //ノードになる基底状態を自動生成
     const modelStructure = [[]];
     for (let i = 0; i < this.VirusModel.strainTypesArr.length; i++) {
@@ -146,6 +180,13 @@ class People {
           tmp.I[I.strainType] += I.p;
           tmp.ALL += I.p;
         }
+
+        //layer内のRIを算出
+        for (const RI of Object.values(node.RI)) {
+          //再感染者もIクラスで保持するので、Iクラスの合計として算出する
+          tmp.I[RI.strainType] += RI.p;
+          tmp.ALL += RI.p;
+        }
       }
     }
 
@@ -160,6 +201,9 @@ class People {
 
         //layer内のI探索
         for (const I of Object.values(node.I)) I.applyDiff();
+
+        //layer内のRI探索
+        for (const RI of Object.values(node.RI)) RI.applyDiff();
       }
     }
   }
