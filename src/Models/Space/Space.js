@@ -1,4 +1,3 @@
-const { PeopleDeath } = require("../LifeCycleEvents/PeopleDeathByInfection");
 const {
   PeopleStateTransition,
 } = require("../LifeCycleEvents/PeopleStateTransition");
@@ -38,8 +37,6 @@ class Space {
   updateWithLifeCycle() {
     //時間を進める
     this.t += 1;
-
-    // new PeopleDeath(this);
 
     //人流移動を実行
     new PeopleTravel(this);

@@ -68,7 +68,7 @@ class PeopleTravel {
     // coeffの範囲を動的に取得（MAX_COEFF * space.length < 1を満たすように取得）
     // とりあえず max_coeff_const / space.lengthとした
     const COEFF_MAX = (1 / space.length) * max_coeff_const;
-    const COEFF_MIN = COEFF_MAX * 0.001;
+    const COEFF_MIN = COEFF_MAX * 0.01;
 
     for (let i_from = 0; i_from < space.length; i_from++) {
       //coeffMatrixに行を追加
