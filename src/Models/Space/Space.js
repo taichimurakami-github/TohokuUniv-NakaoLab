@@ -1,3 +1,4 @@
+const { PeopleDeath } = require("../LifeCycleEvents/PeopleDeathByInfection");
 const {
   PeopleStateTransition,
 } = require("../LifeCycleEvents/PeopleStateTransition");
@@ -38,10 +39,7 @@ class Space {
     //時間を進める
     this.t += 1;
 
-    //Peopleインスタンスで定義されたイベント開始
-    for (const state of this.state) state.people.updateWithCycleStart();
-
-    //ウイルスによる死亡の反映
+    // new PeopleDeath(this);
 
     //人流移動を実行
     new PeopleTravel(this);
@@ -49,10 +47,16 @@ class Space {
     //ウイルス変異を実行
     new VirusMutation(this);
 
+    //Peopleインスタンスで定義されたイベント開始
+    for (const state of this.state) state.people.updateWithCycleStart();
+
     //空間内での基底状態間の遷移
     new PeopleStateTransition(this);
 
     //Peopleインスタンスで定義されたイベント開始
+    //1. 計算結果を反映
+    //2. 該当インスタンスの死亡率を算出して適用
+    //3. ライフサイクルの最終計算結果を記録
     for (const state of this.state) state.people.updateWithCycleEnd();
   }
 

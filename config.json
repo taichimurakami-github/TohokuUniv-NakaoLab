@@ -1,12 +1,12 @@
 {
   "params": {
     "timeLength": 500,
-    "spaceLength": 10,
+    "spaceLength": 5,
     "maxCoeffConst": 1,
     "maxPopulationSize": 1000000,
+    "birthRate": 0,
     "initialInfectiousRate": 0.0001,
-    "mutationBeginTime": 200,
-    "societyCheckDepth": 10
+    "initialFatarity": 0
   },
   "io": {
     "writeResultAsXLSX": true,
@@ -17,30 +17,28 @@
   "variantConfig": [
     {
       "strainType": "alpha",
-      "infectivity": 0.4,
+      "infectivity": 0.3,
       "resilience": 0.3,
-      "fatarity": 0.001,
+      "fatarity": 0.005,
       "appearanceTime": 1,
       "crossImmunity": {}
     },
     {
       "strainType": "beta",
-      "infectivity": 0.5,
+      "infectivity": 0.3,
       "resilience": 0.3,
-      "fatarity": 0.001,
+      "fatarity": 0.006,
       "appearanceTime": 100,
       "crossImmunity": {}
     },
     {
       "strainType": "gamma",
-      "infectivity": 0.55,
+      "infectivity": 0.5,
       "resilience": 0.3,
-      "fatarity": 0,
+      "fatarity": 0.01,
       "appearanceTime": 150,
       "crossImmunity": {}
-    }
-  ],
-  "t": [
+    },
     {
       "strainType": "epsilon",
       "infectivity": 0.8,

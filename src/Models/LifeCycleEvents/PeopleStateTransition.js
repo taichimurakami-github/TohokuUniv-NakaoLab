@@ -39,7 +39,7 @@ class PeopleStateTransition {
     }
   }
 
-  calcInfection(layer_prev, layer_this, People, Virus) {
+  calcInfection(layer_prev, layer_this, People, VirusModel) {
     for (const prevNode of layer_prev) {
       const NI_prev = prevNode.NI;
       for (const thisNode of layer_this) {
@@ -58,12 +58,7 @@ class PeopleStateTransition {
             const rate_I = People.sum.I[I_this.strainType] / People.sum.ALL;
 
             //交差免疫反応を考慮した感染力の生成
-            const beta =
-              I_this.beta *
-              Virus.getCrossImmunityEffectForBeta(
-                I_this.strainType,
-                NI_prev.immunizedType
-              );
+            const beta = I_this.getBeta("infected", VirusModel);
 
             //計算
             const diff = NI_prev.p * beta * rate_I;
@@ -81,7 +76,7 @@ class PeopleStateTransition {
           const rate_RI = People.sum.I[RI_this.strainType] / People.sum.ALL;
 
           //交差免疫反応を考慮した感染力の生成
-          const beta = RI_this.beta * Virus.getImmunizedEffectForBeta();
+          const beta = RI_this.getBeta("reinfected", VirusModel);
 
           //計算
           const diff = NI_prev.p * beta * rate_RI;
@@ -100,7 +95,7 @@ class PeopleStateTransition {
       //各I -> 各NIにそのまま遷移
       //Iは複数のstrainTypeをキーとして含んでいる可能性があるので、forループですべて処理しておく
       for (const I_this of Object.values(thisNode.I)) {
-        const diff = I_this.p * I_this.gamma;
+        const diff = I_this.p * I_this.getGamma();
         I_this.diff -= diff;
         NI_this.diff += diff;
       }
@@ -108,7 +103,7 @@ class PeopleStateTransition {
       //各I -> 各NIにそのまま遷移
       //Iは複数のstrainTypeをキーとして含んでいる可能性があるので、forループですべて処理しておく
       for (const RI_this of Object.values(thisNode.RI)) {
-        const diff = RI_this.p * RI_this.gamma;
+        const diff = RI_this.p * RI_this.getGamma();
         RI_this.diff -= diff;
         NI_this.diff += diff;
       }

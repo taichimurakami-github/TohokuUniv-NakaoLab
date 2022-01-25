@@ -34,11 +34,28 @@ class People {
 
     /**
      * 作成されたレイヤーを基にPeopleStateを生成
+     * レイヤー内の各ノードにしたがって、計算で使用するNI, Iクラスを自動で作成する
      */
-    //レイヤー内の各ノードにしたがって、計算で使用するNI, Iクラスを自動で作成
-    for (let i = 0; i < this.nodeTree.length; i++) {
+
+    //S（免疫を保持しない原点ノード）生成
+    this.state[0] = [
+      {
+        NI: new NI({
+          p: Math.floor(
+            // 初期人口：0.01 ~ 1.0 * max_const
+            getRandomFloat(0.1, 1.0) * this.config.params.maxPopulationSize
+          ),
+          immunizedType: [],
+          config: this.config,
+        }),
+        I: {},
+        RI: {},
+      },
+    ];
+
+    for (let i = 1; i < this.nodeTree.length; i++) {
       //レイヤーを生成
-      this.state[i] = [];
+      this.state.push([]);
 
       /**
        * レイヤーの中身を作成
@@ -58,9 +75,8 @@ class People {
          * のみ生成
          */
         template.NI = new NI({
-          p: 0,
-          mu: 0,
           immunizedType: node,
+          config: this.config,
         });
 
         /**
@@ -83,17 +99,15 @@ class People {
           //I_immunizedTypeを獲得済み免疫として設定
           //除外されたstrainTypeを感染先のウイルス株と認定
           template.I[strainType] = new I({
-            p: 0,
             immunizedType: I_immunizedType,
-            config: VirusModel.getStrainConfig(strainType),
+            VirusConfig: VirusModel.getStrainConfig(strainType),
           });
 
           //感染済みウイルス株に対する感染クラス（RI）を生成
           //immunizedType:
           template.RI[strainType] = new I({
-            p: 0,
             immunizedType: node,
-            config: VirusModel.getStrainConfig(strainType),
+            VirusConfig: VirusModel.getStrainConfig(strainType),
             reinfected: true,
           });
         }
@@ -102,20 +116,6 @@ class People {
         this.state[i].push(template);
       }
     }
-
-    //S（免疫を保持しない原点ノード）生成
-    this.state[0].push({
-      NI: new NI({
-        p: Math.floor(
-          // 初期人口：0.01 ~ 1.0 * max_const
-          getRandomFloat(0.1, 1.0) * this.config.params.maxPopulationSize
-        ),
-        mu: 0,
-        immunizedType: [],
-      }),
-      I: {},
-      RI: {},
-    });
 
     //初期状態を記録
     this.recordResult();
@@ -132,7 +132,26 @@ class People {
   }
 
   updateWithCycleEnd() {
-    this.applyDiffOfAllState();
+    //計算結果を適用したのち、死亡数を計算して適用する
+    for (const layer of this.state) {
+      for (const node of layer) {
+        //layer内のNI探索 & 死亡と出生の反映
+        node.NI.applyDiff();
+        node.NI.applyBirthAndDeath();
+
+        //layer内のI探索 & 感染による死亡の反映
+        for (const I of Object.values(node.I)) {
+          I.applyDiff();
+          I.applyDeathByInfection();
+        }
+
+        //layer内のRI探索 & 感染による死亡の反映
+        for (const RI of Object.values(node.RI)) {
+          RI.applyDiff();
+          RI.applyDeathByInfection();
+        }
+      }
+    }
     this.recordResult();
   }
 
@@ -191,21 +210,6 @@ class People {
     }
 
     return (this.sum = { ...tmp });
-  }
-
-  applyDiffOfAllState() {
-    for (const layer of this.state) {
-      for (const node of layer) {
-        //layer内のNI探索
-        node.NI.applyDiff();
-
-        //layer内のI探索
-        for (const I of Object.values(node.I)) I.applyDiff();
-
-        //layer内のRI探索
-        for (const RI of Object.values(node.RI)) RI.applyDiff();
-      }
-    }
   }
 
   recordResult() {

@@ -1,7 +1,6 @@
 class BasicPeopleState {
   constructor(options, eqConsts) {
-    this.p = options.p;
-    this.mu = options.mu;
+    this.p = options?.p || 0;
     this.immunizedType = options.immunizedType;
     this.diff = 0;
 
