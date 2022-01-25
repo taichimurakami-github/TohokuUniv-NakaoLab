@@ -4,7 +4,7 @@
     "spaceLength": 10,
     "maxCoeffConst": 0.5,
     "maxPopulationSize": 1000000,
-    "birthRate": 0.001,
+    "birthRate": 0.003,
     "initialInfectiousRate": 0.0001,
     "initialFatarity": 0
   },
@@ -19,33 +19,83 @@
       "strainType": "alpha",
       "infectivity": 0.3,
       "resilience": 0.35,
-      "fatarity": 0,
+      "fatarity": 0.001,
       "appearanceTime": 1,
-      "crossImmunity": {}
+      "crossImmunity": {
+        "beta": 0.1,
+        "gamma": 0.1,
+        "delta": 0.1,
+        "epsilon": 0.1,
+        "zeta": 0.1
+      }
     },
     {
       "strainType": "beta",
       "infectivity": 0.35,
       "resilience": 0.3,
-      "fatarity": 0,
+      "fatarity": 0.002,
       "appearanceTime": 120,
-      "crossImmunity": {}
+      "crossImmunity": {
+        "alpha": 0.1,
+        "gamma": 0.1,
+        "delta": 0.1,
+        "epsilon": 0.1,
+        "zeta": 0.1
+      }
     },
     {
       "strainType": "gamma",
       "infectivity": 0.5,
       "resilience": 0.4,
-      "fatarity": 0,
+      "fatarity": 0.002,
       "appearanceTime": 240,
-      "crossImmunity": {}
+      "crossImmunity": {
+        "alpha": 0.1,
+        "gamma": 0.1,
+        "delta": 0.1,
+        "epsilon": 0.1,
+        "zeta": 0.1
+      }
+    },
+    {
+      "strainType": "delta",
+      "infectivity": 0.5,
+      "resilience": 0.4,
+      "fatarity": 0.002,
+      "appearanceTime": 300,
+      "crossImmunity": {
+        "alpha": 0.1,
+        "gamma": 0.1,
+        "delta": 0.1,
+        "epsilon": 0.1,
+        "zeta": 0.1
+      }
     },
     {
       "strainType": "epsilon",
-      "infectivity": 0.75,
+      "infectivity": 0.7,
       "resilience": 0.4,
-      "fatarity": 0,
-      "appearanceTime": 360,
-      "crossImmunity": {}
+      "fatarity": 0.001,
+      "appearanceTime": 400,
+      "crossImmunity": {
+        "alpha": 0.1,
+        "beta": 0.1,
+        "gamma": 0.1,
+        "delta": 0.1,
+        "epsilon": 0.1
+      }
+    },
+    {
+      "strainType": "zeta",
+      "infectivity": 0.6,
+      "resilience": 0.4,
+      "fatarity": 0.002,
+      "appearanceTime": 400,
+      "crossImmunity": {
+        "alpha": 0.2,
+        "beta": 0.2,
+        "gamma": 0.2
+      }
     }
   ]
 }

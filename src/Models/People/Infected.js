@@ -63,6 +63,7 @@ class I extends BasicPeopleState {
    */
   getCrossImmunityEffectForBeta(VirusModel) {
     let attenuationRate = 0;
+    const attenuationRate_maxConst = 0.9;
 
     //免疫を保持しているウイルス株すべての交差免疫性の設定を読み出す
     for (const immunizedStrainType of this.immunizedType) {
@@ -75,12 +76,17 @@ class I extends BasicPeopleState {
       );
     }
 
-    //減衰値が1を超えていればエラー
-    if (1 < attenuationRate) {
-      throw new Error(
-        "Virus.getCrossImmunityEffect Error: 免疫交差性による減衰率の設定は、各ウイルスごとに合計値が１を下回るように設定してください。"
-      );
-    }
+    //減衰値が最大値を超えていれば強制的に最大値に戻す
+    if (attenuationRate_maxConst < attenuationRate)
+      attenuationRate = attenuationRate_maxConst;
+    //   throw new Error(
+    //     "Virus.getCrossImmunityEffect Error: 免疫交差性による減衰率の設定は、各ウイルスごとに合計値が１を下回るように設定してください。"
+    //   );
+    // if (0.8 < attenuationRate) {
+    //   throw new Error(
+    //     "Virus.getCrossImmunityEffect Error: 免疫交差性による減衰率の設定は、各ウイルスごとに合計値が１を下回るように設定してください。"
+    //   );
+    // }
 
     //減衰値を返す（そのまま感染力に乗する）
     return 1 - attenuationRate;
