@@ -1,12 +1,19 @@
 {
   "params": {
     "timeLength": 720,
-    "spaceLength": 10,
+    "spaceLength": 100,
     "maxCoeffConst": 0.5,
     "maxPopulationSize": 1000000,
     "birthRate": 0.003,
     "initialInfectiousRate": 0.0001,
-    "initialFatarity": 0
+    "initialFatarity": 0,
+    "space": {
+      "connectionType": "full",
+      "length": {
+        "col": 10,
+        "row": 10
+      }
+    }
   },
   "io": {
     "writeResultAsXLSX": true,
@@ -22,8 +29,8 @@
       "fatarity": 0.001,
       "appearanceTime": 1,
       "crossImmunity": {
-        "beta": 0.1,
-        "gamma": 0.1,
+        "beta": 0.2,
+        "gamma": 0.15,
         "delta": 0.1,
         "epsilon": 0.1,
         "zeta": 0.1
@@ -36,9 +43,9 @@
       "fatarity": 0.002,
       "appearanceTime": 120,
       "crossImmunity": {
-        "alpha": 0.1,
-        "gamma": 0.1,
-        "delta": 0.1,
+        "alpha": 0.2,
+        "gamma": 0.2,
+        "delta": 0.15,
         "epsilon": 0.1,
         "zeta": 0.1
       }
@@ -50,11 +57,11 @@
       "fatarity": 0.002,
       "appearanceTime": 240,
       "crossImmunity": {
-        "alpha": 0.1,
-        "gamma": 0.1,
-        "delta": 0.1,
-        "epsilon": 0.1,
-        "zeta": 0.1
+        "alpha": 0.2,
+        "gamma": 0.2,
+        "delta": 0.2,
+        "epsilon": 0.15,
+        "zeta": 0.15
       }
     },
     {
@@ -64,11 +71,11 @@
       "fatarity": 0.002,
       "appearanceTime": 300,
       "crossImmunity": {
-        "alpha": 0.1,
-        "gamma": 0.1,
-        "delta": 0.1,
-        "epsilon": 0.1,
-        "zeta": 0.1
+        "alpha": 0.2,
+        "gamma": 0.2,
+        "delta": 0.2,
+        "epsilon": 0.2,
+        "zeta": 0.15
       }
     },
     {
@@ -78,11 +85,11 @@
       "fatarity": 0.001,
       "appearanceTime": 400,
       "crossImmunity": {
-        "alpha": 0.1,
-        "beta": 0.1,
-        "gamma": 0.1,
-        "delta": 0.1,
-        "epsilon": 0.1
+        "alpha": 0.2,
+        "beta": 0.2,
+        "gamma": 0.2,
+        "delta": 0.2,
+        "epsilon": 0.2
       }
     },
     {

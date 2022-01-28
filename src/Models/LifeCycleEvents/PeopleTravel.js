@@ -3,6 +3,8 @@ const { getRandomFloat } = require("../../calc/lib");
 class PeopleTravel {
   constructor(SpaceModel) {
     const s = SpaceModel;
+    this.connectionType = s.config.params.space.connectionType;
+    this.spaceLength = s.config.params.space;
 
     //移動係数を計算、保存
     this.mvCoeff = this.generateMvCoeffMatrix(s);
@@ -13,7 +15,7 @@ class PeopleTravel {
       const P_outflowFrom = s.state[i_from].people;
 
       for (let i_to = 0; i_to < s.state.length; i_to++) {
-        //流出先が流出元と同じPeopleだったらスキップ
+        //流出先が流出元と同じSpaceだったらスキップ
         if (i_from === i_to) continue;
 
         //移動係数を取得
@@ -35,8 +37,21 @@ class PeopleTravel {
       //phase1: 各レイヤー取り出し
       const layer_outflowFrom = P_outflowFrom.state[i];
       const layer_outflowTo = P_outflowTo.state[i];
+      let adjacentScanningCnt = 0;
 
       for (let j = 0; j < layer_outflowFrom.length; j++) {
+        //設定でconnectionType = partial にしている場合の処理
+        //部分結合なので、隣接したセルに対してのみ移動を発生させる
+        if (this.connectionType === "partial") {
+          //2. i_toがi_fromと隣り合っていなければスキップ
+          if (!this.isAdjacent(this.spaceLength, i_from, i_to)) continue;
+
+          //3. すべての隣接セルを操作し終わったらこのループを終了
+          if (adjacentScanningCnt === 4) break;
+
+          adjacentScanningCnt++;
+        }
+
         //phase2: 各ノード取り出し
         const node_outflowFrom = layer_outflowFrom[j];
         const node_outflowTo = layer_outflowTo[j];
@@ -57,6 +72,30 @@ class PeopleTravel {
         }
       }
     }
+  }
+
+  isAdjacent(length, i, j) {
+    const col = length.col;
+    const row = length.row;
+
+    //case 1 check left
+    const left = i - 1;
+    if (j === left || j === left + row) return true;
+
+    //case 2 check right
+    const right = i + 1;
+    if (j === right || j === right - row) return true;
+
+    //case 3 check top
+    const top = i - col;
+    if (j === top || j === top + (row - 1) * col) return true;
+
+    //case 4 check bottom
+    const bottom = i + col;
+    if (j === bottom || j === bottom - (row - 1) * col) return true;
+
+    //not adjacent
+    return false;
   }
 
   generateMvCoeffMatrix(s) {
