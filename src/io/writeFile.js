@@ -30,6 +30,10 @@ const writeFile = async (writeFiletypes, result) => {
         break;
       }
 
+      case "json": {
+        break;
+      }
+
       default:
         break;
     }

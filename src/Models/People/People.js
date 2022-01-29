@@ -160,7 +160,7 @@ class People {
       NI: 0,
       ALL: 0,
       S: 0,
-      I: {},
+      I: { ALL: 0 },
       R: 0,
     };
 
@@ -198,6 +198,7 @@ class People {
         for (const I of Object.values(node.I)) {
           tmp.I[I.strainType] += I.p;
           tmp.ALL += I.p;
+          tmp.I.ALL += I.p;
         }
 
         //layer内のRIを算出
@@ -205,6 +206,7 @@ class People {
           //再感染者もIクラスで保持するので、Iクラスの合計として算出する
           tmp.I[RI.strainType] += RI.p;
           tmp.ALL += RI.p;
+          tmp.I.ALL += RI.p;
         }
       }
     }

@@ -24,10 +24,10 @@
   "variantConfig": [
     {
       "strainType": "alpha",
-      "infectivity": 0.3,
+      "infectivity": 0.5,
       "resilience": 0.35,
       "fatarity": 0.001,
-      "appearanceTime": 1,
+      "appearanceTime": 10,
       "appearanceAt": [5],
       "crossImmunity": {
         "beta": 0.2,
