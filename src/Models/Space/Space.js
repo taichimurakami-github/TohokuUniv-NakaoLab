@@ -25,7 +25,8 @@ class Space {
     // this.strainTypesArr = v.getStrainTypesArr(); //ウイルス情報を記録
 
     //Peopleインスタンスを空間の個数分生成
-    for (let i = 0; i < config.params.spaceLength; i++) {
+    const spaceConfig = config.params.space;
+    for (let i = 0; i < this.getSpaceLength(spaceConfig); i++) {
       //初期状態を定義
       //各空間に属するインスタンスを作成
       this.state.push({
@@ -55,6 +56,12 @@ class Space {
     //2. 該当インスタンスの死亡率を算出して適用
     //3. ライフサイクルの最終計算結果を記録
     for (const state of this.state) state.people.updateWithCycleEnd();
+  }
+
+  getSpaceLength(spaceConfig) {
+    const row = spaceConfig.length.row;
+    const col = spaceConfig.length.col;
+    return row * col;
   }
 
   /**
