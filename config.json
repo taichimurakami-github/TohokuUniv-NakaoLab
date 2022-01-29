@@ -15,7 +15,7 @@
     }
   },
   "io": {
-    "writeResultAsXLSX": true,
+    "writeResultAsXLSX": false,
     "writeResultAsJSON": true,
     "writeResultAsPNG": false,
     "showProgressBar": true,

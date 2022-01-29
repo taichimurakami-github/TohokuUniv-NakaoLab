@@ -9,28 +9,32 @@ const XLSX = require("xlsx");
  * @returns
  */
 const writeFile = async (writeFiletypes, result) => {
-  //XLSXファイル書き出し設定
-  const [writeFileName, writeFilePath] = getFileNameAndPath();
-
-  //フォルダが存在するか確認
-  handleCheckFolder(writeFilePath);
+  const resultAsObjectTemplate = Object.values(result[0].asObject);
+  const axisNames = Object.keys(resultAsObjectTemplate[0]);
+  const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
 
   //ファイル生成
   for (const fileType of writeFiletypes) {
     switch (fileType) {
       case "xlsx": {
-        const resultAsObjectTemplate = Object.values(result[0].asObject);
-        const axisNames = Object.keys(resultAsObjectTemplate[0]);
-        const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
+        //XLSXファイル書き出し設定
+        const [writeFileName, writeFilePath] = getFileNameAndPath("xlsx");
+        //フォルダが存在するか確認
+        handleCheckFolder(writeFilePath);
+        //書き出し
         await handleWriteFileAsXLSX(writeFileName, parsedResult, axisNames);
-        break;
-      }
 
-      case "png": {
         break;
       }
 
       case "json": {
+        //XLSXファイル書き出し設定
+        const [writeFileName, writeFilePath] = getFileNameAndPath("json");
+        //フォルダが存在するか確認
+        handleCheckFolder(writeFilePath);
+        //書き出し
+        await handleWriteFileAsJSON(writeFileName, parsedResult, axisNames);
+
         break;
       }
 
@@ -40,13 +44,16 @@ const writeFile = async (writeFiletypes, result) => {
   }
 };
 
-const getFileNameAndPath = () => {
+const getFileNameAndPath = (writeFileType) => {
   const now = new Date();
   const fileNameDateString = `${now.getFullYear()}.${
     now.getMonth() + 1
   }.${now.getDate()}-${now.getHours()}${now.getMinutes()}-${now.getSeconds()}${now.getMilliseconds()}`;
-  const writeFileType = "xlsx";
-  const writeFilePath = path.resolve(__dirname, "../../result");
+  const writeFilePath = path.resolve(
+    __dirname,
+    "../../result/" + writeFileType
+  );
+
   const writeFileName = path.resolve(
     writeFilePath,
     "result-" + fileNameDateString + `.${writeFileType}`
@@ -69,7 +76,13 @@ const handleCheckFolder = async (writeFilePath) => {
   }
 };
 
-const handleWriteFileAsPNG = async (writeFileName, data, axisNames) => {};
+const handleWriteFileAsJSON = async (writeFileName, data, axisNames) => {
+  const dataObject = {
+    axisNames: axisNames,
+    data: data,
+  };
+  await fs.writeFile(writeFileName, JSON.stringify(dataObject));
+};
 
 const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
   const now = new Date();
