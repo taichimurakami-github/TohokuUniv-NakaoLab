@@ -17,7 +17,8 @@ const { Space } = require("./Models/Space/Space");
    * (3)計算
    */
   for (let t = 0; t < config.params.timeLength; t++) {
-    IO.showProgressOnConsole(t, config.params.timeLength);
+    config.io.showProgressBar &&
+      IO.showProgressOnConsole(t, config.params.timeLength);
     s.updateWithLifeCycle();
   }
 

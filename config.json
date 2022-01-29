@@ -1,16 +1,15 @@
 {
   "params": {
     "timeLength": 720,
-    "spaceLength": 100,
     "maxCoeffConst": 0.5,
     "maxPopulationSize": 1000000,
     "birthRate": 0.003,
     "initialInfectiousRate": 0.0001,
     "initialFatarity": 0,
     "space": {
-      "connectionType": "full",
+      "connectionType": "partial",
       "length": {
-        "col": 10,
+        "col": 15,
         "row": 10
       }
     }
@@ -18,7 +17,7 @@
   "io": {
     "writeResultAsXLSX": true,
     "writeResultAsPNG": false,
-    "showProgressBar": false,
+    "showProgressBar": true,
     "resultArrayDepth": 3
   },
   "variantConfig": [
