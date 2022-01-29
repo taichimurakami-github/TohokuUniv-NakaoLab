@@ -37,7 +37,7 @@ const showProgressOnConsole = (now, total) => {
   /**
    * move cursor and rewrite progress
    */
-  if (now !== 1) readline.moveCursor(process.stdout, 0, -3);
+  if (now !== 0) readline.moveCursor(process.stdout, 0, -3);
 
   process.stdout.write(`
     now calculating ...

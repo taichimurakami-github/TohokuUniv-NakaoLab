@@ -3,19 +3,20 @@
     "timeLength": 720,
     "maxCoeffConst": 0.5,
     "maxPopulationSize": 1000000,
-    "birthRate": 0.003,
+    "birthRate": 0.0,
     "initialInfectiousRate": 0.0001,
     "initialFatarity": 0,
     "space": {
       "connectionType": "partial",
       "length": {
-        "col": 15,
+        "col": 10,
         "row": 10
       }
     }
   },
   "io": {
     "writeResultAsXLSX": true,
+    "writeResultAsJSON": true,
     "writeResultAsPNG": false,
     "showProgressBar": true,
     "resultArrayDepth": 3
@@ -27,6 +28,7 @@
       "resilience": 0.35,
       "fatarity": 0.001,
       "appearanceTime": 1,
+      "appearanceAt": [5],
       "crossImmunity": {
         "beta": 0.2,
         "gamma": 0.15,
@@ -48,13 +50,16 @@
         "epsilon": 0.1,
         "zeta": 0.1
       }
-    },
+    }
+  ],
+  "otherVariants": [
     {
       "strainType": "gamma",
       "infectivity": 0.5,
       "resilience": 0.4,
       "fatarity": 0.002,
       "appearanceTime": 240,
+      "appearanceAt": [3],
       "crossImmunity": {
         "alpha": 0.2,
         "gamma": 0.2,
