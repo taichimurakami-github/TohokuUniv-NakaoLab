@@ -8,7 +8,7 @@ const XLSX = require("xlsx");
  * @param {array of array} data
  * @returns
  */
-const writeFile = async (writeFiletypes, result) => {
+const writeFile = async (writeFiletypes, result, config) => {
   const resultAsObjectTemplate = Object.values(result[0].asObject);
   const axisNames = Object.keys(resultAsObjectTemplate[0]);
   const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
@@ -33,7 +33,12 @@ const writeFile = async (writeFiletypes, result) => {
         //フォルダが存在するか確認
         handleCheckFolder(writeFilePath);
         //書き出し
-        await handleWriteFileAsJSON(writeFileName, parsedResult, axisNames);
+        await handleWriteFileAsJSON(
+          writeFileName,
+          parsedResult,
+          axisNames,
+          config
+        );
 
         break;
       }
@@ -76,12 +81,20 @@ const handleCheckFolder = async (writeFilePath) => {
   }
 };
 
-const handleWriteFileAsJSON = async (writeFileName, data, axisNames) => {
+const handleWriteFileAsJSON = async (
+  writeFileName,
+  data,
+  axisNames,
+  config
+) => {
   const dataObject = {
     axisNames: axisNames,
+    config: config,
     data: data,
   };
-  await fs.writeFile(writeFileName, JSON.stringify(dataObject));
+
+  console.log(dataObject);
+  return await fs.writeFile(writeFileName, JSON.stringify(dataObject));
 };
 
 const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {

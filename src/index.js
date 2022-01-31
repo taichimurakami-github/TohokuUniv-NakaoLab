@@ -39,7 +39,7 @@ const { Space } = require("./Models/Space/Space");
   if (writeFileTypes.length > 0) {
     console.log("\nwriting result...\n");
 
-    await IO.writeFile(writeFileTypes, result);
+    await IO.writeFile(writeFileTypes, result, config);
 
     console.log("\n....done!");
   }
