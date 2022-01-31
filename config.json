@@ -1,6 +1,6 @@
 {
   "params": {
-    "timeLength": 2500,
+    "timeLength": 1000,
     "maxCoeffConst": 0.5,
     "maxPopulationSize": 1000000,
     "birthRate": 0.0,
@@ -24,7 +24,7 @@
   "variantConfig": [
     {
       "strainType": "alpha",
-      "infectivity": 0.3,
+      "infectivity": 0.35,
       "resilience": 0.35,
       "fatarity": 0.001,
       "appearanceTime": 10,
