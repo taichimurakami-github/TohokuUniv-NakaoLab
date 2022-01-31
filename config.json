@@ -1,21 +1,22 @@
 {
   "params": {
-    "timeLength": 720,
+    "timeLength": 1000,
     "maxCoeffConst": 0.5,
     "maxPopulationSize": 1000000,
-    "birthRate": 0.003,
+    "birthRate": 0.0,
     "initialInfectiousRate": 0.0001,
     "initialFatarity": 0,
     "space": {
       "connectionType": "partial",
       "length": {
-        "col": 15,
+        "col": 10,
         "row": 10
       }
     }
   },
   "io": {
-    "writeResultAsXLSX": true,
+    "writeResultAsXLSX": false,
+    "writeResultAsJSON": true,
     "writeResultAsPNG": false,
     "showProgressBar": true,
     "resultArrayDepth": 3
@@ -23,10 +24,43 @@
   "variantConfig": [
     {
       "strainType": "alpha",
-      "infectivity": 0.3,
+      "infectivity": 0.35,
       "resilience": 0.35,
       "fatarity": 0.001,
-      "appearanceTime": 1,
+      "appearanceTime": 10,
+      "appearanceAt": [0],
+      "crossImmunity": {
+        "beta": 0.2,
+        "gamma": 0.15,
+        "delta": 0.1,
+        "epsilon": 0.1,
+        "zeta": 0.1
+      }
+    },
+    {
+      "strainType": "gamma",
+      "infectivity": 0.5,
+      "resilience": 0.4,
+      "fatarity": 0.002,
+      "appearanceTime": 240,
+      "appearanceAt": [0],
+      "crossImmunity": {
+        "alpha": 0.2,
+        "gamma": 0.2,
+        "delta": 0.2,
+        "epsilon": 0.15,
+        "zeta": 0.15
+      }
+    }
+  ],
+  "otherVariants": [
+    {
+      "strainType": "alpha",
+      "infectivity": 0.5,
+      "resilience": 0.35,
+      "fatarity": 0.001,
+      "appearanceTime": 10,
+      "appearanceAt": [15],
       "crossImmunity": {
         "beta": 0.2,
         "gamma": 0.15,
@@ -41,6 +75,7 @@
       "resilience": 0.3,
       "fatarity": 0.002,
       "appearanceTime": 120,
+      "appearanceAt": [0],
       "crossImmunity": {
         "alpha": 0.2,
         "gamma": 0.2,
@@ -55,6 +90,7 @@
       "resilience": 0.4,
       "fatarity": 0.002,
       "appearanceTime": 240,
+      "appearanceAt": [10, 50],
       "crossImmunity": {
         "alpha": 0.2,
         "gamma": 0.2,

@@ -12,7 +12,8 @@ const { writeFile } = require("./writeFile");
 class IO {
   static readFile = (filePath) => readFile(filePath);
 
-  static writeFile = (data, axisNames) => writeFile(data, axisNames);
+  static writeFile = (data, axisNames, config) =>
+    writeFile(data, axisNames, config);
 
   static showProgressOnConsole = (now, total) =>
     showProgressOnConsole(now, total);

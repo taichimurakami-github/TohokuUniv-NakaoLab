@@ -32,13 +32,14 @@ const { Space } = require("./Models/Space/Space");
    */
   const writeFileTypes = [];
   config.io.writeResultAsXLSX && writeFileTypes.push("xlsx");
+  config.io.writeResultAsJSON && writeFileTypes.push("json");
   config.io.writeResultAsPNG && writeFileTypes.push("png");
 
   //ファイル書き出し
   if (writeFileTypes.length > 0) {
     console.log("\nwriting result...\n");
 
-    await IO.writeFile(writeFileTypes, result);
+    await IO.writeFile(writeFileTypes, result, config);
 
     console.log("\n....done!");
   }
