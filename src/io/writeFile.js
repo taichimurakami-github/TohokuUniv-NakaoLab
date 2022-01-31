@@ -93,7 +93,6 @@ const handleWriteFileAsJSON = async (
     data: data,
   };
 
-  console.log(dataObject);
   return await fs.writeFile(writeFileName, JSON.stringify(dataObject));
 };
 

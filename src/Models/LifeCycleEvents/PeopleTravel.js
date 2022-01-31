@@ -4,7 +4,7 @@ class PeopleTravel {
   constructor(SpaceModel) {
     const s = SpaceModel;
     this.connectionType = s.config.params.space.connectionType;
-    this.spaceLength = s.config.params.space;
+    this.spaceLength = s.config.params.space.length;
 
     //移動係数を計算、保存
     this.mvCoeff = this.generateMvCoeffMatrix(s);
@@ -81,27 +81,27 @@ class PeopleTravel {
   }
 
   isAdjacent(length, i, j) {
-    const col = length.col;
-    const row = length.row;
+    const n = length.col; //横
+    const m = length.row; //縦
 
-    //case 1 check left
-    const left = i - 1;
-    if (j === left || j === left + row) return true;
-
-    //case 2 check right
-    const right = i + 1;
-    if (j === right || j === right - row) return true;
-
-    //case 3 check top
-    const top = i - col;
-    if (j === top || j === top + (row - 1) * col) return true;
-
-    //case 4 check bottom
-    const bottom = i + col;
-    if (j === bottom || j === bottom - (row - 1) * col) return true;
-
+    if (
+      //case 1 check left
+      (i % n === 0 && j === i + n - 1) ||
+      (i % n !== 0 && j === i - 1) ||
+      //case 2 check right
+      (i % n === n - 1 && j === i - (n - 1)) ||
+      (i % n !== n - 1 && j === i + 1) ||
+      //case 3 check top
+      (i < n && j === i + (m - 1) * n) ||
+      (i >= n && j === i - n) ||
+      //case 4 check bottom
+      (i + n > n * m - 1 && j === i - (m - 1) * n) ||
+      (i + n <= n * m - 1 && j === i + n)
+    ) {
+      return true;
+    }
     //not adjacent
-    return false;
+    else return false;
   }
 
   generateMvCoeffMatrix(s) {

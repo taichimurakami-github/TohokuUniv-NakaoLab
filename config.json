@@ -1,6 +1,6 @@
 {
   "params": {
-    "timeLength": 700,
+    "timeLength": 2500,
     "maxCoeffConst": 0.5,
     "maxPopulationSize": 1000000,
     "birthRate": 0.0,
@@ -9,8 +9,8 @@
     "space": {
       "connectionType": "partial",
       "length": {
-        "col": 5,
-        "row": 2
+        "col": 10,
+        "row": 10
       }
     }
   },
@@ -24,11 +24,43 @@
   "variantConfig": [
     {
       "strainType": "alpha",
+      "infectivity": 0.3,
+      "resilience": 0.35,
+      "fatarity": 0.001,
+      "appearanceTime": 10,
+      "appearanceAt": [0],
+      "crossImmunity": {
+        "beta": 0.2,
+        "gamma": 0.15,
+        "delta": 0.1,
+        "epsilon": 0.1,
+        "zeta": 0.1
+      }
+    },
+    {
+      "strainType": "gamma",
+      "infectivity": 0.5,
+      "resilience": 0.4,
+      "fatarity": 0.002,
+      "appearanceTime": 240,
+      "appearanceAt": [0],
+      "crossImmunity": {
+        "alpha": 0.2,
+        "gamma": 0.2,
+        "delta": 0.2,
+        "epsilon": 0.15,
+        "zeta": 0.15
+      }
+    }
+  ],
+  "otherVariants": [
+    {
+      "strainType": "alpha",
       "infectivity": 0.5,
       "resilience": 0.35,
       "fatarity": 0.001,
       "appearanceTime": 10,
-      "appearanceAt": [5],
+      "appearanceAt": [15],
       "crossImmunity": {
         "beta": 0.2,
         "gamma": 0.15,
@@ -43,6 +75,7 @@
       "resilience": 0.3,
       "fatarity": 0.002,
       "appearanceTime": 120,
+      "appearanceAt": [0],
       "crossImmunity": {
         "alpha": 0.2,
         "gamma": 0.2,
@@ -50,16 +83,14 @@
         "epsilon": 0.1,
         "zeta": 0.1
       }
-    }
-  ],
-  "otherVariants": [
+    },
     {
       "strainType": "gamma",
       "infectivity": 0.5,
       "resilience": 0.4,
       "fatarity": 0.002,
       "appearanceTime": 240,
-      "appearanceAt": [3],
+      "appearanceAt": [10, 50],
       "crossImmunity": {
         "alpha": 0.2,
         "gamma": 0.2,
