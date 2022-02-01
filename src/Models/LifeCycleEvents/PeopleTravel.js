@@ -3,8 +3,9 @@ const { getRandomFloat } = require("../../calc/lib");
 class PeopleTravel {
   constructor(SpaceModel) {
     const s = SpaceModel;
-    this.connectionType = s.config.params.space.connectionType;
-    this.spaceLength = s.config.params.space.length;
+    this.connectionType = s.config.models.Space.connectionType;
+    this.spaceLength = s.config.models.Space.length;
+    this.maxCoeffConst = s.config.params.maxCoeffConst;
 
     //移動係数を計算、保存
     this.mvCoeff = this.generateMvCoeffMatrix(s);
@@ -28,7 +29,7 @@ class PeopleTravel {
          */
         if (this.connectionType === "partial") {
           //i_toがi_fromと隣り合っていなければスキップ
-          if (!this.isAdjacent(this.spaceLength, i_from, i_to)) continue;
+          if (!this.isAdjacent(i_from, i_to)) continue;
 
           //すべての隣接セルを操作し終わったらこのループを終了、次の空間の遷移へ
           if (adjacentScanningCnt === 4) break;
@@ -80,9 +81,9 @@ class PeopleTravel {
     }
   }
 
-  isAdjacent(length, i, j) {
-    const n = length.col; //横
-    const m = length.row; //縦
+  isAdjacent(i, j) {
+    const n = this.spaceLength.col; //横
+    const m = this.spaceLength.row; //縦
 
     if (
       //case 1 check left
@@ -105,14 +106,12 @@ class PeopleTravel {
   }
 
   generateMvCoeffMatrix(s) {
-    const config = s.config;
     const space = s.state.map((state) => state.people);
     const coeffMatrix = [];
-    const max_coeff_const = config.params.maxCoeffConst;
 
     // coeffの範囲を動的に取得（MAX_COEFF * space.length < 1を満たすように取得）
     // とりあえず max_coeff_const / space.lengthとした
-    const COEFF_MAX = (1 / space.length) * max_coeff_const;
+    const COEFF_MAX = (1 / space.length) * this.maxCoeffConst;
     const COEFF_MIN = COEFF_MAX * 0.01;
 
     for (let i_from = 0; i_from < space.length; i_from++) {

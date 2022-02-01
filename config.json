@@ -1,16 +1,19 @@
 {
   "params": {
-    "timeLength": 1000,
-    "maxCoeffConst": 0.5,
+    "timeLength": 2000,
+    "maxCoeffConst": 0.1,
     "maxPopulationSize": 1000000,
     "birthRate": 0.0,
     "initialInfectiousRate": 0.0001,
     "initialFatarity": 0,
-    "space": {
+    "feedbackRate": 0.0007
+  },
+  "models": {
+    "Space": {
       "connectionType": "partial",
       "length": {
-        "col": 10,
-        "row": 10
+        "col": 2,
+        "row": 2
       }
     }
   },
@@ -24,14 +27,14 @@
   "variantConfig": [
     {
       "strainType": "alpha",
-      "infectivity": 0.35,
-      "resilience": 0.35,
+      "infectivity": 0.2,
+      "resilience": 0.18,
       "fatarity": 0.001,
       "appearanceTime": 10,
-      "appearanceAt": [0],
+      "appearanceAt": [10],
       "crossImmunity": {
         "beta": 0.2,
-        "gamma": 0.15,
+        "gamma": 0.1,
         "delta": 0.1,
         "epsilon": 0.1,
         "zeta": 0.1
@@ -39,13 +42,13 @@
     },
     {
       "strainType": "gamma",
-      "infectivity": 0.5,
-      "resilience": 0.4,
+      "infectivity": 0.3,
+      "resilience": 0.23,
       "fatarity": 0.002,
-      "appearanceTime": 240,
+      "appearanceTime": 500,
       "appearanceAt": [0],
       "crossImmunity": {
-        "alpha": 0.2,
+        "alpha": 0.1,
         "gamma": 0.2,
         "delta": 0.2,
         "epsilon": 0.15,

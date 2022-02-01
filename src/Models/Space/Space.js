@@ -25,7 +25,7 @@ class Space {
     // this.strainTypesArr = v.getStrainTypesArr(); //ウイルス情報を記録
 
     //Peopleインスタンスを空間の個数分生成
-    const spaceConfig = config.params.space;
+    const spaceConfig = config.models.Space;
     for (let i = 0; i < this.getSpaceLength(spaceConfig); i++) {
       //初期状態を定義
       //各空間に属するインスタンスを作成

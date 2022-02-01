@@ -2,6 +2,7 @@ class PeopleStateTransition {
   constructor(SpaceModel) {
     const s = SpaceModel;
     const v = SpaceModel.VirusModel;
+    this.feedbackRate = s.config.params.feedbackRate;
 
     for (const state of s.state) {
       this.calcByPhaseLoop(state.people, v);
@@ -132,7 +133,7 @@ class PeopleStateTransition {
       //記録したfeedbackTargetsに対して、フィードバックを計算
       //とりあえず、均等に戻るものとする
       for (const NI_prev of feedbackTargets) {
-        const diff = 0.01 * NI_this.p;
+        const diff = this.feedbackRate * NI_this.p;
         NI_this.diff -= diff;
         NI_prev.diff += diff;
       }
