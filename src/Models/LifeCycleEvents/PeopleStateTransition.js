@@ -112,6 +112,9 @@ class PeopleStateTransition {
   }
 
   calcFeedback(layer_prev, layer_this) {
+    //フィードバック率が0であれば計算を破棄（リソース節約）
+    if (this.feedbackRate === 0) return;
+
     for (const thisNode of layer_this) {
       const NI_this = thisNode.NI;
       const feedbackTargets = [];
