@@ -1,6 +1,6 @@
 {
   "params": {
-    "timeLength": 3000,
+    "timeLength": 5000,
     "maxCoeffConst": 0.1,
     "maxPopulationSize": 1000000,
     "birthRate": 0.0001,
@@ -18,7 +18,7 @@
     }
   },
   "io": {
-    "writeResultAsXLSX": false,
+    "writeResultAsXLSX": true,
     "writeResultAsJSON": true,
     "writeResultAsPNG": false,
     "showProgressBar": true,
@@ -45,7 +45,7 @@
       "infectivity": 0.3,
       "resilience": 0.23,
       "fatarity": 0.002,
-      "appearanceTime": 250,
+      "appearanceTime": 500,
       "appearanceAt": [0],
       "crossImmunity": {
         "alpha": 0.1,
@@ -60,7 +60,8 @@
       "infectivity": 0.5,
       "resilience": 0.3,
       "fatarity": 0.001,
-      "appearanceTime": 400,
+      "appearanceTime": 2000,
+      "appearanceAt": [0],
       "crossImmunity": {
         "alpha": 0.2,
         "gamma": 0.2,

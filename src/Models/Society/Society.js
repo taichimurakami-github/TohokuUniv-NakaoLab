@@ -56,6 +56,10 @@ class Society {
       return (beta) => beta;
     }
   }
+
+  calcEffectionForBeta() {
+    return 1;
+  }
 }
 
 // const getInfectionCoeff = (beta, activityDist) => {
