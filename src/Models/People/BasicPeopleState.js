@@ -2,6 +2,7 @@ class BasicPeopleState {
   constructor(options, eqConsts) {
     this.p = options?.p || 0;
     this.immunizedType = options.immunizedType;
+    this.vaccinated = [];
     this.diff = 0;
 
     if (eqConsts) {

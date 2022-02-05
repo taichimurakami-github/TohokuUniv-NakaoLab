@@ -2,6 +2,7 @@ const {
   PeopleStateTransition,
 } = require("../LifeCycleEvents/PeopleStateTransition");
 const { PeopleTravel } = require("../LifeCycleEvents/PeopleTravel");
+const { PeopleVaccination } = require("../LifeCycleEvents/Vaccination");
 const { VirusMutation } = require("../LifeCycleEvents/VirusMutation");
 const { People } = require("../People/People");
 const { Virus } = require("../Virus/Virus");
@@ -20,9 +21,11 @@ class Space {
     this.config = config;
 
     //空間内のウイルスを定義
-    const v = new Virus(config.variantConfig);
-    this.VirusModel = v; //Spaceモデルに記録
+    const virus = new Virus(config.variantConfig);
+    this.VirusModel = virus; //Spaceモデルに記録
     // this.strainTypesArr = v.getStrainTypesArr(); //ウイルス情報を記録
+
+    //ワクチンモデルを起動
 
     //Peopleインスタンスを空間の個数分生成
     const spaceConfig = config.models.Space;
@@ -38,6 +41,9 @@ class Space {
   updateWithLifeCycle() {
     //時間を進める
     this.t += 1;
+
+    //ワクチン接種を実行
+    new PeopleVaccination(this);
 
     //人流移動を実行
     new PeopleTravel(this);

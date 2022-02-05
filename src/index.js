@@ -6,7 +6,16 @@ const { Space } = require("./Models/Space/Space");
   /**
    * (1)設定読み込み
    */
-  const config = await IO.readFile(path.resolve(__dirname, "../config.json"));
+  const settings = await IO.readFile(
+    path.resolve(__dirname, "../config/settings.json")
+  );
+  const vaccinationConfig = await IO.readFile(
+    path.resolve(__dirname, "../config/settings.json")
+  );
+  const variantConfig = await IO.readFile(
+    path.resolve(__dirname, "../config/variant.json")
+  );
+  const config = { ...settings, ...vaccinationConfig, ...variantConfig };
 
   /**
    * (2)計算準備
