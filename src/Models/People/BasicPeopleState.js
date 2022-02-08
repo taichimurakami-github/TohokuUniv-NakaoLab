@@ -12,6 +12,10 @@ class BasicPeopleState {
     }
   }
 
+  vaccinate(vaccineConfig) {
+    this.vaccinated.push(vaccineConfig.name);
+  }
+
   applyDiff() {
     //diffとdeathsをpopulationに反映し、リセットする
     this.p += this.diff;
