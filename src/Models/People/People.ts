@@ -1,6 +1,7 @@
-const { calcCombination, getRandomFloat } = require("../../calc/lib");
-const { I } = require("./Infected");
-const { NI } = require("./NotInfected");
+import { calcCombination, getRandomFloat } from "../../calc/lib";
+import { Virus } from "../Virus/Virus";
+import { I, E } from "./Infected";
+import { S, R } from "./NotInfected";
 
 /**
  * class People
@@ -13,8 +14,16 @@ const { NI } = require("./NotInfected");
  *
  * <class function>
  */
-class People {
-  constructor(config, VirusModel) {
+export class People {
+  public state: any;
+  public result: any;
+  public config: any;
+  public t: number;
+  public VirusModel: InstanceType<typeof Virus>;
+  public sum: any;
+  public nodeTree: any;
+
+  constructor(config: any, VirusModel: InstanceType<typeof Virus>) {
     this.state = [];
     this.result = [];
     this.config = config;
@@ -98,18 +107,24 @@ class People {
           //新規ウイルス株に対する感染クラス（I）を生成
           //I_immunizedTypeを獲得済み免疫として設定
           //除外されたstrainTypeを感染先のウイルス株と認定
-          template.I[strainType] = new I({
-            immunizedType: I_immunizedType,
-            VirusConfig: VirusModel.getStrainConfig(strainType),
-          });
+          template.I[strainType] = new I(
+            {
+              immunizedType: I_immunizedType,
+              VirusConfig: VirusModel.getStrainConfig(strainType),
+            },
+            undefined
+          );
 
           //感染済みウイルス株に対する感染クラス（RI）を生成
           //immunizedType:
-          template.RI[strainType] = new I({
-            immunizedType: node,
-            VirusConfig: VirusModel.getStrainConfig(strainType),
-            reinfected: true,
-          });
+          template.RI[strainType] = new I(
+            {
+              immunizedType: node,
+              VirusConfig: VirusModel.getStrainConfig(strainType),
+              reinfected: true,
+            },
+            undefined
+          );
         }
 
         //テンプレートに従ってノードを生成
@@ -218,5 +233,3 @@ class People {
     return this.result.push(this.getSum());
   }
 }
-
-module.exports = { People };

@@ -1,7 +1,15 @@
-const { BasicPeopleState } = require("./BasicPeopleState");
+import { Virus } from "../Virus/Virus";
+import { BasicPeopleState } from "./BasicPeopleState";
 
-class I extends BasicPeopleState {
-  constructor(options, eqConsts) {
+export class I extends BasicPeopleState {
+  public strainType: string;
+  public type: string;
+  public beta: number;
+  public gamma: number;
+  public mu: number;
+  public reinfected: boolean;
+
+  constructor(options: any, eqConsts: any) {
     super(options, eqConsts);
     //本クラスのカテゴライズタイプ
     this.type = "I";
@@ -24,7 +32,10 @@ class I extends BasicPeopleState {
    * @param {VirusModelObject} VirusModel
    * @returns
    */
-  getBeta(mode, VirusModel) {
+  getBeta(
+    mode: "infected" | "reinfected",
+    VirusModel: InstanceType<typeof Virus>
+  ) {
     switch (mode) {
       case "infected":
         return this.getCrossImmunityEffectForBeta(VirusModel) * this.beta;
@@ -61,7 +72,7 @@ class I extends BasicPeopleState {
    * @param {Array} immunizedType
    * @returns
    */
-  getCrossImmunityEffectForBeta(VirusModel) {
+  getCrossImmunityEffectForBeta(VirusModel: InstanceType<typeof Virus>) {
     let attenuationRate = 0;
     const attenuationRate_maxConst = 0.9;
 
@@ -79,18 +90,15 @@ class I extends BasicPeopleState {
     //減衰値が最大値を超えていれば強制的に最大値に戻す
     if (attenuationRate_maxConst < attenuationRate)
       attenuationRate = attenuationRate_maxConst;
-    //   throw new Error(
-    //     "Virus.getCrossImmunityEffect Error: 免疫交差性による減衰率の設定は、各ウイルスごとに合計値が１を下回るように設定してください。"
-    //   );
-    // if (0.8 < attenuationRate) {
-    //   throw new Error(
-    //     "Virus.getCrossImmunityEffect Error: 免疫交差性による減衰率の設定は、各ウイルスごとに合計値が１を下回るように設定してください。"
-    //   );
-    // }
 
     //減衰値を返す（そのまま感染力に乗する）
     return 1 - attenuationRate;
   }
 }
 
-module.exports = { I };
+export class E extends I {
+  constructor(options: any, eqConsts: any) {
+    super(options, eqConsts);
+    this.type = "E";
+  }
+}

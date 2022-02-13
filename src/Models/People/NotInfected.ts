@@ -1,11 +1,23 @@
-const { BasicPeopleState } = require("./BasicPeopleState");
+import { BasicPeopleState } from "./BasicPeopleState";
 
-class NI extends BasicPeopleState {
-  constructor(options) {
-    super(options);
-    this.type = "NI";
-    this.birthRate = options.config.params.birthRate;
+export class R extends BasicPeopleState {
+  public type: string;
+  public mu: number;
+
+  constructor(options: any) {
+    super(options, undefined);
+    this.type = "R";
     this.mu = options.config.params.initialFatarity;
+  }
+}
+
+export class S extends R {
+  public birthRate: number;
+
+  constructor(options: any) {
+    super(options);
+    this.type = "S";
+    this.birthRate = options.config.params.birthRate;
   }
 
   applyBirth() {
@@ -24,5 +36,3 @@ class NI extends BasicPeopleState {
     }
   }
 }
-
-module.exports = { NI };

@@ -3,28 +3,32 @@
  * + 変異株設定
  *
  */
-class Virus {
-  constructor(variantDefaults) {
+export class Virus {
+  public config: any;
+  readonly strainTypesArr: string[];
+
+  constructor(variantDefaults: any) {
     this.config = [...variantDefaults];
     this.strainTypesArr = this.getStrainTypesArr();
   }
 
-  getStrainTypesArr() {
-    return this.config.map((val) => val.strainType);
+  public getStrainTypesArr() {
+    return this.config.map((val: any) => val.strainType);
   }
 
-  getStrainConfig(strainType) {
+  public getStrainConfig(strainType: string): any {
     if (strainType === "_INITIAL_STRAIN_") return this.config[0];
     for (const config of this.config) {
       if (config.strainType === strainType) return config;
     }
   }
 
-  getCrossImmunity(immunizedStrainType, reinfectedStrainType) {
+  public getCrossImmunity(
+    immunizedStrainType: string,
+    reinfectedStrainType: string
+  ): number {
     const result =
       this.config[immunizedStrainType]?.crossImmunity[reinfectedStrainType];
     return result || 0;
   }
 }
-
-module.exports = { Virus };
