@@ -33,7 +33,7 @@ class Space {
       //初期状態を定義
       //各空間に属するインスタンスを作成
       this.state.push({
-        people: new People(config, v),
+        people: new People(config, virus),
       });
     }
   }
@@ -43,7 +43,7 @@ class Space {
     this.t += 1;
 
     //ワクチン接種を実行
-    new PeopleVaccination(this);
+    // new PeopleVaccination(this);
 
     //人流移動を実行
     new PeopleTravel(this);
