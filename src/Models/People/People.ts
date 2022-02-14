@@ -1,7 +1,44 @@
-import { calcCombination, getRandomFloat } from "../../calc/lib";
+import { calcCombination, getRandomFloat } from "../../lib";
 import { Virus } from "../Virus/Virus";
 import { I, E } from "./Infected";
-import { S, R } from "./NotInfected";
+import { NI } from "./NotInfected";
+
+//layerdNode構造用 型定義
+/**
+ * [
+ *     ↓ Node
+ *  [ [] [] [] ...], <- Layer
+ *  [ [] [] [] ...],
+ *  ...
+ * ] <- NodeTree
+ */
+export type LayerStructure<T> = T[][];
+export type NodeTreeStructure<T> = LayerStructure<T>[];
+
+//state生成用 型定義
+//NodeTreeのLayerをStateNodeで置き換える
+/**
+ * [
+ *   { StateNode } , <- Layer
+ *   { StateNode } ,
+ *  ...
+ * ] <- LayeredStructure
+ */
+export type InstanceListPerStrainTypes<T> = {
+  [strainType: string]: T;
+};
+
+export type StateNode = {
+  NI: NI;
+  E?: InstanceListPerStrainTypes<E>;
+  I?: InstanceListPerStrainTypes<I>;
+  Re?: {
+    I: InstanceListPerStrainTypes<I>;
+    E: InstanceListPerStrainTypes<E>;
+  };
+};
+export type PeopleStateNodeTree = LayerStructure<StateNode>;
+export type PeopleResult = number[][];
 
 /**
  * class People
@@ -15,15 +52,15 @@ import { S, R } from "./NotInfected";
  * <class function>
  */
 export class People {
-  public state: any;
-  public result: any;
+  public state: PeopleStateNodeTree;
+  public result: PeopleResult;
   public config: any;
   public t: number;
-  public VirusModel: InstanceType<typeof Virus>;
+  public VirusModel: Virus;
   public sum: any;
   public nodeTree: any;
 
-  constructor(config: any, VirusModel: InstanceType<typeof Virus>) {
+  constructor(config: any, VirusModel: Virus) {
     this.state = [];
     this.result = [];
     this.config = config;
@@ -47,18 +84,19 @@ export class People {
      */
 
     //S（免疫を保持しない原点ノード）生成
+    const initialPopulation = Math.floor(
+      // 初期人口：0.01 ~ 1.0 * max_const
+      getRandomFloat(0.1, 1.0) * this.config.params.maxPopulationSize
+    );
     this.state[0] = [
       {
-        NI: new NI({
-          p: Math.floor(
-            // 初期人口：0.01 ~ 1.0 * max_const
-            getRandomFloat(0.1, 1.0) * this.config.params.maxPopulationSize
-          ),
-          immunizedType: [],
-          config: this.config,
-        }),
-        I: {},
-        RI: {},
+        NI: new NI(
+          {
+            immunizedType: [],
+            config: this.config,
+          },
+          initialPopulation
+        ),
       },
     ];
 
@@ -76,17 +114,21 @@ export class People {
        */
       for (const node of this.nodeTree[i]) {
         //各レイヤーのテンプレート生成
-        const template = { NI: null, RI: {}, I: {} };
+        const template: StateNode = {
+          NI: new NI({
+            immunizedType: node,
+            config: this.config,
+          }),
+          E: {},
+          I: {},
+          Re: { I: {}, E: {} },
+        };
         /**
          * 各ノードには、一つの回復者NIが対応
          * ex: node = ["E","M1","M2"]の場合
          * (1) R(immunized E, M1, M2)
          * のみ生成
          */
-        template.NI = new NI({
-          immunizedType: node,
-          config: this.config,
-        });
 
         /**
          * 各ノードには、ウイルス株の個数に応じて複数のIが対応
@@ -102,7 +144,9 @@ export class People {
          */
         for (const strainType of node) {
           //nodeから要素１つを除外した配列を用意
-          const I_immunizedType = node.filter((val) => val !== strainType);
+          const I_immunizedType = node.filter(
+            (val: string) => val !== strainType
+          );
 
           //新規ウイルス株に対する感染クラス（I）を生成
           //I_immunizedTypeを獲得済み免疫として設定
@@ -151,11 +195,13 @@ export class People {
     for (const layer of this.state) {
       for (const node of layer) {
         //layer内のNI探索 & 死亡と出生の反映
-        node.NI.applyDiff();
-        node.NI.applyBirthAndDeath();
+        node.S.applyDiff();
+        node.S.applyBirthAndDeath();
 
         //layer内のI探索 & 感染による死亡の反映
         for (const I of Object.values(node.I)) {
+          E.applyDiff();
+          E.applyDeathByInfection();
           I.applyDiff();
           I.applyDeathByInfection();
         }
@@ -188,7 +234,7 @@ export class People {
 
   getLayeredStrainTypesNodeTree() {
     //ノードになる基底状態を自動生成
-    const modelStructure = [[]];
+    const modelStructure: NodeTreeStructure<string> = [[]];
     for (let i = 0; i < this.VirusModel.strainTypesArr.length; i++) {
       modelStructure.push(
         calcCombination(this.VirusModel.strainTypesArr, i + 1)

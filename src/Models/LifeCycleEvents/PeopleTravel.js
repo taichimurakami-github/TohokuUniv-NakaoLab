@@ -1,4 +1,4 @@
-const { getRandomFloat } = require("../../calc/lib");
+const { getRandomFloat } = require("../../lib");
 
 class PeopleTravel {
   constructor(SpaceModel) {

@@ -4,14 +4,15 @@
  * @param {float | int} max
  * @returns
  */
-const getRandomFloat = (min, max) => Math.random() * (max - min) + min;
+export const getRandomFloat = (min: number, max: number) =>
+  Math.random() * (max - min) + min;
 
 /**
  * float | int　の配列内の要素の合計値を返す
  * @param {[int | float]} target
  * @returns
  */
-const getNumArrayAmount = (target) =>
+export const getNumArrayAmount = (target: number[]) =>
   target.reduce((sum, currentval) => sum + currentval);
 
 /**
@@ -20,8 +21,8 @@ const getNumArrayAmount = (target) =>
  * @param {string} parseMode
  * @returns
  */
-const getNumArrayAverage = (target, parseMode = "default") => {
-  const result = getPeopleAmount(target) / target.length;
+export const getNumArrayAverage = (target: number[], parseMode = "default") => {
+  const result = getNumArrayAmount(target) / target.length;
 
   switch (parseMode) {
     case "floor":
@@ -38,7 +39,7 @@ const getNumArrayAverage = (target, parseMode = "default") => {
  * @param {[int]} arr
  * @returns
  */
-const getIntArrayAmount = (arr) => {
+export const getIntArrayAmount = (arr: number[]) => {
   let sum = 0;
   for (const val of arr) sum += val;
   return sum;
@@ -49,7 +50,7 @@ const getIntArrayAmount = (arr) => {
  * @param {[int | float]} arr
  * @returns
  */
-const getMaxAndMinFromIntArray = (arr) => {
+export const getMaxAndMinFromIntArray = (arr: number[]) => {
   let max = 0;
   let min = arr[0];
   for (const val of arr) {
@@ -66,9 +67,9 @@ const getMaxAndMinFromIntArray = (arr) => {
  * @param {Integer} m
  * @returns
  */
-const calcCombination = (source, m) => {
-  const getCombination = (subset, begin, end) => {
-    let r = [];
+export const calcCombination = (source: string[], m: number) => {
+  const getCombination = (subset: string[], begin: number, end: number) => {
+    let r: string[][] = [];
     for (let i = begin; i < end; i++) {
       //帰ってきた結果subsetと、探索該当要素のsource[i]を融合
       const tmp = [...subset, source[i]];
@@ -86,13 +87,4 @@ const calcCombination = (source, m) => {
   };
 
   return getCombination([], 0, source.length - (m - 1));
-};
-
-module.exports = {
-  getRandomFloat,
-  getNumArrayAmount,
-  getNumArrayAverage,
-  getIntArrayAmount,
-  getMaxAndMinFromIntArray,
-  calcCombination,
 };

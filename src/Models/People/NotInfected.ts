@@ -1,23 +1,27 @@
 import { BasicPeopleState } from "./BasicPeopleState";
 
-export class R extends BasicPeopleState {
+/**
+ * SとRを兼用したクラス
+ * S、Rは免疫を一つ以上保持しているかしていないかの差しかないので、
+ * 一つに統合
+ */
+export class NI extends BasicPeopleState {
+  public birthRate: number;
   public type: string;
   public mu: number;
 
-  constructor(options: any) {
+  constructor(
+    options: {
+      immunizedType: string[];
+      config: any;
+    },
+    initialBirthPopulation: number = 0
+  ) {
     super(options, undefined);
-    this.type = "R";
-    this.mu = options.config.params.initialFatarity;
-  }
-}
-
-export class S extends R {
-  public birthRate: number;
-
-  constructor(options: any) {
-    super(options);
-    this.type = "S";
+    this.type = "NI";
     this.birthRate = options.config.params.birthRate;
+    this.p = initialBirthPopulation;
+    this.mu = options.config.params.initialFatarity;
   }
 
   applyBirth() {
