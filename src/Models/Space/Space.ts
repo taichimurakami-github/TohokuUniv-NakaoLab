@@ -1,19 +1,32 @@
 import { PeopleStateTransition } from "../LifeCycleEvents/PeopleStateTransition";
 import { PeopleTravel } from "../LifeCycleEvents/PeopleTravel";
 import { VirusMutation } from "../LifeCycleEvents/VirusMutation";
-import { People } from "../People/People";
+import { People, PeopleSumTemplate } from "../People/People";
 import { Virus } from "../Virus/Virus";
+
+export type SpaceResult = PeopleSumTemplate[][];
+
+export type SpaceState = {
+  people: People;
+}[];
 
 /**
  * 空間を定義し、管理する
  * インスタンス生成時に空間作成を自動で行う
  */
 
-class Space {
-  constructor(config) {
+export class Space {
+  public state: SpaceState;
+  public mvCoeff: number[][];
+  public result: SpaceResult;
+  public t: number;
+  public config: any;
+  public VirusModel: Virus;
+
+  constructor(config: any) {
     this.state = [];
     this.mvCoeff = [];
-    this.result = {};
+    this.result = [];
     this.t = 0;
     this.config = config;
 
@@ -61,7 +74,7 @@ class Space {
     for (const state of this.state) state.people.updateWithCycleEnd();
   }
 
-  getSpaceLength(spaceConfig) {
+  getSpaceLength(spaceConfig: any) {
     const row = spaceConfig.length.row;
     const col = spaceConfig.length.col;
     return row * col;
@@ -86,38 +99,7 @@ class Space {
    * @returns {[{[String]: Array}]}
    */
   getResults() {
-    //execute parse
-    return this.state.reduce((prevResult, state) => {
-      //result parse template
-      const result = {
-        asObject: [],
-        asArray: [],
-      };
-
-      for (const r of state.people.result) {
-        const tmpAsObj = {};
-        const tmpAsArr = [];
-        //register S,R
-        tmpAsObj.S = r.S;
-        tmpAsObj.R = r.R;
-
-        tmpAsArr.push(r.S);
-        tmpAsArr.push(r.R);
-
-        //register I
-        for (const [strainType, population] of Object.entries(r.I)) {
-          tmpAsObj[`I_${strainType}`] = population;
-          tmpAsArr.push(population);
-        }
-
-        //add to result
-        result.asArray.push(tmpAsArr);
-        result.asObject.push(tmpAsObj);
-      }
-
-      return [...prevResult, result];
-    }, []);
+    //PeopleResultをそのまま返す
+    return this.state.map((SpaceState) => SpaceState.people.result);
   }
 }
-
-module.exports = { Space };

@@ -1,4 +1,5 @@
-type variantConfig = {
+//variantConfig
+export type VariantConfig = {
   strainType: string;
   infectivity: number;
   resilience: number;
@@ -8,7 +9,8 @@ type variantConfig = {
   crossImmunity: { [strainType: string]: number };
 }[];
 
-type vaccineConfig = {
+//vaccineConfig
+export type VaccineConfig = {
   name: string;
   begin: { time: number; space: number[] }[];
   effect: {
@@ -18,13 +20,16 @@ type vaccineConfig = {
   };
 }[];
 
-type settings = {
+//settings
+export type ModelsConnectionTypeConfig = "partial" | "full";
+
+export type SettingsConfig = {
   params: {
     [settingsName: string]: number;
   };
   models: {
     [modelName: string]: {
-      connectionType: "partial" | "full";
+      connectionType: ModelsConnectionTypeConfig;
       length: {
         col: number;
         row: number;

@@ -29,11 +29,11 @@ export type InstanceListPerStrainTypes<T> = {
 };
 
 export type StateNode = {
+  E: InstanceListPerStrainTypes<E>;
+  I: InstanceListPerStrainTypes<I>;
   NI: NI;
-  E?: InstanceListPerStrainTypes<E>;
-  I?: InstanceListPerStrainTypes<I>;
-  R_E?: InstanceListPerStrainTypes<E>;
-  R_I?: InstanceListPerStrainTypes<I>;
+  R_E: InstanceListPerStrainTypes<E>;
+  R_I: InstanceListPerStrainTypes<I>;
 };
 export type PeopleStateNodeTree = LayerStructure<StateNode>;
 
@@ -43,10 +43,10 @@ export type PeopleSumTemplate = {
   ALL: number;
   S: number;
   E: {
-    [key: string]: number;
+    [strainType: string]: number;
   };
   I: {
-    [key: string]: number;
+    [strainType: string]: number;
   };
   R: number;
 };
@@ -111,6 +111,10 @@ export class People {
           },
           initialPopulation
         ),
+        I: {},
+        E: {},
+        R_I: {},
+        R_E: {},
       },
     ];
 
@@ -135,7 +139,8 @@ export class People {
           }),
           E: {},
           I: {},
-          Re: { I: {}, E: {} },
+          R_E: {},
+          R_I: {},
         };
         /**
          * 各ノードには、一つの回復者NIが対応
@@ -172,12 +177,12 @@ export class People {
 
           //感染済みウイルス株に対する感染クラス（RI）を生成
           //immunizedType:
-          template.Re_I[strainType] = new I({
+          template.R_I[strainType] = new I({
             immunizedType: node,
             VirusConfig: VirusModel.getStrainConfig(strainType),
             reinfected: true,
           });
-          template.Re_E[strainType] = new E({
+          template.R_E[strainType] = new E({
             immunizedType: node,
             VirusConfig: VirusModel.getStrainConfig(strainType),
             reinfected: true,
@@ -210,26 +215,28 @@ export class People {
         node.NI.applyDiff();
         node.NI.applyBirthAndDeath();
 
-        if ("I" in node && "E" in node) {
-          //layer内のI探索 & 感染による死亡の反映
-          for (const strainType of Object.keys(node.E)) {
-            node.E[strainType].applyDiff();
-            node.E[strainType].applyDeathByInfection();
-            node.I[strainType].applyDiff();
-            node.I[strainType].applyDeathByInfection();
-          }
+        //layer内のI探索 & 感染による死亡の反映
+        for (const strainType of Object.keys(node.E)) {
+          node.E[strainType].applyDiff();
+          node.E[strainType].applyDeathByInfection();
+          node.I[strainType].applyDiff();
+          node.I[strainType].applyDeathByInfection();
         }
 
-        if ("R_I" in node && "R_E" in node) {
-          //layer内のRI探索 & 感染による死亡の反映
-          for (const strainType of Object.keys(node.R_E)) {
-            node.R_I[strainType].applyDiff();
-            node.R_E[strainType].applyDeathByInfection();
-          }
+        //layer内のRI探索 & 感染による死亡の反映
+        for (const strainType of Object.keys(node.R_E)) {
+          node.R_I[strainType].applyDiff();
+          node.R_E[strainType].applyDeathByInfection();
         }
       }
     }
     this.recordResult();
+  }
+
+  getInfectedRate(strainType: string) {
+    const infected_sum = this.sum.I[strainType] + this.sum.E[strainType];
+    const all = this.sum.ALL;
+    return infected_sum / all;
   }
 
   getInitializedSumTemplate() {
@@ -273,34 +280,30 @@ export class People {
         else tmp.R += node.NI.p;
 
         //layer内の新規感染系統を算出
-        if ("I" in node && "E" in node) {
-          for (const strainType of Object.keys(node.E)) {
-            //E状態の人数を計算
-            tmp.E[strainType] += node.E[strainType].p;
-            tmp.ALL += node.E[strainType].p;
-            tmp.E.ALL += node.E[strainType].p;
+        for (const strainType of Object.keys(node.E)) {
+          //E状態の人数を計算
+          tmp.E[strainType] += node.E[strainType].p;
+          tmp.ALL += node.E[strainType].p;
+          tmp.E.ALL += node.E[strainType].p;
 
-            //I状態の人数を計算
-            tmp.I[strainType] += node.I[strainType].p;
-            tmp.ALL += node.I[strainType].p;
-            tmp.I.ALL += node.I[strainType].p;
-          }
+          //I状態の人数を計算
+          tmp.I[strainType] += node.I[strainType].p;
+          tmp.ALL += node.I[strainType].p;
+          tmp.I.ALL += node.I[strainType].p;
         }
 
         //layer内の再感染系統を算出
-        if ("R_I" in node && "R_E" in node) {
-          for (const strainType of Object.keys(node.R_E)) {
-            //再感染者もIクラスで保持するので、Iクラスの合計として算出する
-            //E状態の人数を計算
-            tmp.E[strainType] += node.R_E[strainType].p;
-            tmp.ALL += node.R_E[strainType].p;
-            tmp.E.ALL += node.R_E[strainType].p;
+        for (const strainType of Object.keys(node.R_E)) {
+          //再感染者もIクラスで保持するので、Iクラスの合計として算出する
+          //E状態の人数を計算
+          tmp.E[strainType] += node.R_E[strainType].p;
+          tmp.ALL += node.R_E[strainType].p;
+          tmp.E.ALL += node.R_E[strainType].p;
 
-            //I状態の人数を計算
-            tmp.I[strainType] += node.R_I[strainType].p;
-            tmp.ALL += node.R_I[strainType].p;
-            tmp.I.ALL += node.R_I[strainType].p;
-          }
+          //I状態の人数を計算
+          tmp.I[strainType] += node.R_I[strainType].p;
+          tmp.ALL += node.R_I[strainType].p;
+          tmp.I.ALL += node.R_I[strainType].p;
         }
       }
     }

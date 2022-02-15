@@ -1,6 +1,6 @@
-const path = require("path");
-const { IO } = require("./io/io");
-const { Space } = require("./Models/Space/Space");
+import path from "path";
+import { IO } from "./io/io";
+import { Space } from "./Models/Space/Space";
 
 (async () => {
   /**

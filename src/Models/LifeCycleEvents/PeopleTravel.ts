@@ -1,7 +1,15 @@
-const { getRandomFloat } = require("../../lib");
+import { getRandomFloat } from "../../lib";
+import { Space } from "../Space/Space";
+import { ModelsConnectionTypeConfig } from "../../../@types/config";
+import { People } from "../People/People";
 
-class PeopleTravel {
-  constructor(SpaceModel) {
+export class PeopleTravel {
+  private connectionType: ModelsConnectionTypeConfig;
+  private spaceLength: { [key: string]: number };
+  private maxCoeffConst: number;
+  private mvCoeff: number[][];
+
+  constructor(SpaceModel: Space) {
     const s = SpaceModel;
     this.connectionType = s.config.models.Space.connectionType;
     this.spaceLength = s.config.models.Space.length;
@@ -50,7 +58,7 @@ class PeopleTravel {
     }
   }
 
-  calcMove(P_outflowFrom, P_outflowTo, mvCoeff) {
+  calcMove(P_outflowFrom: People, P_outflowTo: People, mvCoeff: number) {
     //Space内で定義されたウイルス株設定は全空間で共通のものとなると仮定しているので、
     //Spaceが保持するすべてのPeopleインスタンス内のlayeredNodeの構造は同じになる
     for (let i = 0; i < P_outflowFrom.state.length; i++) {
@@ -68,20 +76,22 @@ class PeopleTravel {
         node_outflowFrom.NI.p -= NI_outflow;
         node_outflowTo.NI.p += NI_outflow;
 
-        for (const key of Object.keys(node_outflowFrom.I)) {
-          //phase4: I系の移動
-          const I_outflowFrom_instance = node_outflowFrom.I[key];
-          const I_outflowTo_instance = node_outflowTo.I[key];
-          const I_outflow = I_outflowFrom_instance.p * mvCoeff;
+        if ("E" in node_outflowFrom && "E" in node_outflowTo) {
+          for (const key of Object.keys(node_outflowFrom.E)) {
+            //phase4: E系の移動 (Iは移動しないものとする)
+            const I_outflowFrom_instance = node_outflowFrom.E[key];
+            const I_outflowTo_instance = node_outflowTo.E[key];
+            const I_outflow = I_outflowFrom_instance.p * mvCoeff;
 
-          I_outflowFrom_instance.p -= I_outflow;
-          I_outflowTo_instance.p += I_outflow;
+            I_outflowFrom_instance.p -= I_outflow;
+            I_outflowTo_instance.p += I_outflow;
+          }
         }
       }
     }
   }
 
-  isAdjacent(i, j) {
+  isAdjacent(i: number, j: number) {
     const n = this.spaceLength.col; //横
     const m = this.spaceLength.row; //縦
 
@@ -105,9 +115,9 @@ class PeopleTravel {
     else return false;
   }
 
-  generateMvCoeffMatrix(s) {
+  generateMvCoeffMatrix(s: Space) {
     const space = s.state.map((state) => state.people);
-    const coeffMatrix = [];
+    const coeffMatrix: number[][] = [];
 
     // coeffの範囲を動的に取得（MAX_COEFF * space.length < 1を満たすように取得）
     // とりあえず max_coeff_const / space.lengthとした
@@ -128,5 +138,3 @@ class PeopleTravel {
     return coeffMatrix;
   }
 }
-
-module.exports = { PeopleTravel };

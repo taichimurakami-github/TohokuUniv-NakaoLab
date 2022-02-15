@@ -1,5 +1,8 @@
-class VirusMutation {
-  constructor(SpaceModel) {
+import { People } from "../People/People";
+import { Space } from "../Space/Space";
+
+export class VirusMutation {
+  constructor(SpaceModel: Space) {
     const s = SpaceModel;
     const v = s.VirusModel;
 
@@ -41,7 +44,11 @@ class VirusMutation {
     }
   }
 
-  mutationInfectorAppearance(strainType, initialInfectorRate, PeopleModel) {
+  mutationInfectorAppearance(
+    strainType: string,
+    initialInfectorRate: number,
+    PeopleModel: People
+  ) {
     //初期感染者数を定義
     const initialInfectorPopulation = PeopleModel.sum.S * initialInfectorRate;
     //ノード内を全探索
@@ -54,5 +61,3 @@ class VirusMutation {
     }
   }
 }
-
-module.exports = { VirusMutation };
