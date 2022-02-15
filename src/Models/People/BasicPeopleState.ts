@@ -3,7 +3,7 @@ export class BasicPeopleState {
   public p: number;
   public diff: number;
 
-  constructor(options: any, eqConsts: undefined | any) {
+  constructor(options: any) {
     this.p = 0;
     this.immunizedType = options.immunizedType;
     this.diff = 0;

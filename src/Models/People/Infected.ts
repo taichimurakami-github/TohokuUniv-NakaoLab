@@ -9,8 +9,8 @@ export class I extends BasicPeopleState {
   public mu: number;
   public reinfected: boolean;
 
-  constructor(options: any, eqConsts: any) {
-    super(options, eqConsts);
+  constructor(options: any) {
+    super(options);
     //本クラスのカテゴライズタイプ
     this.type = "I";
 
@@ -97,8 +97,8 @@ export class I extends BasicPeopleState {
 }
 
 export class E extends I {
-  constructor(options: any, eqConsts: any) {
-    super(options, eqConsts);
+  constructor(options: any) {
+    super(options);
     this.type = "E";
   }
 }

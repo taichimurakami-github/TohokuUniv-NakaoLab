@@ -17,7 +17,7 @@ export class NI extends BasicPeopleState {
     },
     initialBirthPopulation: number = 0
   ) {
-    super(options, undefined);
+    super(options);
     this.type = "NI";
     this.birthRate = options.config.params.birthRate;
     this.p = initialBirthPopulation;

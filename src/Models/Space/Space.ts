@@ -1,11 +1,8 @@
-const {
-  PeopleStateTransition,
-} = require("../LifeCycleEvents/PeopleStateTransition");
-const { PeopleTravel } = require("../LifeCycleEvents/PeopleTravel");
-const { PeopleVaccination } = require("../LifeCycleEvents/Vaccination");
-const { VirusMutation } = require("../LifeCycleEvents/VirusMutation");
-const { People } = require("../People/People");
-const { Virus } = require("../Virus/Virus");
+import { PeopleStateTransition } from "../LifeCycleEvents/PeopleStateTransition";
+import { PeopleTravel } from "../LifeCycleEvents/PeopleTravel";
+import { VirusMutation } from "../LifeCycleEvents/VirusMutation";
+import { People } from "../People/People";
+import { Virus } from "../Virus/Virus";
 
 /**
  * 空間を定義し、管理する
