@@ -42,12 +42,8 @@ export type PeopleSumTemplate = {
   NI: number;
   ALL: number;
   S: number;
-  E: {
-    [strainType: string]: number;
-  };
-  I: {
-    [strainType: string]: number;
-  };
+  E: { [strainType: string]: number };
+  I: { [strainType: string]: number };
   R: number;
 };
 
@@ -170,6 +166,10 @@ export class People {
           //新規ウイルス株に対する感染クラス（I）を生成
           //I_immunizedTypeを獲得済み免疫として設定
           //除外されたstrainTypeを感染先のウイルス株と認定
+          template.E[strainType] = new I({
+            immunizedType: I_immunizedType,
+            VirusConfig: VirusModel.getStrainConfig(strainType),
+          });
           template.I[strainType] = new I({
             immunizedType: I_immunizedType,
             VirusConfig: VirusModel.getStrainConfig(strainType),
@@ -177,12 +177,12 @@ export class People {
 
           //感染済みウイルス株に対する感染クラス（RI）を生成
           //immunizedType:
-          template.R_I[strainType] = new I({
+          template.R_E[strainType] = new E({
             immunizedType: node,
             VirusConfig: VirusModel.getStrainConfig(strainType),
             reinfected: true,
           });
-          template.R_E[strainType] = new E({
+          template.R_I[strainType] = new I({
             immunizedType: node,
             VirusConfig: VirusModel.getStrainConfig(strainType),
             reinfected: true,
@@ -250,8 +250,10 @@ export class People {
     };
 
     //ウイルス株を解析し、Iのpropertyを生成
-    for (const strainType of this.VirusModel.strainTypesArr)
+    for (const strainType of this.VirusModel.strainTypesArr) {
       initialTemp.I[strainType] = 0;
+      initialTemp.E[strainType] = 0;
+    }
 
     return initialTemp;
   }

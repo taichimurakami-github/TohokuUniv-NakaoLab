@@ -24,11 +24,11 @@ export class PeopleStateTransition {
 
       /**
        * 計算(1)
-       * phase同士の遷移：previousLayer.NI -> thisLayer.E
+       * 1. phase同士の遷移：previousLayer.NI -> thisLayer.E
        * + 免疫を持っていないウイルス株への感染
        * + 免疫を持っているウイルス株への再感染
        *
-       * phase内のE -> Iへの遷移
+       * 2. phase内のE -> Iへの遷移
        */
       this.calcInfection(layer_prev, layer_this, PeopleModel, VirusModel);
 
@@ -70,6 +70,12 @@ export class PeopleStateTransition {
           //記録
           E_this.diff -= diff_E_to_I;
           I_this.diff += diff_E_to_I;
+
+          const testvalue1 = !NI_prev.immunizedType.includes(E_this.strainType);
+          const testvalue2 = this.isArraySame(
+            NI_prev.immunizedType,
+            E_this.immunizedType
+          );
 
           /**
            * 1. 遷移先のIのstrainTypeが遷移元のimmunizedTypeに含まれていない
