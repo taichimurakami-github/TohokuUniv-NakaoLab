@@ -9,10 +9,6 @@ const XLSX = require("xlsx");
  * @returns
  */
 const writeFile = async (writeFiletypes, result, config) => {
-  const resultAsObjectTemplate = Object.values(result[0].asObject);
-  const axisNames = Object.keys(resultAsObjectTemplate[0]);
-  const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
-
   //ファイル生成
   for (const fileType of writeFiletypes) {
     switch (fileType) {
@@ -22,7 +18,7 @@ const writeFile = async (writeFiletypes, result, config) => {
         //フォルダが存在するか確認
         handleCheckFolder(writeFilePath);
         //書き出し
-        await handleWriteFileAsXLSX(writeFileName, parsedResult, axisNames);
+        await handleWriteFileAsXLSX(writeFileName, result.data);
 
         break;
       }
@@ -33,12 +29,7 @@ const writeFile = async (writeFiletypes, result, config) => {
         //フォルダが存在するか確認
         handleCheckFolder(writeFilePath);
         //書き出し
-        await handleWriteFileAsJSON(
-          writeFileName,
-          parsedResult,
-          axisNames,
-          config
-        );
+        await handleWriteFileAsJSON(writeFileName, result);
 
         break;
       }
@@ -81,19 +72,8 @@ const handleCheckFolder = async (writeFilePath) => {
   }
 };
 
-const handleWriteFileAsJSON = async (
-  writeFileName,
-  data,
-  axisNames,
-  config
-) => {
-  const dataObject = {
-    axisNames: axisNames,
-    config: config,
-    data: data,
-  };
-
-  return await fs.writeFile(writeFileName, JSON.stringify(dataObject));
+const handleWriteFileAsJSON = async (writeFileName, result) => {
+  return await fs.writeFile(writeFileName, JSON.stringify(result));
 };
 
 const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {

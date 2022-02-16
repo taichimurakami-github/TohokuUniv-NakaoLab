@@ -1,3 +1,4 @@
+import { Vaccinated } from "../Space/Space";
 import { Virus } from "../Virus/Virus";
 import { BasicPeopleState } from "./BasicPeopleState";
 
@@ -34,11 +35,22 @@ export class I extends BasicPeopleState {
    */
   getBeta(
     mode: "infected" | "reinfected",
+    VaccineLog: Vaccinated,
     VirusModel: InstanceType<typeof Virus>
   ) {
     switch (mode) {
-      case "infected":
-        return this.getCrossImmunityEffectForBeta(VirusModel) * this.beta;
+      case "infected": {
+        const strainType = this.strainType;
+        const vaccineEffect = VaccineLog[strainType]
+          ? VaccineLog[strainType].attenuationCoeff
+          : 1;
+
+        return (
+          this.getCrossImmunityEffectForBeta(VirusModel) *
+          vaccineEffect *
+          this.beta
+        );
+      }
 
       case "reinfected":
         return this.getImmunizedEffectForBeta() * this.beta;

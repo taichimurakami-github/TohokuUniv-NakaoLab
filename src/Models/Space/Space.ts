@@ -6,9 +6,23 @@ import { Virus } from "../Virus/Virus";
 
 export type SpaceResult = PeopleSumTemplate[][];
 
+export type Vaccinated = {
+  [vaccineName: string]: {
+    vaccinatedAt: number; //ワクチン接種日
+    attenuationCoeff: number;
+  };
+};
+
 export type SpaceState = {
   people: People;
-}[];
+  vaccinated: Vaccinated;
+};
+
+export type Result = {
+  config: any;
+  axisNames: string[];
+  data: number[][][];
+};
 
 /**
  * 空間を定義し、管理する
@@ -16,7 +30,7 @@ export type SpaceState = {
  */
 
 export class Space {
-  public state: SpaceState;
+  public state: SpaceState[];
   public mvCoeff: number[][];
   public result: SpaceResult;
   public t: number;
@@ -44,6 +58,7 @@ export class Space {
       //各空間に属するインスタンスを作成
       this.state.push({
         people: new People(config, virus),
+        vaccinated: {},
       });
     }
   }
@@ -99,7 +114,42 @@ export class Space {
    * @returns {[{[String]: Array}]}
    */
   getResults() {
-    //PeopleResultをそのまま返す
-    return this.state.map((SpaceState) => SpaceState.people.result);
+    const result: any = {
+      config: { ...this.config },
+      axisNames: ["S", "R"],
+      data: [],
+    };
+
+    //axisNames(label)を設定
+    const E_sum_temp = this.state[0].people.getInitializedSumTemplate().E;
+    for (const strainTypes of Object.keys(E_sum_temp)) {
+      result.axisNames.push(`E_${strainTypes}`);
+      result.axisNames.push(`I_${strainTypes}`);
+    }
+
+    for (const SpaceState of this.state) {
+      //Space.stateの各Peopleに対して計算
+      const p = SpaceState.people;
+      const this_p_result = [];
+
+      //各PeopleのResultを計算
+      for (const r of p.result) {
+        const tmp: number[] = [];
+        tmp.push(r.S);
+        tmp.push(r.R);
+
+        //register E, I
+        for (const strainType of Object.keys(r.E)) {
+          tmp.push(r.E[strainType]);
+          tmp.push(r.I[strainType]);
+        }
+
+        this_p_result.push(tmp);
+      }
+
+      result.data.push(this_p_result);
+    }
+
+    return result;
   }
 }

@@ -2,17 +2,26 @@
   "vaccine": [
     {
       "name": "fizer",
+      "duaration": 300,
       "begin": [
         {
-          "time": 2,
-          "space": [10]
+          "time": 200,
+          "space": [1, 10, 90]
+        },
+        {
+          "time": 300,
+          "space": [15, 20]
+        },
+        {
+          "time": 400,
+          "space": [1, 10, 90]
         }
       ],
       "effect": {
         "beta": {
-          "beta": 0.05,
-          "gamma": 0.05,
-          "mu": 0.05
+          "beta": 0.9,
+          "gamma": 1.1,
+          "mu": 0.5
         },
         "gamma": {
           "beta": 0.1,

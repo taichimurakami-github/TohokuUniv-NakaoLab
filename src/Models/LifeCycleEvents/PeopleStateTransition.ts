@@ -1,5 +1,5 @@
 import { People, StateNode } from "../People/People";
-import { Space } from "../Space/Space";
+import { Space, SpaceState, Vaccinated } from "../Space/Space";
 import { Virus } from "../Virus/Virus";
 
 export class PeopleStateTransition {
@@ -11,11 +11,14 @@ export class PeopleStateTransition {
     this.feedbackRate = s.config.params.feedbackRate;
 
     for (const state of s.state) {
-      this.calcByPhaseLoop(state.people, v);
+      this.calcByPhaseLoop(state, v);
     }
   }
 
-  calcByPhaseLoop(PeopleModel: People, VirusModel: Virus) {
+  calcByPhaseLoop(SpaceState: SpaceState, VirusModel: Virus) {
+    const PeopleModel = SpaceState.people;
+    const VaccineLog = SpaceState.vaccinated;
+
     //最初のSは特殊遷移（S -> Iのパターンのみ）なので、除外
     //最後のRは遷移先が存在しない（あとでフィードバックは追加するかも）ので、Rに関する計算は除外
     for (let i = 1; i < PeopleModel.nodeTree.length; i++) {
@@ -30,7 +33,13 @@ export class PeopleStateTransition {
        *
        * 2. phase内のE -> Iへの遷移
        */
-      this.calcInfection(layer_prev, layer_this, PeopleModel, VirusModel);
+      this.calcInfection(
+        layer_prev,
+        layer_this,
+        PeopleModel,
+        VaccineLog,
+        VirusModel
+      );
 
       /**
        * 計算(2)
@@ -52,6 +61,7 @@ export class PeopleStateTransition {
     layer_prev: StateNode[],
     layer_this: StateNode[],
     PeopleModel: People,
+    VaccineLog: Vaccinated,
     VirusModel: Virus
   ) {
     for (const prevNode of layer_prev) {
@@ -65,17 +75,11 @@ export class PeopleStateTransition {
            * E -> Iへの遷移
            */
           //計算
-          const diff_E_to_I = E_this.p * 0.01;
+          const diff_E_to_I = E_this.p * 0.5;
 
           //記録
           E_this.diff -= diff_E_to_I;
           I_this.diff += diff_E_to_I;
-
-          const testvalue1 = !NI_prev.immunizedType.includes(E_this.strainType);
-          const testvalue2 = this.isArraySame(
-            NI_prev.immunizedType,
-            E_this.immunizedType
-          );
 
           /**
            * 1. 遷移先のIのstrainTypeが遷移元のimmunizedTypeに含まれていない
@@ -90,7 +94,7 @@ export class PeopleStateTransition {
             const rate_I = PeopleModel.getInfectedRate(strainType);
 
             //交差免疫反応を考慮した感染力の生成
-            const beta = E_this.getBeta("infected", VirusModel);
+            const beta = E_this.getBeta("infected", VaccineLog, VirusModel);
 
             //計算
             const diff_NI_to_E = NI_prev.p * beta * rate_I;
@@ -108,7 +112,7 @@ export class PeopleStateTransition {
           const RI_this = thisNode.R_I[strainType];
 
           //E -> Iへの遷移
-          const diff_RE_to_RI = RE_this.p * 0.01;
+          const diff_RE_to_RI = RE_this.p * 0.45;
           RE_this.p -= diff_RE_to_RI;
           RI_this.p += diff_RE_to_RI;
 
@@ -116,14 +120,14 @@ export class PeopleStateTransition {
           const rate_I = PeopleModel.getInfectedRate(strainType);
 
           //交差免疫反応を考慮した感染力の生成
-          const beta = RI_this.getBeta("reinfected", VirusModel);
+          const beta = RE_this.getBeta("reinfected", VaccineLog, VirusModel);
 
           //計算
           const diff = NI_prev.p * beta * rate_I;
 
           //記録
           NI_this.diff -= diff;
-          RI_this.diff += diff;
+          RE_this.diff += diff;
         }
       }
     }
