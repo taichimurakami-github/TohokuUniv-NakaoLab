@@ -14,7 +14,9 @@
         "epsilon": 0.1,
         "zeta": 0.1
       }
-    },
+    }
+  ],
+  "others_test_variant": [
     {
       "strainType": "gamma",
       "infectivity": 0.3,

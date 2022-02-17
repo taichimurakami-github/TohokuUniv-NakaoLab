@@ -40,10 +40,19 @@ export class I extends BasicPeopleState {
   ) {
     switch (mode) {
       case "infected": {
-        const strainType = this.strainType;
-        const vaccineEffect = VaccineLog[strainType]
-          ? VaccineLog[strainType].attenuationCoeff
-          : 1;
+        const vaccineEffect = Object.keys(VaccineLog).reduce(
+          (prevResult, currentValue): number => {
+            //vaccine効果と、減衰率の積を出す
+            const vaccinated = VaccineLog[currentValue];
+            const vaccineEffectForBeta =
+              vaccinated.effect[this.strainType].beta *
+              vaccinated.attenuationCoeff;
+
+            //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
+            return prevResult * vaccineEffectForBeta;
+          },
+          1
+        );
 
         return (
           this.getCrossImmunityEffectForBeta(VirusModel) *
@@ -76,6 +85,10 @@ export class I extends BasicPeopleState {
 
   getImmunizedEffectForBeta() {
     return 0.1;
+  }
+
+  getImmunizedEffectForGamma() {
+    return 1.05;
   }
 
   /**

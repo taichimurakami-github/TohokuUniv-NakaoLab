@@ -10,7 +10,7 @@ import { Space } from "./Models/Space/Space";
     path.resolve(__dirname, "../config/settings.json")
   );
   const vaccinationConfig = await IO.readFile(
-    path.resolve(__dirname, "../config/settings.json")
+    path.resolve(__dirname, "../config/vaccine.json")
   );
   const variantConfig = await IO.readFile(
     path.resolve(__dirname, "../config/variant.json")

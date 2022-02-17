@@ -10,15 +10,27 @@ export type VariantConfig = {
 }[];
 
 //vaccineConfig
+export type VaccineEffects = {
+  [strainType: string]: {
+    [strainType: string]: number;
+  };
+};
+export type VaccineData = {
+  duration: number;
+  effect: VaccineEffects;
+};
+
 export type VaccineConfig = {
-  name: string;
-  begin: { time: number; space: number[] }[];
-  effect: {
-    [strainType: string]: {
-      [strainType: string]: number;
+  data: {
+    [vaccineName: string]: VaccineData;
+  };
+  begin: {
+    [time: string]: {
+      vaccineName: string;
+      target: number[] | "ALL";
     };
   };
-}[];
+};
 
 //settings
 export type ModelsConnectionTypeConfig = "partial" | "full";

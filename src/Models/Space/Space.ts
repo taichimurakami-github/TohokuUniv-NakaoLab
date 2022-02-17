@@ -1,5 +1,7 @@
+import { VaccineEffects } from "../../../@types/config";
 import { PeopleStateTransition } from "../LifeCycleEvents/PeopleStateTransition";
 import { PeopleTravel } from "../LifeCycleEvents/PeopleTravel";
+import { PeopleVaccination } from "../LifeCycleEvents/PeopleVaccination";
 import { VirusMutation } from "../LifeCycleEvents/VirusMutation";
 import { People, PeopleSumTemplate } from "../People/People";
 import { Virus } from "../Virus/Virus";
@@ -9,7 +11,8 @@ export type SpaceResult = PeopleSumTemplate[][];
 export type Vaccinated = {
   [vaccineName: string]: {
     vaccinatedAt: number; //ワクチン接種日
-    attenuationCoeff: number;
+    attenuationCoeff: number; //ワクチン接種からの時間経過による効果減少度
+    effect: VaccineEffects;
   };
 };
 
@@ -68,7 +71,7 @@ export class Space {
     this.t += 1;
 
     //ワクチン接種を実行
-    // new PeopleVaccination(this);
+    new PeopleVaccination(this);
 
     //人流移動を実行
     new PeopleTravel(this);

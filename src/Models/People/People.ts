@@ -93,10 +93,14 @@ export class People {
      * レイヤー内の各ノードにしたがって、計算で使用するNI, Iクラスを自動で作成する
      */
 
+    const i_pop_max = config.models.People.initialPopulation.max;
+    const i_pop_min = config.models.People.initialPopulation.min;
+
     //S（免疫を保持しない原点ノード）生成
     const initialPopulation = Math.floor(
-      // 初期人口：0.01 ~ 1.0 * max_const
-      getRandomFloat(0.1, 1.0) * this.config.params.maxPopulationSize
+      // 初期人口：config i_pop_min ~ i_pop_max * max_const
+      getRandomFloat(i_pop_min, i_pop_max) *
+        this.config.params.maxPopulationSize
     );
     this.state[0] = [
       {
