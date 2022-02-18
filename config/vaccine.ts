@@ -1,4 +1,6 @@
-const vaccineConfig = {
+import { VaccineConfig } from "../@types/config";
+
+const vaccineConfig: { vaccine: VaccineConfig } = {
   vaccine: {
     begin: {
       10: {
@@ -12,7 +14,7 @@ const vaccineConfig = {
     },
     data: {
       fizer: {
-        duaration: 300,
+        duration: 300,
         effect: {
           alpha: {
             beta: 0.9,

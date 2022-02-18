@@ -1,4 +1,6 @@
-const settings = {
+import { SettingsConfig } from "../@types/config";
+
+const settings: SettingsConfig = {
   params: {
     timeLength: 1000,
     maxCoeffConst: 0.1,
@@ -29,7 +31,6 @@ const settings = {
     writeResultAsJSON: true,
     writeResultAsPNG: false,
     showProgressBar: true,
-    resultArrayDepth: 3,
   },
 };
 

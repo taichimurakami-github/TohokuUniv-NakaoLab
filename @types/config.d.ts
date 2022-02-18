@@ -40,12 +40,19 @@ export type SettingsConfig = {
     [settingsName: string]: number;
   };
   models: {
-    [modelName: string]: {
+    Space: {
       connectionType: ModelsConnectionTypeConfig;
       length: {
         col: number;
         row: number;
       };
     };
+    People: {
+      initialPopulation: { [key: string]: number };
+      EI_transCoeff: number;
+    };
+  };
+  io: {
+    [key: string]: boolean;
   };
 };

@@ -1,4 +1,6 @@
-const variantConfig = {
+import { VariantConfig } from "../@types/config";
+
+const variantConfig: { variantConfig: VariantConfig } = {
   variantConfig: [
     {
       strainType: "alpha",
@@ -30,38 +32,38 @@ const variantConfig = {
         zeta: 0.15,
       },
     },
-  ],
-  others_test_variant: [
-    {
-      strainType: "gamma",
-      infectivity: 0.3,
-      resilience: 0.23,
-      fatarity: 0.002,
-      appearanceTime: 500,
-      appearanceAt: [0],
-      crossImmunity: {
-        alpha: 0.1,
-        gamma: 0.2,
-        delta: 0.2,
-        epsilon: 0.15,
-        zeta: 0.15,
-      },
-    },
-    {
-      strainType: "delta",
-      infectivity: 0.5,
-      resilience: 0.3,
-      fatarity: 0.001,
-      appearanceTime: 2000,
-      appearanceAt: [0],
-      crossImmunity: {
-        alpha: 0.2,
-        gamma: 0.2,
-        delta: 0.2,
-        epsilon: 0.2,
-        zeta: 0.15,
-      },
-    },
+
+    //   {
+    //     strainType: "gamma",
+    //     infectivity: 0.3,
+    //     resilience: 0.23,
+    //     fatarity: 0.002,
+    //     appearanceTime: 500,
+    //     appearanceAt: [0],
+    //     crossImmunity: {
+    //       alpha: 0.1,
+    //       gamma: 0.2,
+    //       delta: 0.2,
+    //       epsilon: 0.15,
+    //       zeta: 0.15,
+    //     },
+    //   },
+
+    //   {
+    //     strainType: "delta",
+    //     infectivity: 0.5,
+    //     resilience: 0.3,
+    //     fatarity: 0.001,
+    //     appearanceTime: 2000,
+    //     appearanceAt: [0],
+    //     crossImmunity: {
+    //       alpha: 0.2,
+    //       gamma: 0.2,
+    //       delta: 0.2,
+    //       epsilon: 0.2,
+    //       zeta: 0.15,
+    //     },
+    //   },
   ],
 };
 
