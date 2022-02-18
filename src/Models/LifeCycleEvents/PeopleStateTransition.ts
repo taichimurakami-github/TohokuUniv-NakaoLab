@@ -4,11 +4,13 @@ import { Virus } from "../Virus/Virus";
 
 export class PeopleStateTransition {
   private feedbackRate: number;
+  private EI_transCoeff: number;
 
   constructor(SpaceModel: Space) {
     const s = SpaceModel;
     const v = SpaceModel.VirusModel;
     this.feedbackRate = s.config.params.feedbackRate;
+    this.EI_transCoeff = s.config.models.People.EI_transCoeff;
 
     for (const state of s.state) {
       this.calcByPhaseLoop(state, v);
@@ -75,7 +77,7 @@ export class PeopleStateTransition {
            * E -> Iへの遷移
            */
           //計算
-          const diff_E_to_I = E_this.p * 0.5;
+          const diff_E_to_I = E_this.p * this.EI_transCoeff;
 
           //記録
           E_this.diff -= diff_E_to_I;
@@ -112,7 +114,7 @@ export class PeopleStateTransition {
           const RI_this = thisNode.R_I[strainType];
 
           //E -> Iへの遷移
-          const diff_RE_to_RI = RE_this.p * 0.45;
+          const diff_RE_to_RI = RE_this.p * this.EI_transCoeff;
           RE_this.p -= diff_RE_to_RI;
           RI_this.p += diff_RE_to_RI;
 
