@@ -14,6 +14,21 @@
         "epsilon": 0.1,
         "zeta": 0.1
       }
+    },
+    {
+      "strainType": "beta",
+      "infectivity": 0.3,
+      "resilience": 0.23,
+      "fatarity": 0.002,
+      "appearanceTime": 200,
+      "appearanceAt": [0, 9],
+      "crossImmunity": {
+        "alpha": 0.1,
+        "gamma": 0.2,
+        "delta": 0.2,
+        "epsilon": 0.15,
+        "zeta": 0.15
+      }
     }
   ],
   "others_test_variant": [

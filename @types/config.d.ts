@@ -26,7 +26,7 @@ export type VaccineConfig = {
   };
   begin: {
     [time: string]: {
-      vaccineName: string;
+      name: string;
       target: number[] | "ALL";
     };
   };
