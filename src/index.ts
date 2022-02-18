@@ -1,21 +1,24 @@
 import path from "path";
 import { IO } from "./io/io";
 import { Space } from "./Models/Space/Space";
+import settings from "../config/settings";
+import vaccineConfig from "../config/vaccine";
+import variantConfig from "../config/variant";
 
 (async () => {
   /**
    * (1)設定読み込み
    */
-  const settings = await IO.readFile(
-    path.resolve(__dirname, "../config/settings.json")
-  );
-  const vaccinationConfig = await IO.readFile(
-    path.resolve(__dirname, "../config/vaccine.json")
-  );
-  const variantConfig = await IO.readFile(
-    path.resolve(__dirname, "../config/variant.json")
-  );
-  const config = { ...settings, ...vaccinationConfig, ...variantConfig };
+  // const settings = await IO.readFile(
+  //   path.resolve(__dirname, "../config/settings.json")
+  // );
+  // const variantConfig = await IO.readFile(
+  //   path.resolve(__dirname, "../config/vaccine.json")
+  // );
+  // const variantConfig = await IO.readFile(
+  //   path.resolve(__dirname, "../config/variant.json")
+  // );
+  const config = { ...settings, ...vaccineConfig, ...variantConfig };
 
   /**
    * (2)計算準備
