@@ -22,7 +22,7 @@ const vaccineConfig: { vaccine: VaccineConfig } = {
             mu: 0.5,
           },
           beta: {
-            beta: 0.8,
+            beta: 0.9,
             gamma: 1.1,
             mu: 0.5,
           },

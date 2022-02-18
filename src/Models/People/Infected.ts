@@ -38,22 +38,20 @@ export class I extends BasicPeopleState {
     VaccineLog: Vaccinated,
     VirusModel: InstanceType<typeof Virus>
   ) {
+    const vaccineEffect = Object.keys(VaccineLog).reduce(
+      (prevResult, currentValue): number => {
+        //vaccine効果と、減衰率の積を出す
+        const vaccinated = VaccineLog[currentValue];
+        const vaccineEffectForBeta =
+          vaccinated.effect[this.strainType].beta * vaccinated.attenuationCoeff;
+
+        //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
+        return prevResult * vaccineEffectForBeta;
+      },
+      1
+    );
     switch (mode) {
       case "infected": {
-        const vaccineEffect = Object.keys(VaccineLog).reduce(
-          (prevResult, currentValue): number => {
-            //vaccine効果と、減衰率の積を出す
-            const vaccinated = VaccineLog[currentValue];
-            const vaccineEffectForBeta =
-              vaccinated.effect[this.strainType].beta *
-              vaccinated.attenuationCoeff;
-
-            //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
-            return prevResult * vaccineEffectForBeta;
-          },
-          1
-        );
-
         return (
           this.getCrossImmunityEffectForBeta(VirusModel) *
           vaccineEffect *
@@ -62,16 +60,32 @@ export class I extends BasicPeopleState {
       }
 
       case "reinfected":
-        return this.getImmunizedEffectForBeta() * this.beta;
+        return (
+          this.getImmunizedEffectForBeta() * //免疫獲得済み
+          this.getCrossImmunityEffectForBeta(VirusModel) * //交差免疫の影響
+          vaccineEffect * //ワクチン免疫の影響
+          this.beta //基本感染力係数
+        );
 
       default:
-        return this.beta;
+        throw new Error(
+          `invarid mode at ${this.type}.getBeta(): mode = ${mode}`
+        );
     }
   }
 
   //gammaが可変になる可能性があるので、ゲッターを定義しておく
-  getGamma() {
+  getGamma() { // VirusModel: InstanceType<typeof Virus> // VaccineLog: Vaccinated, // mode: "infected" | "reinfected",
     return this.gamma;
+    // switch (mode) {
+    //   case "infected":
+
+    //   case "reinfected":
+    //     return this.getImmunizedEffectForGamma() * this.beta;
+
+    //   default:
+    //     return this.gamma;
+    // }
   }
 
   //muが可変になる可能性があるので、ゲッターを定義しておく
