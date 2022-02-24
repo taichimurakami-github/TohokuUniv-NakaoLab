@@ -21,15 +21,14 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
       "../../result/" + fileType + "/" + dateString
     );
     //書き出しフォルダを生成
-    await handleMakeDir(writeFileRootDir);
+    // await handleMakeDir(writeFileRootDir);
+    const writeFileDir = writeFileRootDir + `/${flowName}/`;
+    await handleMakeDir(writeFileDir);
+    const writeFileName = `${flowName}_${stepName}.${fileType}`;
 
     //ファイル拡張子ごとに処理
     switch (fileType) {
       case "xlsx": {
-        //XLSXファイル書き出し設定
-        const [writeFileName, writeFilePath] = getFileNameAndPath("xlsx");
-        //フォルダが存在するか確認
-        handleCheckFolder(writeFilePath);
         //書き出し
         await handleWriteFileAsXLSX(writeFileName, result.data);
 
@@ -37,11 +36,6 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
       }
 
       case "json": {
-        //さらにflowごとにフォルダを生成
-        const writeFileDir = writeFileRootDir + `/${flowName}/`;
-        await handleMakeDir(writeFileDir);
-        const writeFileName = `${flowName}_${stepName}.json`;
-
         //書き出し
         return await fs.writeFile(
           writeFileDir + writeFileName,
@@ -56,13 +50,9 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
 };
 
 const handleMakeDir = async (pathlike) => {
-  try {
-    await fs.access(pathlike);
-  } catch (e) {
-    try {
-      await fs.mkdir(pathlike);
-    } catch (e) {}
-  }
+  await fs.access(pathlike).catch(async (e) => {
+    await fs.mkdir(pathlike).catch((e) => {});
+  });
 };
 
 const getFileNameAndPath = (writeFileType) => {
@@ -81,24 +71,6 @@ const getFileNameAndPath = (writeFileType) => {
   );
 
   return [writeFileName, writeFilePath];
-};
-
-const handleCheckFolder = async (writeFilePath) => {
-  //書き込み対象のディレクトリが存在するか確認
-  try {
-    await fs.lstat(writeFilePath);
-  } catch (e) {
-    /**
-     * no such file or directory Error no
-     * mac: -2 / windows: -4058
-     */
-    if (e.errno === -4058 || e.errno === -2) fs.mkdir(writeFilePath);
-    else throw new Error(e);
-  }
-};
-
-const handleWriteFileAsJSON = async (writeFileName, result) => {
-  return await fs.writeFile(writeFileName, JSON.stringify(result));
 };
 
 const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
