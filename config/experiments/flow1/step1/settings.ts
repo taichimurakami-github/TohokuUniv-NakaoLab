@@ -2,20 +2,20 @@ import { type_SettingsConfig } from "../../../../@types/config";
 
 const settings: type_SettingsConfig = {
   params: {
-    timeLength: 2500,
+    timeLength: 1000,
     maxCoeffConst: 0,
     maxPopulationSize: 1000000,
-    birthRate: 0.0001,
-    initialInfectiousRate: 0.0001,
+    birthRate: 0,
+    initialInfectiousRate: 0.001,
     initialFatarity: 0,
-    feedbackRate: 0,
+    feedbackRate: 0, //R -> before Rへの遷移
   },
   models: {
     Space: {
       connectionType: "partial",
       length: {
-        col: 1,
-        row: 1,
+        col: 2,
+        row: 2,
       },
     },
     People: {

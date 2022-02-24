@@ -1,12 +1,15 @@
 import { type_VariantConfig } from "../../../../@types/config";
 
+export const strainTypesArray = ["v_alpha", "v_beta", "v_gamma", "v_delta"];
+
 const variantConfig: { variantConfig: type_VariantConfig } = {
-  variantConfig: [
-    {
-      strainType: "alpha",
+  variantConfig: {
+    [strainTypesArray[0]]: {
+      strainType: strainTypesArray[0],
+      EI_transCoeff: 0.4,
       infectivity: 0.2,
       resilience: 0.18,
-      fatarity: 0.001,
+      fatality: 0.001,
       appearanceAt: [0],
       appearanceTime: 10,
       crossImmunity: {
@@ -64,7 +67,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
     //       zeta: 0.15,
     //     },
     //   },
-  ],
+  },
 };
 
 export default variantConfig;

@@ -1,6 +1,5 @@
 import { calcCombination, getRandomFloat } from "../../lib";
 import { Config } from "../Config/Config";
-import { Virus } from "../Virus/Virus";
 import { I, E } from "./Infected";
 import { NI } from "./NotInfected";
 
@@ -67,16 +66,14 @@ export class People {
   public result: type_PeopleResult;
   public Config: Config;
   public t: number;
-  public VirusModel: Virus;
   public sum: any;
   public nodeTree: type_NodeTreeStructure<string>;
 
-  constructor(config: Config, VirusModel: Virus) {
+  constructor(config: Config) {
     this.state = [];
     this.result = [];
     this.Config = config;
     this.t = 0;
-    this.VirusModel = VirusModel;
 
     /**
      * sumを計算
@@ -171,24 +168,30 @@ export class People {
           //I_immunizedTypeを獲得済み免疫として設定
           //除外されたstrainTypeを感染先のウイルス株と認定
           template.E[strainType] = new I({
+            strainType: strainType,
             immunizedType: I_immunizedType,
-            VirusConfig: VirusModel.getStrainConfig(strainType),
+            Config: config,
+            reinfected: false,
           });
           template.I[strainType] = new I({
+            strainType: strainType,
             immunizedType: I_immunizedType,
-            VirusConfig: VirusModel.getStrainConfig(strainType),
+            Config: config,
+            reinfected: false,
           });
 
           //感染済みウイルス株に対する感染クラス（RI）を生成
           //immunizedType:
           template.R_E[strainType] = new E({
+            strainType: strainType,
             immunizedType: node,
-            VirusConfig: VirusModel.getStrainConfig(strainType),
+            Config: config,
             reinfected: true,
           });
           template.R_I[strainType] = new I({
+            strainType: strainType,
             immunizedType: node,
-            VirusConfig: VirusModel.getStrainConfig(strainType),
+            Config: config,
             reinfected: true,
           });
         }
@@ -254,7 +257,7 @@ export class People {
     };
 
     //ウイルス株を解析し、Iのpropertyを生成
-    for (const strainType of this.VirusModel.strainTypesArr) {
+    for (const strainType of this.Config.getStrainTypesArray()) {
       initialTemp.I[strainType] = 0;
       initialTemp.E[strainType] = 0;
     }
@@ -263,12 +266,11 @@ export class People {
   }
 
   getLayeredStrainTypesNodeTree() {
+    const strainTypesArr = this.Config.getStrainTypesArray();
     //ノードになる基底状態を自動生成
     const modelStructure: type_NodeTreeStructure<string> = [[]];
-    for (let i = 0; i < this.VirusModel.strainTypesArr.length; i++) {
-      modelStructure.push(
-        calcCombination(this.VirusModel.strainTypesArr, i + 1)
-      );
+    for (let i = 0; i < strainTypesArr.length; i++) {
+      modelStructure.push(calcCombination(strainTypesArr, i + 1));
     }
     return modelStructure;
   }

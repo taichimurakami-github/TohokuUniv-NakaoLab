@@ -3,7 +3,7 @@ export class BasicPeopleState {
   public _p: number;
   public diff: number;
 
-  constructor(options: any) {
+  constructor(options: { immunizedType: string[] }) {
     this._p = 0;
     this.immunizedType = options.immunizedType;
     this.diff = 0;

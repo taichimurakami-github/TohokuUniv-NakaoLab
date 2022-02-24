@@ -1,23 +1,22 @@
+import { Config } from "../Config/Config";
 import { People, StateNode } from "../People/People";
 import { Space, type_SpaceState, type_VaccineLog } from "../Space/Space";
-import { Virus } from "../Virus/Virus";
 
 export class PeopleStateTransition {
-  private feedbackRate: number;
   private EI_transCoeff: number;
 
   constructor(SpaceModel: Space) {
     const s = SpaceModel;
-    const v = SpaceModel.VirusModel;
-    this.feedbackRate = s.Config.getFeedbackRate();
-    this.EI_transCoeff = s.Config.getEI_transCoeff();
+    const c = s.Config;
+    // this.EI_transCoeff = s.Config.getEI_transCoeff();
+    this.EI_transCoeff = 0.4;
 
     for (const state of s.state) {
-      this.calcByPhaseLoop(state, v);
+      this.calcByPhaseLoop(state, c);
     }
   }
 
-  calcByPhaseLoop(type_SpaceState: type_SpaceState, VirusModel: Virus) {
+  calcByPhaseLoop(type_SpaceState: type_SpaceState, Config: Config) {
     const PeopleModel = type_SpaceState.people;
     const VaccineLog = type_SpaceState.vaccinated;
 
@@ -40,7 +39,7 @@ export class PeopleStateTransition {
         layer_this,
         PeopleModel,
         VaccineLog,
-        VirusModel
+        Config
       );
 
       /**
@@ -49,13 +48,13 @@ export class PeopleStateTransition {
        * + 感染しているウイルス株からの回復
        * + 再感染しているウイルス株からの回復
        */
-      this.calcRecover(layer_this);
+      this.calcRecover(layer_this, Config);
 
       /**
        * 計算(3)
        * フィードバックの計算
        */
-      this.calcFeedback(layer_prev, layer_this);
+      this.calcFeedback(layer_prev, layer_this, Config.getFeedbackRate());
     }
   }
 
@@ -64,7 +63,7 @@ export class PeopleStateTransition {
     layer_this: StateNode[],
     PeopleModel: People,
     VaccineLog: type_VaccineLog,
-    VirusModel: Virus
+    Config: Config
   ) {
     for (const prevNode of layer_prev) {
       const NI_prev = prevNode.NI;
@@ -96,7 +95,7 @@ export class PeopleStateTransition {
             const rate_I = PeopleModel.getInfectedRate(strainType);
 
             //交差免疫反応を考慮した感染力の生成
-            const beta = E_this.getBeta("infected", VaccineLog, VirusModel);
+            const beta = E_this.getBeta(VaccineLog, Config);
 
             //計算
             const diff_NI_to_E = NI_prev.p * beta * rate_I;
@@ -122,7 +121,7 @@ export class PeopleStateTransition {
           const rate_I = PeopleModel.getInfectedRate(strainType);
 
           //交差免疫反応を考慮した感染力の生成
-          const beta = RE_this.getBeta("reinfected", VaccineLog, VirusModel);
+          const beta = RE_this.getBeta(VaccineLog, Config);
 
           //計算
           const diff = NI_prev.p * beta * rate_I;
@@ -135,7 +134,7 @@ export class PeopleStateTransition {
     }
   }
 
-  calcRecover(layer_this: StateNode[]) {
+  calcRecover(layer_this: StateNode[], Config: Config) {
     for (const thisNode of layer_this) {
       const NI_this = thisNode.NI;
 
@@ -157,9 +156,13 @@ export class PeopleStateTransition {
     }
   }
 
-  calcFeedback(layer_prev: StateNode[], layer_this: StateNode[]) {
+  calcFeedback(
+    layer_prev: StateNode[],
+    layer_this: StateNode[],
+    feedbackRate: number
+  ) {
     //フィードバック率が0であれば計算を破棄（リソース節約）
-    if (this.feedbackRate === 0) return;
+    if (feedbackRate === 0) return;
 
     for (const thisNode of layer_this) {
       const NI_this = thisNode.NI;
@@ -182,7 +185,7 @@ export class PeopleStateTransition {
       //記録したfeedbackTargetsに対して、フィードバックを計算
       //とりあえず、均等に戻るものとする
       for (const NI_prev of feedbackTargets) {
-        const diff = this.feedbackRate * NI_this.p;
+        const diff = feedbackRate * NI_this.p;
         NI_this.diff -= diff;
         NI_prev.diff += diff;
       }

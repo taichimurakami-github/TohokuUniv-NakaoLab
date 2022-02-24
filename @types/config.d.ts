@@ -1,13 +1,18 @@
 //variantConfig
-export type type_VariantConfig = {
+export type type_VariantSetting = {
   strainType: string;
+  EI_transCoeff: number;
   infectivity: number;
   resilience: number;
-  fatarity: number;
+  fatality: number;
   appearanceAt: number[];
   appearanceTime: number;
   crossImmunity: { [strainType: string]: number };
-}[];
+};
+
+export type type_VariantConfig = {
+  [strainType: string]: type_VariantSetting;
+};
 
 //vaccineConfig
 export type type_VaccineEffects = {
