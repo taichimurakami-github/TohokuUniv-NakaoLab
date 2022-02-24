@@ -8,9 +8,22 @@ const XLSX = require("xlsx");
  * @param {array of array} data
  * @returns
  */
-const writeFile = async (writeFiletypes, result, config) => {
+const writeFile = async (writeFiletypes, result, flowName, stepName) => {
+  const now = new Date();
+  const dateString = `${now.getFullYear()}.${
+    now.getMonth() + 1
+  }.${now.getDate()}`;
+
   //ファイル生成
   for (const fileType of writeFiletypes) {
+    const writeFileRootDir = path.resolve(
+      __dirname,
+      "../../result/" + fileType + "/" + dateString
+    );
+    //書き出しフォルダを生成
+    await handleMakeDir(writeFileRootDir);
+
+    //ファイル拡張子ごとに処理
     switch (fileType) {
       case "xlsx": {
         //XLSXファイル書き出し設定
@@ -24,19 +37,31 @@ const writeFile = async (writeFiletypes, result, config) => {
       }
 
       case "json": {
-        //XLSXファイル書き出し設定
-        const [writeFileName, writeFilePath] = getFileNameAndPath("json");
-        //フォルダが存在するか確認
-        handleCheckFolder(writeFilePath);
-        //書き出し
-        await handleWriteFileAsJSON(writeFileName, result);
+        //さらにflowごとにフォルダを生成
+        const writeFileDir = writeFileRootDir + `/${flowName}/`;
+        await handleMakeDir(writeFileDir);
+        const writeFileName = `${flowName}_${stepName}.json`;
 
-        break;
+        //書き出し
+        return await fs.writeFile(
+          writeFileDir + writeFileName,
+          JSON.stringify(result)
+        );
       }
 
       default:
         break;
     }
+  }
+};
+
+const handleMakeDir = async (pathlike) => {
+  try {
+    await fs.access(pathlike);
+  } catch (e) {
+    try {
+      await fs.mkdir(pathlike);
+    } catch (e) {}
   }
 };
 

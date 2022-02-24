@@ -57,9 +57,7 @@ export type SettingsConfig = {
   };
 };
 
-export type AllConfig =
-  | SettingsConfig
-  | {
-      variantConfig: VariantConfig;
-      vaccine: VaccineConfig;
-    };
+export type AllConfig = SettingsConfig & {
+  variantConfig: VariantConfig;
+  vaccine: VaccineConfig;
+};
