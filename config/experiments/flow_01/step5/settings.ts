@@ -1,21 +1,21 @@
-import { SettingsConfig } from "../@types/config";
+import { SettingsConfig } from "../../../../@types/config";
 
 const settings: SettingsConfig = {
   params: {
     timeLength: 2500,
-    maxCoeffConst: 0.05,
+    maxCoeffConst: 0,
     maxPopulationSize: 1000000,
-    birthRate: 0.005,
+    birthRate: 0.0001,
     initialInfectiousRate: 0.0001,
     initialFatarity: 0,
-    feedbackRate: 0.002,
+    feedbackRate: 0.1,
   },
   models: {
     Space: {
       connectionType: "partial",
       length: {
-        col: 10,
-        row: 10,
+        col: 1,
+        row: 1,
       },
     },
     People: {

@@ -1,4 +1,4 @@
-import { VaccineConfig } from "../@types/config";
+import { VaccineConfig } from "../../../../@types/config";
 
 const vaccineConfig: { vaccine: VaccineConfig } = {
   vaccine: {
