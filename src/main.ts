@@ -1,33 +1,18 @@
 import { IO } from "./io/io";
 import { Space } from "./Models/Space/Space";
-import { AllConfig } from "../@types/config";
+import { type_AllConfig } from "../@types/config";
+import { Config } from "./Models/Config/Config";
 
 export const main = async (
-  config: AllConfig,
+  config: type_AllConfig,
   flowName: string,
   stepName: string
 ) => {
-  /**
-   * (1)設定読み込み
-   */
-  // const settings = await IO.readFile(
-  //   path.resolve(__dirname, "../config/settings.json")
-  // );
-  // const variantConfig = await IO.readFile(
-  //   path.resolve(__dirname, "../config/vaccine.json")
-  // );
-  // const variantConfig = await IO.readFile(
-  //   path.resolve(__dirname, "../config/variant.json")
-  // );
+  //計算準備
+  const c = new Config(config);
+  const s = new Space(c);
 
-  /**
-   * (2)計算準備
-   */
-  const s = new Space(config);
-
-  /**
-   * (3)計算
-   */
+  //計算
   const timeLength = config.params.timeLength;
   for (let t = 0; t < timeLength; t++) {
     config.io.showProgressBar &&
@@ -35,14 +20,10 @@ export const main = async (
     s.updateWithLifeCycle();
   }
 
-  /**
-   * (4)結果取得
-   */
+  //結果取得
   const result = s.getResults();
 
-  /**
-   * (5)書き出し
-   */
+  // 書き出し
   const writeFileTypes = [];
   config.io.writeResultAsXLSX && writeFileTypes.push("xlsx");
   config.io.writeResultAsJSON && writeFileTypes.push("json");

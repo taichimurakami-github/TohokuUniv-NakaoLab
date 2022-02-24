@@ -1,6 +1,6 @@
-import { VariantConfig } from "../@types/config";
+import { type_VariantConfig } from "../@types/config";
 
-const variantConfig: { variantConfig: VariantConfig } = {
+const variantConfig: { variantConfig: type_VariantConfig } = {
   variantConfig: [
     {
       strainType: "alpha",

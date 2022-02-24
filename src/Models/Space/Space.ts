@@ -1,27 +1,28 @@
-import { VaccineEffects } from "../../../@types/config";
+import { type_VaccineEffects } from "../../../@types/config";
+import { Config } from "../Config/Config";
 import { PeopleStateTransition } from "../LifeCycleEvents/PeopleStateTransition";
 import { PeopleTravel } from "../LifeCycleEvents/PeopleTravel";
 import { PeopleVaccination } from "../LifeCycleEvents/PeopleVaccination";
 import { VirusMutation } from "../LifeCycleEvents/VirusMutation";
-import { People, PeopleSumTemplate } from "../People/People";
+import { People, type_PeopleSumTemplate } from "../People/People";
 import { Virus } from "../Virus/Virus";
 
-export type SpaceResult = PeopleSumTemplate[][];
+export type type_ModelResult = type_PeopleSumTemplate[][];
 
-export type Vaccinated = {
+export type type_VaccineLog = {
   [vaccineName: string]: {
     vaccinatedAt: number; //ワクチン接種日
     attenuationCoeff: number; //ワクチン接種からの時間経過による効果減少度
-    effect: VaccineEffects;
+    effect: type_VaccineEffects;
   };
 };
 
-export type SpaceState = {
+export type type_SpaceState = {
   people: People;
-  vaccinated: Vaccinated;
+  vaccinated: type_VaccineLog;
 };
 
-export type Result = {
+export type type_ModelResultTemplate = {
   config: any;
   axisNames: string[];
   data: number[][][];
@@ -33,30 +34,31 @@ export type Result = {
  */
 
 export class Space {
-  public state: SpaceState[];
+  public state: type_SpaceState[];
   public mvCoeff: number[][];
-  public result: SpaceResult;
+  public result: type_ModelResult;
   public t: number;
-  public config: any;
+  public Config: Config;
   public VirusModel: Virus;
 
-  constructor(config: any) {
+  constructor(config: Config) {
     this.state = [];
     this.mvCoeff = [];
     this.result = [];
     this.t = 0;
-    this.config = config;
+    this.Config = config;
 
     //空間内のウイルスを定義
-    const virus = new Virus(config.variantConfig);
+    const virus = new Virus(config.getVirusSettings());
     this.VirusModel = virus; //Spaceモデルに記録
     // this.strainTypesArr = v.getStrainTypesArr(); //ウイルス情報を記録
 
     //ワクチンモデルを起動
 
     //Peopleインスタンスを空間の個数分生成
-    const spaceConfig = config.models.Space;
-    for (let i = 0; i < this.getSpaceLength(spaceConfig); i++) {
+    const row = config.getSpaceLength().row;
+    const col = config.getSpaceLength().col;
+    for (let i = 0; i < row * col; i++) {
       //初期状態を定義
       //各空間に属するインスタンスを作成
       this.state.push({
@@ -92,12 +94,6 @@ export class Space {
     for (const state of this.state) state.people.updateWithCycleEnd();
   }
 
-  getSpaceLength(spaceConfig: any) {
-    const row = spaceConfig.length.row;
-    const col = spaceConfig.length.col;
-    return row * col;
-  }
-
   /**
    * 各spaceごとのPeople.resultを返す
    * -----------------------------------
@@ -118,7 +114,7 @@ export class Space {
    */
   getResults() {
     const result: any = {
-      config: { ...this.config },
+      config: { ...this.Config.getAllConfig() },
       axisNames: ["S", "R"],
       data: [],
     };
@@ -130,12 +126,12 @@ export class Space {
       result.axisNames.push(`I_${strainTypes}`);
     }
 
-    for (const SpaceState of this.state) {
+    for (const type_SpaceState of this.state) {
       //Space.stateの各Peopleに対して計算
-      const p = SpaceState.people;
+      const p = type_SpaceState.people;
       const this_p_result = [];
 
-      //各PeopleのResultを計算
+      //各Peopleのtype_ModelResultTemplateを計算
       for (const r of p.result) {
         const tmp: number[] = [];
         tmp.push(r.S);

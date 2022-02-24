@@ -1,5 +1,5 @@
 //variantConfig
-export type VariantConfig = {
+export type type_VariantConfig = {
   strainType: string;
   infectivity: number;
   resilience: number;
@@ -10,19 +10,19 @@ export type VariantConfig = {
 }[];
 
 //vaccineConfig
-export type VaccineEffects = {
+export type type_VaccineEffects = {
   [strainType: string]: {
     [strainType: string]: number;
   };
 };
-export type VaccineData = {
+export type type_VaccineData = {
   duration: number;
   effect: VaccineEffects;
 };
 
-export type VaccineConfig = {
+export type type_VaccineConfig = {
   data: {
-    [vaccineName: string]: VaccineData;
+    [vaccineName: string]: type_VaccineData;
   };
   begin: {
     [time: string]: {
@@ -33,15 +33,15 @@ export type VaccineConfig = {
 };
 
 //settings
-export type ModelsConnectionTypeConfig = "partial" | "full";
+export type type_ModelsConnectionTypeConfig = "partial" | "full";
 
-export type SettingsConfig = {
+export type type_SettingsConfig = {
   params: {
     [settingsName: string]: number;
   };
   models: {
     Space: {
-      connectionType: ModelsConnectionTypeConfig;
+      connectionType: type_ModelsConnectionTypeConfig;
       length: {
         col: number;
         row: number;
@@ -57,7 +57,7 @@ export type SettingsConfig = {
   };
 };
 
-export type AllConfig = SettingsConfig & {
-  variantConfig: VariantConfig;
-  vaccine: VaccineConfig;
+export type type_AllConfig = type_SettingsConfig & {
+  variantConfig: type_VariantConfig;
+  vaccine: type_VaccineConfig;
 };

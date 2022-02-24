@@ -1,4 +1,5 @@
 import { calcCombination, getRandomFloat } from "../../lib";
+import { Config } from "../Config/Config";
 import { Virus } from "../Virus/Virus";
 import { I, E } from "./Infected";
 import { NI } from "./NotInfected";
@@ -12,8 +13,8 @@ import { NI } from "./NotInfected";
  *  ...
  * ] <- NodeTree
  */
-export type LayerStructure<T> = T[][];
-export type NodeTreeStructure<T> = LayerStructure<T>[];
+export type type_LayerStructure<T> = T[][];
+export type type_NodeTreeStructure<T> = type_LayerStructure<T>[];
 
 //state生成用 型定義
 //NodeTreeのLayerをStateNodeで置き換える
@@ -24,21 +25,21 @@ export type NodeTreeStructure<T> = LayerStructure<T>[];
  *  ...
  * ] <- LayeredStructure
  */
-export type InstanceListPerStrainTypes<T> = {
+export type type_InstanceListPerStrainTypes<T> = {
   [strainType: string]: T;
 };
 
 export type StateNode = {
-  E: InstanceListPerStrainTypes<E>;
-  I: InstanceListPerStrainTypes<I>;
+  E: type_InstanceListPerStrainTypes<E>;
+  I: type_InstanceListPerStrainTypes<I>;
   NI: NI;
-  R_E: InstanceListPerStrainTypes<E>;
-  R_I: InstanceListPerStrainTypes<I>;
+  R_E: type_InstanceListPerStrainTypes<E>;
+  R_I: type_InstanceListPerStrainTypes<I>;
 };
-export type PeopleStateNodeTree = LayerStructure<StateNode>;
+export type type_PeopleStateNodeTree = type_LayerStructure<StateNode>;
 
 //sum計算用template型宣言
-export type PeopleSumTemplate = {
+export type type_PeopleSumTemplate = {
   NI: number;
   ALL: number;
   S: number;
@@ -48,7 +49,7 @@ export type PeopleSumTemplate = {
 };
 
 //resultの構造を型宣言
-export type PeopleResult = PeopleSumTemplate[];
+export type type_PeopleResult = type_PeopleSumTemplate[];
 
 /**
  * class People
@@ -62,18 +63,18 @@ export type PeopleResult = PeopleSumTemplate[];
  * <class function>
  */
 export class People {
-  public state: PeopleStateNodeTree;
-  public result: PeopleResult;
-  public config: any;
+  public state: type_PeopleStateNodeTree;
+  public result: type_PeopleResult;
+  public Config: Config;
   public t: number;
   public VirusModel: Virus;
   public sum: any;
-  public nodeTree: NodeTreeStructure<string>;
+  public nodeTree: type_NodeTreeStructure<string>;
 
-  constructor(config: any, VirusModel: Virus) {
+  constructor(config: Config, VirusModel: Virus) {
     this.state = [];
     this.result = [];
-    this.config = config;
+    this.Config = config;
     this.t = 0;
     this.VirusModel = VirusModel;
 
@@ -93,21 +94,20 @@ export class People {
      * レイヤー内の各ノードにしたがって、計算で使用するNI, Iクラスを自動で作成する
      */
 
-    const i_pop_max = config.models.People.initialPopulation.max;
-    const i_pop_min = config.models.People.initialPopulation.min;
+    const i_pop_max = config.getInitialPopulation().max;
+    const i_pop_min = config.getInitialPopulation().min;
 
     //S（免疫を保持しない原点ノード）生成
     const initialPopulation = Math.floor(
       // 初期人口：config i_pop_min ~ i_pop_max * max_const
-      getRandomFloat(i_pop_min, i_pop_max) *
-        this.config.params.maxPopulationSize
+      getRandomFloat(i_pop_min, i_pop_max) * this.Config.getMaxPopulationSize()
     );
     this.state[0] = [
       {
         NI: new NI(
           {
             immunizedType: [],
-            config: this.config,
+            config: this.Config.getAllConfig(),
           },
           initialPopulation
         ),
@@ -135,7 +135,7 @@ export class People {
         const template: any = {
           NI: new NI({
             immunizedType: node,
-            config: this.config,
+            config: this.Config.getAllConfig(),
           }),
           E: {},
           I: {},
@@ -244,7 +244,7 @@ export class People {
   }
 
   getInitializedSumTemplate() {
-    const initialTemp: PeopleSumTemplate = {
+    const initialTemp: type_PeopleSumTemplate = {
       NI: 0,
       ALL: 0,
       S: 0,
@@ -264,7 +264,7 @@ export class People {
 
   getLayeredStrainTypesNodeTree() {
     //ノードになる基底状態を自動生成
-    const modelStructure: NodeTreeStructure<string> = [[]];
+    const modelStructure: type_NodeTreeStructure<string> = [[]];
     for (let i = 0; i < this.VirusModel.strainTypesArr.length; i++) {
       modelStructure.push(
         calcCombination(this.VirusModel.strainTypesArr, i + 1)

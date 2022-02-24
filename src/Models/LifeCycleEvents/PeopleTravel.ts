@@ -1,19 +1,19 @@
 import { getRandomFloat } from "../../lib";
 import { Space } from "../Space/Space";
-import { ModelsConnectionTypeConfig } from "../../../@types/config";
+import { type_ModelsConnectionTypeConfig } from "../../../@types/config";
 import { People } from "../People/People";
 
 export class PeopleTravel {
-  private connectionType: ModelsConnectionTypeConfig;
+  private connectionType: type_ModelsConnectionTypeConfig;
   private spaceLength: { [key: string]: number };
   private maxCoeffConst: number;
   private mvCoeff: number[][];
 
   constructor(SpaceModel: Space) {
     const s = SpaceModel;
-    this.connectionType = s.config.models.Space.connectionType;
-    this.spaceLength = s.config.models.Space.length;
-    this.maxCoeffConst = s.config.params.maxCoeffConst;
+    this.connectionType = s.Config.getSpaceConnectionType();
+    this.spaceLength = s.Config.getSpaceLength();
+    this.maxCoeffConst = s.Config.getMaxTravelCoeffConst();
 
     //移動係数を計算、保存
     this.mvCoeff = this.generateMvCoeffMatrix(s);

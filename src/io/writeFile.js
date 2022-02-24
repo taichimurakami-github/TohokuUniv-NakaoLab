@@ -21,7 +21,7 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
       "../../result/" + fileType + "/" + dateString
     );
     //書き出しフォルダを生成
-    // await handleMakeDir(writeFileRootDir);
+    await handleMakeDir(writeFileRootDir); //日付のフォルダが無ければ作成
     const writeFileDir = writeFileRootDir + `/${flowName}/`;
     await handleMakeDir(writeFileDir);
     const writeFileName = `${flowName}_${stepName}.${fileType}`;
@@ -36,6 +36,7 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
       }
 
       case "json": {
+        console.log("\n\n\n\n\n\n" + writeFileName);
         //書き出し
         return await fs.writeFile(
           writeFileDir + writeFileName,

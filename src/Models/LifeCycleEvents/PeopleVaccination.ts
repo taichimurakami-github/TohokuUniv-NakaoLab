@@ -1,13 +1,10 @@
-import {
-  VaccineData,
-  VaccineConfig,
-  VaccineEffects,
-} from "../../../@types/config";
-import { Space, SpaceState, Vaccinated } from "../Space/Space";
+import { type_VaccineData, type_VaccineConfig } from "../../../@types/config";
+import { Space, type_SpaceState, type_VaccineLog } from "../Space/Space";
 
 export class PeopleVaccination {
   constructor(SpaceModel: Space) {
-    const vaccineConfig: VaccineConfig = SpaceModel.config.vaccine;
+    const vaccineConfig: type_VaccineConfig =
+      SpaceModel.Config.getVaccineConfig();
     const state = SpaceModel.state;
     const t = SpaceModel.t;
 
@@ -47,9 +44,9 @@ export class PeopleVaccination {
   //ワクチン再接種による減衰率の復元
   beginOrRestartEffect(
     t: number,
-    state: SpaceState,
+    state: type_SpaceState,
     v_name: string,
-    v_data: VaccineData
+    v_data: type_VaccineData
   ) {
     state.vaccinated[v_name] = {
       vaccinatedAt: t,
@@ -61,9 +58,9 @@ export class PeopleVaccination {
   //減衰率
   setAttenuationEffect(
     t: number,
-    vaccinated: Vaccinated,
+    vaccinated: type_VaccineLog,
     v_name: string,
-    v_data: VaccineData
+    v_data: type_VaccineData
   ) {
     const vaccinatedAt = vaccinated[v_name].vaccinatedAt;
 
