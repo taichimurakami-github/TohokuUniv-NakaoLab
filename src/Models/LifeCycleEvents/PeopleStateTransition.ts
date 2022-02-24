@@ -9,8 +9,8 @@ export class PeopleStateTransition {
   constructor(SpaceModel: Space) {
     const s = SpaceModel;
     const v = SpaceModel.VirusModel;
-    this.feedbackRate = s.config.params.feedbackRate;
-    this.EI_transCoeff = s.config.models.People.EI_transCoeff;
+    this.feedbackRate = s.Config.getFeedbackRate();
+    this.EI_transCoeff = s.Config.getEI_transCoeff();
 
     for (const state of s.state) {
       this.calcByPhaseLoop(state, v);

@@ -3,7 +3,8 @@ import { Space, type_SpaceState, type_VaccineLog } from "../Space/Space";
 
 export class PeopleVaccination {
   constructor(SpaceModel: Space) {
-    const vaccineConfig: type_VaccineConfig = SpaceModel.config.vaccine;
+    const vaccineConfig: type_VaccineConfig =
+      SpaceModel.Config.getVaccineConfig();
     const state = SpaceModel.state;
     const t = SpaceModel.t;
 

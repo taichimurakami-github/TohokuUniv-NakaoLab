@@ -1,6 +1,7 @@
 import { IO } from "./io/io";
 import { Space } from "./Models/Space/Space";
 import { type_AllConfig } from "../@types/config";
+import { Config } from "./Models/Config/Config";
 
 export const main = async (
   config: type_AllConfig,
@@ -8,7 +9,8 @@ export const main = async (
   stepName: string
 ) => {
   //計算準備
-  const s = new Space(config);
+  const c = new Config(config);
+  const s = new Space(c);
 
   //計算
   const timeLength = config.params.timeLength;

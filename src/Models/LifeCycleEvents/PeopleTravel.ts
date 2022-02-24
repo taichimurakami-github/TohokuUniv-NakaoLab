@@ -11,9 +11,9 @@ export class PeopleTravel {
 
   constructor(SpaceModel: Space) {
     const s = SpaceModel;
-    this.connectionType = s.config.models.Space.connectionType;
-    this.spaceLength = s.config.models.Space.length;
-    this.maxCoeffConst = s.config.params.maxCoeffConst;
+    this.connectionType = s.Config.getSpaceConnectionType();
+    this.spaceLength = s.Config.getSpaceLength();
+    this.maxCoeffConst = s.Config.getMaxTravelCoeffConst();
 
     //移動係数を計算、保存
     this.mvCoeff = this.generateMvCoeffMatrix(s);

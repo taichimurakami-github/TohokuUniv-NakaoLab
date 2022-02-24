@@ -1,4 +1,5 @@
 import { calcCombination, getRandomFloat } from "../../lib";
+import { Config } from "../Config/Config";
 import { Virus } from "../Virus/Virus";
 import { I, E } from "./Infected";
 import { NI } from "./NotInfected";
@@ -64,16 +65,16 @@ export type type_PeopleResult = type_PeopleSumTemplate[];
 export class People {
   public state: type_PeopleStateNodeTree;
   public result: type_PeopleResult;
-  public config: any;
+  public Config: Config;
   public t: number;
   public VirusModel: Virus;
   public sum: any;
   public nodeTree: type_NodeTreeStructure<string>;
 
-  constructor(config: any, VirusModel: Virus) {
+  constructor(config: Config, VirusModel: Virus) {
     this.state = [];
     this.result = [];
-    this.config = config;
+    this.Config = config;
     this.t = 0;
     this.VirusModel = VirusModel;
 
@@ -93,21 +94,20 @@ export class People {
      * レイヤー内の各ノードにしたがって、計算で使用するNI, Iクラスを自動で作成する
      */
 
-    const i_pop_max = config.models.People.initialPopulation.max;
-    const i_pop_min = config.models.People.initialPopulation.min;
+    const i_pop_max = config.getInitialPopulation().max;
+    const i_pop_min = config.getInitialPopulation().min;
 
     //S（免疫を保持しない原点ノード）生成
     const initialPopulation = Math.floor(
       // 初期人口：config i_pop_min ~ i_pop_max * max_const
-      getRandomFloat(i_pop_min, i_pop_max) *
-        this.config.params.maxPopulationSize
+      getRandomFloat(i_pop_min, i_pop_max) * this.Config.getMaxPopulationSize()
     );
     this.state[0] = [
       {
         NI: new NI(
           {
             immunizedType: [],
-            config: this.config,
+            config: this.Config.getAllConfig(),
           },
           initialPopulation
         ),
@@ -135,7 +135,7 @@ export class People {
         const template: any = {
           NI: new NI({
             immunizedType: node,
-            config: this.config,
+            config: this.Config.getAllConfig(),
           }),
           E: {},
           I: {},

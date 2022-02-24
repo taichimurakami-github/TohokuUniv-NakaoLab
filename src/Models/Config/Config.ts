@@ -1,6 +1,6 @@
 import { type_AllConfig, type_VariantConfig } from "../../../@types/config";
 
-class Config {
+export class Config {
   private config: type_AllConfig;
   constructor(config: type_AllConfig) {
     this.config = config;
@@ -8,6 +8,7 @@ class Config {
 
   //まとめて複数のconfigを取る
   public getAllConfig = () => this.config;
+  public getVaccineConfig = () => this.config.vaccine;
   public getIOConfig = () => this.config.io;
 
   //params
