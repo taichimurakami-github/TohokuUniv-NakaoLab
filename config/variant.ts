@@ -10,7 +10,8 @@ const variantConfig: { variantConfig: VariantConfig } = {
       appearanceAt: [0],
       appearanceTime: 100,
       crossImmunity: {
-        beta: 0.2,
+        alpha: 0.4,
+        beta: 0.5,
         gamma: 0.1,
         // delta: 0.1,
         // epsilon: 0.1,
@@ -26,6 +27,7 @@ const variantConfig: { variantConfig: VariantConfig } = {
       appearanceAt: [0],
       crossImmunity: {
         alpha: 0.1,
+        beta: 0.5,
         gamma: 0.2,
         // delta: 0.2,
         // epsilon: 0.15,
@@ -42,6 +44,7 @@ const variantConfig: { variantConfig: VariantConfig } = {
       appearanceAt: [0],
       crossImmunity: {
         alpha: 0.1,
+        beta: 0.5,
         gamma: 0.2,
         // delta: 0.2,
         // epsilon: 0.15,

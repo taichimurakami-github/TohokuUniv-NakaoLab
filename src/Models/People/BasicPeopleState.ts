@@ -1,10 +1,10 @@
 export class BasicPeopleState {
   public immunizedType: string[];
-  public p: number;
+  public _p: number;
   public diff: number;
 
   constructor(options: any) {
-    this.p = 0;
+    this._p = 0;
     this.immunizedType = options.immunizedType;
     this.diff = 0;
 
@@ -25,6 +25,16 @@ export class BasicPeopleState {
 
     //diffをリセット
     this.diff = 0;
+  }
+
+  //pのsetter
+  set p(val: number) {
+    this._p = Math.round(val);
+  }
+
+  //pのgetter
+  get p() {
+    return this._p;
   }
 
   // setDiff(diffVal, activateMu = true) {

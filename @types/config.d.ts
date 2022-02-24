@@ -56,3 +56,10 @@ export type SettingsConfig = {
     [key: string]: boolean;
   };
 };
+
+export type AllConfig =
+  | SettingsConfig
+  | {
+      variantConfig: VariantConfig;
+      vaccine: VaccineConfig;
+    };
