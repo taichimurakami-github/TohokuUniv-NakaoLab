@@ -36,7 +36,7 @@ v_alpha, beta, gamma ... は最初に定義した設定のまま変更しない
 - v_alpha
 
   ```js
-      strainType: "alpha",
+      strainType: "v_alpha",
       infectivity: 0.2,
       resilience: 0.18,
       fatarity: 0.001,
@@ -54,7 +54,7 @@ v_alpha, beta, gamma ... は最初に定義した設定のまま変更しない
 - v_beta
 
   ```js
-      strainType: "beta",
+      strainType: "v_beta",
       infectivity: 0.3,
       resilience: 0.23,
       fatarity: 0.002,
@@ -74,9 +74,9 @@ v_alpha, beta, gamma ... は最初に定義した設定のまま変更しない
 
   ```js
        {
-         strainType: "gamma",
-         infectivity: 0.3,
-         resilience: 0.23,
+         strainType: "v_gamma",
+         infectivity: 0.5,
+         resilience: 0.3,
          fatarity: 0.002,
          appearanceTime: 500,
          appearanceAt: [0],
@@ -191,3 +191,31 @@ v_alpha, beta, gamma ... は最初に定義した設定のまま変更しない
 ### 設定の修正
 
 - 自分の分だけ crossImmunity オンにしないと R の意味なくなるぞ
+
+感染同じで重症度変えるとか
+潜伏期間の長さ
+感染期間の長さ
+リカバリーの速さ、致死率
+依存性
+
+系統だてて説明してほしい
+
+- 人流なら人流に絞って、わかるようにプレゼンしてほしい
+  - 感染力がましたら〜、潜伏期間が増えたら〜のように、ストーリーをもって説明できるように
+  - 結果に一貫性が欲しい
+  - パラメータの変化に対して
+  - プレゼン
+- 空間的なパターンがなければ
+  - 不均一 -> 均一かのプロセスは１回みせる
+  - どこかに空間的不均一があっても、均一になっていくだろうという予測
+  - 予想外のことがあったら見せたい
+- それほど細かい
+
+  - 客観的に示したい時は広めの空間でシミュレーション
+  - 面白そうなところがあった場合は
+  - シミュレーションの結果をある程度まとめる
+  - 感染者数がどのように推移していくか、等
+
+- カラーマップ
+- モデルの妥当性
+-

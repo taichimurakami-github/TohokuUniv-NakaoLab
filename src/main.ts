@@ -1,11 +1,12 @@
-import path from "path";
 import { IO } from "./io/io";
 import { Space } from "./Models/Space/Space";
-import settings from "../config/settings";
-import vaccineConfig from "../config/vaccine";
-import variantConfig from "../config/variant";
+import { AllConfig } from "../@types/config";
 
-(async () => {
+export const main = async (
+  config: AllConfig,
+  flowName: string,
+  stepName: string
+) => {
   /**
    * (1)設定読み込み
    */
@@ -18,7 +19,6 @@ import variantConfig from "../config/variant";
   // const variantConfig = await IO.readFile(
   //   path.resolve(__dirname, "../config/variant.json")
   // );
-  const config = { ...settings, ...vaccineConfig, ...variantConfig };
 
   /**
    * (2)計算準備
@@ -52,8 +52,8 @@ import variantConfig from "../config/variant";
   if (writeFileTypes.length > 0) {
     console.log("\nwriting result...\n");
 
-    await IO.writeFile(writeFileTypes, result, config);
+    await IO.writeFile(writeFileTypes, result, flowName, stepName);
 
     console.log("\n....done!");
   }
-})();
+};
