@@ -1,9 +1,9 @@
 import { IO } from "./io/io";
 import { Space } from "./Models/Space/Space";
-import { AllConfig } from "../@types/config";
+import { type_AllConfig } from "../@types/config";
 
 export const main = async (
-  config: AllConfig,
+  config: type_AllConfig,
   flowName: string,
   stepName: string
 ) => {

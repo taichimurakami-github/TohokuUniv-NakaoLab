@@ -1,6 +1,6 @@
-import { SettingsConfig } from "../@types/config";
+import { type_SettingsConfig } from "../@types/config";
 
-const settings: SettingsConfig = {
+const settings: type_SettingsConfig = {
   params: {
     timeLength: 2500,
     maxCoeffConst: 0.05,

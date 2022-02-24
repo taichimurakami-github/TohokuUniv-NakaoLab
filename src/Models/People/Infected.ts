@@ -1,4 +1,4 @@
-import { Vaccinated } from "../Space/Space";
+import { type_VaccineLog } from "../Space/Space";
 import { Virus } from "../Virus/Virus";
 import { BasicPeopleState } from "./BasicPeopleState";
 
@@ -35,7 +35,7 @@ export class I extends BasicPeopleState {
    */
   getBeta(
     mode: "infected" | "reinfected",
-    VaccineLog: Vaccinated,
+    VaccineLog: type_VaccineLog,
     VirusModel: InstanceType<typeof Virus>
   ) {
     const vaccineEffect = Object.keys(VaccineLog).reduce(
@@ -75,7 +75,8 @@ export class I extends BasicPeopleState {
   }
 
   //gammaが可変になる可能性があるので、ゲッターを定義しておく
-  getGamma() { // VirusModel: InstanceType<typeof Virus> // VaccineLog: Vaccinated, // mode: "infected" | "reinfected",
+  getGamma() {
+    // VirusModel: InstanceType<typeof Virus> // VaccineLog: type_VaccineLog, // mode: "infected" | "reinfected",
     return this.gamma;
     // switch (mode) {
     //   case "infected":

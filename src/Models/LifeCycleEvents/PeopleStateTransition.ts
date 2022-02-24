@@ -1,5 +1,5 @@
 import { People, StateNode } from "../People/People";
-import { Space, SpaceState, Vaccinated } from "../Space/Space";
+import { Space, type_SpaceState, type_VaccineLog } from "../Space/Space";
 import { Virus } from "../Virus/Virus";
 
 export class PeopleStateTransition {
@@ -17,9 +17,9 @@ export class PeopleStateTransition {
     }
   }
 
-  calcByPhaseLoop(SpaceState: SpaceState, VirusModel: Virus) {
-    const PeopleModel = SpaceState.people;
-    const VaccineLog = SpaceState.vaccinated;
+  calcByPhaseLoop(type_SpaceState: type_SpaceState, VirusModel: Virus) {
+    const PeopleModel = type_SpaceState.people;
+    const VaccineLog = type_SpaceState.vaccinated;
 
     //最初のSは特殊遷移（S -> Iのパターンのみ）なので、除外
     //最後のRは遷移先が存在しない（あとでフィードバックは追加するかも）ので、Rに関する計算は除外
@@ -63,7 +63,7 @@ export class PeopleStateTransition {
     layer_prev: StateNode[],
     layer_this: StateNode[],
     PeopleModel: People,
-    VaccineLog: Vaccinated,
+    VaccineLog: type_VaccineLog,
     VirusModel: Virus
   ) {
     for (const prevNode of layer_prev) {

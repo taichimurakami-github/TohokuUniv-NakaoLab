@@ -1,6 +1,6 @@
-import { VaccineConfig } from "../../../../@types/config";
+import { type_VaccineConfig } from "../../../../@types/config";
 
-const vaccineConfig: { vaccine: VaccineConfig } = {
+const vaccineConfig: { vaccine: type_VaccineConfig } = {
   vaccine: {
     begin: {
       // 10: {

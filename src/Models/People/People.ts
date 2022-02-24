@@ -12,8 +12,8 @@ import { NI } from "./NotInfected";
  *  ...
  * ] <- NodeTree
  */
-export type LayerStructure<T> = T[][];
-export type NodeTreeStructure<T> = LayerStructure<T>[];
+export type type_LayerStructure<T> = T[][];
+export type type_NodeTreeStructure<T> = type_LayerStructure<T>[];
 
 //state生成用 型定義
 //NodeTreeのLayerをStateNodeで置き換える
@@ -24,21 +24,21 @@ export type NodeTreeStructure<T> = LayerStructure<T>[];
  *  ...
  * ] <- LayeredStructure
  */
-export type InstanceListPerStrainTypes<T> = {
+export type type_InstanceListPerStrainTypes<T> = {
   [strainType: string]: T;
 };
 
 export type StateNode = {
-  E: InstanceListPerStrainTypes<E>;
-  I: InstanceListPerStrainTypes<I>;
+  E: type_InstanceListPerStrainTypes<E>;
+  I: type_InstanceListPerStrainTypes<I>;
   NI: NI;
-  R_E: InstanceListPerStrainTypes<E>;
-  R_I: InstanceListPerStrainTypes<I>;
+  R_E: type_InstanceListPerStrainTypes<E>;
+  R_I: type_InstanceListPerStrainTypes<I>;
 };
-export type PeopleStateNodeTree = LayerStructure<StateNode>;
+export type type_PeopleStateNodeTree = type_LayerStructure<StateNode>;
 
 //sum計算用template型宣言
-export type PeopleSumTemplate = {
+export type type_PeopleSumTemplate = {
   NI: number;
   ALL: number;
   S: number;
@@ -48,7 +48,7 @@ export type PeopleSumTemplate = {
 };
 
 //resultの構造を型宣言
-export type PeopleResult = PeopleSumTemplate[];
+export type type_PeopleResult = type_PeopleSumTemplate[];
 
 /**
  * class People
@@ -62,13 +62,13 @@ export type PeopleResult = PeopleSumTemplate[];
  * <class function>
  */
 export class People {
-  public state: PeopleStateNodeTree;
-  public result: PeopleResult;
+  public state: type_PeopleStateNodeTree;
+  public result: type_PeopleResult;
   public config: any;
   public t: number;
   public VirusModel: Virus;
   public sum: any;
-  public nodeTree: NodeTreeStructure<string>;
+  public nodeTree: type_NodeTreeStructure<string>;
 
   constructor(config: any, VirusModel: Virus) {
     this.state = [];
@@ -244,7 +244,7 @@ export class People {
   }
 
   getInitializedSumTemplate() {
-    const initialTemp: PeopleSumTemplate = {
+    const initialTemp: type_PeopleSumTemplate = {
       NI: 0,
       ALL: 0,
       S: 0,
@@ -264,7 +264,7 @@ export class People {
 
   getLayeredStrainTypesNodeTree() {
     //ノードになる基底状態を自動生成
-    const modelStructure: NodeTreeStructure<string> = [[]];
+    const modelStructure: type_NodeTreeStructure<string> = [[]];
     for (let i = 0; i < this.VirusModel.strainTypesArr.length; i++) {
       modelStructure.push(
         calcCombination(this.VirusModel.strainTypesArr, i + 1)
