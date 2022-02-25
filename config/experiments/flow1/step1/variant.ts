@@ -11,7 +11,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       resilience: 0.18,
       fatality: 0.001,
       appearanceAt: [0],
-      appearanceTime: 10,
+      appearanceTime: 1,
       crossImmunity: {
         // beta: 0.2,
         // gamma: 0.1,
@@ -20,22 +20,22 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
         // zeta: 0.1,
       },
     },
-    [strainTypesArray[1]]: {
-      strainType: strainTypesArray[1],
-      EI_transCoeff: 0.4,
-      infectivity: 0.3,
-      resilience: 0.23,
-      fatality: 0.002,
-      appearanceTime: 200,
-      appearanceAt: [0, 9],
-      crossImmunity: {
-        // alpha: 0.1,
-        // gamma: 0.2,
-        // delta: 0.2,
-        // epsilon: 0.15,
-        // zeta: 0.15,
-      },
-    },
+    // [strainTypesArray[1]]: {
+    //   strainType: strainTypesArray[1],
+    //   EI_transCoeff: 0.4,
+    //   infectivity: 0.3,
+    //   resilience: 0.23,
+    //   fatality: 0.002,
+    //   appearanceTime: 200,
+    //   appearanceAt: [0, 9],
+    //   crossImmunity: {
+    //     // alpha: 0.1,
+    //     // gamma: 0.2,
+    //     // delta: 0.2,
+    //     // epsilon: 0.15,
+    //     // zeta: 0.15,
+    //   },
+    // },
 
     // [strainTypesArray[2]]: {
     //   strainType: strainTypesArray[2],

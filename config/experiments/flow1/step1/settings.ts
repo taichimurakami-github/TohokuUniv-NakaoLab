@@ -3,7 +3,7 @@ import { type_SettingsConfig } from "../../../../@types/config";
 const settings: type_SettingsConfig = {
   params: {
     timeLength: 1000,
-    maxCoeffConst: 0,
+    maxCoeffConst: 0.1,
     maxPopulationSize: 1000000,
     birthRate: 0,
     initialInfectiousRate: 0.001,
@@ -14,8 +14,8 @@ const settings: type_SettingsConfig = {
     Space: {
       connectionType: "partial",
       length: {
-        col: 1,
-        row: 1,
+        col: 10,
+        row: 10,
       },
     },
     People: {

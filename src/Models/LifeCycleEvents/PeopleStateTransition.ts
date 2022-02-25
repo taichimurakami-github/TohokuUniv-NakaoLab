@@ -67,23 +67,59 @@ export class PeopleStateTransition {
     Config: Config,
     t: number
   ) {
+    for (const thisNode of layer_this) {
+      for (const strainType of Object.keys(thisNode.E)) {
+        /**
+         * E -> Iへの遷移
+         */
+        const E_this = thisNode.E[strainType];
+        const I_this = thisNode.I[strainType];
+
+        //計算
+        const diff_E_to_I = E_this.p * this.EI_transCoeff;
+
+        //記録
+        E_this.diff -= diff_E_to_I;
+        I_this.diff += diff_E_to_I;
+      }
+
+      for (const strainType of Object.keys(thisNode.R_E)) {
+        /**
+         * R_E -> R_Iへの遷移
+         */
+        const NI_this = thisNode.NI;
+        const RE_this = thisNode.R_E[strainType];
+        const RI_this = thisNode.R_I[strainType];
+
+        //E -> Iへの遷移
+        const diff_RE_to_RI = RE_this.p * this.EI_transCoeff;
+        RE_this.p -= diff_RE_to_RI;
+        RI_this.p += diff_RE_to_RI;
+
+        //該当するウイルス株に感染している人の割合の定義
+        const rate_I = PeopleModel.getInfectedRate(strainType);
+
+        //交差免疫反応を考慮した感染力の生成
+        const beta = RE_this.getBeta(VaccineLog, Config);
+
+        //計算
+        const diff = NI_this.p * beta * rate_I;
+
+        //記録
+        NI_this.diff -= diff;
+        RE_this.diff += diff;
+      }
+    }
+
+    /**
+     * NI_prev -> E_thisへの遷移
+     */
     for (const prevNode of layer_prev) {
       const NI_prev = prevNode.NI;
       for (const thisNode of layer_this) {
         //感染経験のないウイルス株に対する感染
         for (const strainType of Object.keys(thisNode.E)) {
           const E_this = thisNode.E[strainType];
-          const I_this = thisNode.I[strainType];
-          /**
-           * E -> Iへの遷移
-           */
-          //計算
-          const diff_E_to_I = E_this.p * this.EI_transCoeff;
-
-          //記録
-          E_this.diff -= diff_E_to_I;
-          I_this.diff += diff_E_to_I;
-
           /**
            * 1. 遷移先のIのstrainTypeが遷移元のimmunizedTypeに含まれていない
            * 2. (遷移元のNIのimmunizedType) === (遷移先のIのimmunizedType)
@@ -93,9 +129,6 @@ export class PeopleStateTransition {
             !NI_prev.immunizedType.includes(E_this.strainType) &&
             this.isArraySame(NI_prev.immunizedType, E_this.immunizedType)
           ) {
-            if (t >= 10) {
-              console.log();
-            }
             //該当するウイルス株に感染している人の割合の定義
             const rate_I = PeopleModel.getInfectedRate(strainType);
 
@@ -112,29 +145,24 @@ export class PeopleStateTransition {
         }
 
         //感染経験のあるウイルス株に対する再感染
-        const NI_this = thisNode.NI;
-        for (const strainType of Object.keys(thisNode.R_E)) {
-          const RE_this = thisNode.R_E[strainType];
-          const RI_this = thisNode.R_I[strainType];
-
-          //E -> Iへの遷移
-          const diff_RE_to_RI = RE_this.p * this.EI_transCoeff;
-          RE_this.p -= diff_RE_to_RI;
-          RI_this.p += diff_RE_to_RI;
-
-          //該当するウイルス株に感染している人の割合の定義
-          const rate_I = PeopleModel.getInfectedRate(strainType);
-
-          //交差免疫反応を考慮した感染力の生成
-          const beta = RE_this.getBeta(VaccineLog, Config);
-
-          //計算
-          const diff = NI_prev.p * beta * rate_I;
-
-          //記録
-          NI_this.diff -= diff;
-          RE_this.diff += diff;
-        }
+        // const NI_this = thisNode.NI;
+        // for (const strainType of Object.keys(thisNode.R_E)) {
+        // const RE_this = thisNode.R_E[strainType];
+        // const RI_this = thisNode.R_I[strainType];
+        // //E -> Iへの遷移
+        // const diff_RE_to_RI = RE_this.p * this.EI_transCoeff;
+        // RE_this.p -= diff_RE_to_RI;
+        // RI_this.p += diff_RE_to_RI;
+        // //該当するウイルス株に感染している人の割合の定義
+        // const rate_I = PeopleModel.getInfectedRate(strainType);
+        // //交差免疫反応を考慮した感染力の生成
+        // const beta = RE_this.getBeta(VaccineLog, Config);
+        // //計算
+        // const diff = NI_this.p * beta * rate_I;
+        // //記録
+        // NI_this.diff -= diff;
+        // RE_this.diff += diff;
+        // }
       }
     }
   }

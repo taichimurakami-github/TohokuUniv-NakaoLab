@@ -37,7 +37,7 @@ export class I extends BasicPeopleState {
    * 状況に応じたbetaを計算して返す
    */
   getBeta(VaccineLog: type_VaccineLog, Config: Config) {
-    return this.beta;
+    // return this.beta;
     return (
       this.getImmunizedEffectCoeff(Config) *
       this.getVaccinatedEffectCoeff("beta", VaccineLog) *

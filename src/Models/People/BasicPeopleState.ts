@@ -1,12 +1,12 @@
 export class BasicPeopleState {
   public immunizedType: string[];
   public _p: number;
-  public diff: number;
+  public _diff: number;
 
   constructor(options: { immunizedType: string[] }) {
     this._p = 0;
     this.immunizedType = options.immunizedType;
-    this.diff = 0;
+    this._diff = 0;
   }
 
   applyDiff() {
@@ -17,9 +17,17 @@ export class BasicPeopleState {
     this.diff = 0;
   }
 
+  set diff(val: number) {
+    this._diff = Math.round(val);
+  }
+
+  get diff() {
+    return this._diff;
+  }
+
   //pのsetter
   set p(val: number) {
-    this._p = val;
+    this._p = Math.round(val);
   }
 
   //pのgetter
