@@ -67,11 +67,11 @@ export class Space {
     //時間を進める
     this.t += 1;
 
-    //ワクチン接種を実行
-    // new PeopleVaccination(this);
-
     //人流移動を実行
     // new PeopleTravel(this);
+
+    //ワクチン接種を実行
+    // new PeopleVaccination(this);
 
     //ウイルス変異を実行
     new VirusMutation(this);

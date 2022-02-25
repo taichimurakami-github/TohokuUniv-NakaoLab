@@ -33,31 +33,46 @@ export class VirusMutation {
             //計算実行 -> フラグカウンタを回す
             cnt++;
           }
-          const state = s.state[i];
-          this.mutationInfectorAppearance(
-            variantConfig.strainType,
-            c.getInitialInfectiousRate(),
-            state.people
-          );
+          const people = s.state[i].people;
+          const strainType = variantConfig.strainType;
+
+          //layer 1 の合致するstrainTypeを持つEに人口発生
+          for (const node of people.state[1]) {
+            if (node.E[strainType]) {
+              node.E[strainType].p += 1000;
+              break;
+            }
+          }
         }
       }
     }
   }
 
-  mutationInfectorAppearance(
+  private mutationInfectorAppearance(
     strainType: string,
     initialInfectorRate: number,
     PeopleModel: People
   ) {
     //初期感染者数を定義
-    const initialInfectorPopulation = PeopleModel.sum.S * initialInfectorRate;
+    // const initialInfectorPopulation = PeopleModel.sum.S * initialInfectorRate;
     //ノード内を全探索
-    for (const layer of PeopleModel.state) {
-      for (const node of layer) {
-        for (const E of Object.values(node.E)) {
-          if (E.strainType === strainType) E.p += initialInfectorPopulation;
-        }
+    //layer 1 の合致するstrainTypeを持つEに人口発生
+    for (const node of PeopleModel.state[1]) {
+      if (node.E[strainType]) {
+        node.E[strainType].p += 1000;
+        return;
       }
     }
+
+    // for (const layer of PeopleModel.state) {
+    //   for (const node of layer) {
+    //     for (const E of Object.values(node.E)) {
+    //       if (E.strainType === strainType) {
+    //         // E.p += node.NI.p * 0.0001;
+    //         // E.p += 1000;
+    //       }
+    //     }
+    //   }
+    // }
   }
 }

@@ -14,8 +14,8 @@ const settings: type_SettingsConfig = {
     Space: {
       connectionType: "partial",
       length: {
-        col: 2,
-        row: 2,
+        col: 1,
+        row: 1,
       },
     },
     People: {

@@ -67,7 +67,7 @@ export class I extends BasicPeopleState {
   }
 
   applyDeathByInfection() {
-    this.p -= this.p * this.getMu();
+    // this.p -= this.p * this.getMu();
   }
 
   /**

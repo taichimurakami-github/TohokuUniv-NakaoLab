@@ -12,11 +12,11 @@ export class PeopleStateTransition {
     this.EI_transCoeff = 0.4;
 
     for (const state of s.state) {
-      this.calcByPhaseLoop(state, c);
+      this.calcByPhaseLoop(state, c, s.t);
     }
   }
 
-  calcByPhaseLoop(type_SpaceState: type_SpaceState, Config: Config) {
+  calcByPhaseLoop(type_SpaceState: type_SpaceState, Config: Config, t: number) {
     const PeopleModel = type_SpaceState.people;
     const VaccineLog = type_SpaceState.vaccinated;
 
@@ -39,7 +39,8 @@ export class PeopleStateTransition {
         layer_this,
         PeopleModel,
         VaccineLog,
-        Config
+        Config,
+        t
       );
 
       /**
@@ -54,7 +55,7 @@ export class PeopleStateTransition {
        * 計算(3)
        * フィードバックの計算
        */
-      this.calcFeedback(layer_prev, layer_this, Config.getFeedbackRate());
+      // this.calcFeedback(layer_prev, layer_this, Config.getFeedbackRate());
     }
   }
 
@@ -63,7 +64,8 @@ export class PeopleStateTransition {
     layer_this: StateNode[],
     PeopleModel: People,
     VaccineLog: type_VaccineLog,
-    Config: Config
+    Config: Config,
+    t: number
   ) {
     for (const prevNode of layer_prev) {
       const NI_prev = prevNode.NI;
@@ -91,6 +93,9 @@ export class PeopleStateTransition {
             !NI_prev.immunizedType.includes(E_this.strainType) &&
             this.isArraySame(NI_prev.immunizedType, E_this.immunizedType)
           ) {
+            if (t >= 10) {
+              console.log();
+            }
             //該当するウイルス株に感染している人の割合の定義
             const rate_I = PeopleModel.getInfectedRate(strainType);
 
@@ -196,7 +201,7 @@ export class PeopleStateTransition {
    * Utility Function (1)
    * isArrayComprehensive
    *
-   * 第一引数の配列同士が第二引数の配列の要素をすべて保持しているかを判定
+   * 第一引数の配列が第二引数の配列の要素をすべて保持しているかを判定
    *
    * @param {Array} parent
    * @param {Array} children
