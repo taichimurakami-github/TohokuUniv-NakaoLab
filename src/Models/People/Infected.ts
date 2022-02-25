@@ -37,7 +37,6 @@ export class I extends BasicPeopleState {
    * 状況に応じたbetaを計算して返す
    */
   getBeta(VaccineLog: type_VaccineLog, Config: Config) {
-    // return this.beta;
     return (
       this.getImmunizedEffectCoeff(Config) *
       this.getVaccinatedEffectCoeff("beta", VaccineLog) *
@@ -46,24 +45,22 @@ export class I extends BasicPeopleState {
   }
 
   //gammaが可変になる可能性があるので、ゲッターを定義しておく
-  getGamma() {
-    return this.gamma;
-    // VirusModel: InstanceType<typeof Virus> // VaccineLog: type_VaccineLog, // mode: "infected" | "reinfected",
-    return this.gamma;
-    // switch (mode) {
-    //   case "infected":
+  getGamma(VaccineLog: type_VaccineLog, Config: Config) {
+    const calcResult =
+      (1 - this.getImmunizedEffectCoeff(Config)) *
+      this.getVaccinatedEffectCoeff("gamma", VaccineLog) *
+      this.gamma;
 
-    //   case "reinfected":
-    //     return this.getImmunizedEffectForGamma() * this.beta;
-
-    //   default:
-    //     return this.gamma;
-    // }
+    return calcResult > 1 ? 1 : calcResult;
   }
 
   //muが可変になる可能性があるので、ゲッターを定義しておく
-  getMu() {
-    return this.mu;
+  getMu(VaccineLog: type_VaccineLog, Config: Config) {
+    return (
+      this.getImmunizedEffectCoeff(Config) *
+      this.getVaccinatedEffectCoeff("mu", VaccineLog) *
+      this.mu
+    );
   }
 
   applyDeathByInfection() {

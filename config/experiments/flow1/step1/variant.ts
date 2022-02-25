@@ -6,18 +6,17 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
   variantConfig: {
     [strainTypesArray[0]]: {
       strainType: strainTypesArray[0],
-      EI_transCoeff: 0.4,
+      EI_transCoeff: 0.9,
       infectivity: 0.2,
       resilience: 0.18,
       fatality: 0.001,
       appearanceAt: [0],
       appearanceTime: 1,
       crossImmunity: {
-        // beta: 0.2,
-        // gamma: 0.1,
-        // delta: 0.1,
-        // epsilon: 0.1,
-        // zeta: 0.1,
+        [strainTypesArray[0]]: 0.9,
+        [strainTypesArray[1]]: 0.9,
+        [strainTypesArray[2]]: 0.9,
+        [strainTypesArray[3]]: 0.9,
       },
     },
     // [strainTypesArray[1]]: {

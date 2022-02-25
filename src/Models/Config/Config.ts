@@ -39,7 +39,8 @@ export class Config {
   public getInitialPopulation = () =>
     this.config.models.People.initialPopulation;
 
-  public getEI_transCoeff = () => this.config.models.People.EI_transCoeff;
+  public getEI_transCoeff = (strainType: string) =>
+    this.getVirusConfig()[strainType].EI_transCoeff;
 
   //vaccine
   public getVaccineSchedule = (n: number) =>

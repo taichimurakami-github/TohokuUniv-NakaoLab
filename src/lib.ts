@@ -91,7 +91,12 @@ export const calcCombination = (source: string[], m: number) => {
 
 export const isValidAsCoeff = (target: any) => {
   //targetは数字であり、かつ0以上1以下でなければならない
-  if (Number.isNaN(target) || target < 0 || target > 1) {
+  if (
+    typeof target !== "number" ||
+    Number.isNaN(target) ||
+    target < 0 ||
+    target > 1
+  ) {
     console.log("invalid coeff: " + target);
     return false;
   } else {

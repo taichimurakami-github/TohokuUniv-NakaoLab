@@ -17,6 +17,11 @@ export class BasicPeopleState {
     this.diff = 0;
   }
 
+  /**
+   * setter/getterを定義：整数値で計算結果を格納する
+   * 正負のそれぞれの値に対する挙動が一貫しているMath.round()を使用
+   */
+
   set diff(val: number) {
     this._diff = Math.round(val);
   }
