@@ -1,13 +1,18 @@
 //variantConfig
-export type type_VariantConfig = {
+export type type_VariantSetting = {
   strainType: string;
+  EI_transCoeff: number;
   infectivity: number;
   resilience: number;
-  fatarity: number;
+  fatality: number;
   appearanceAt: number[];
   appearanceTime: number;
   crossImmunity: { [strainType: string]: number };
-}[];
+};
+
+export type type_VariantConfig = {
+  [strainType: string]: type_VariantSetting;
+};
 
 //vaccineConfig
 export type type_VaccineEffects = {
@@ -37,19 +42,23 @@ export type type_ModelsConnectionTypeConfig = "partial" | "full";
 
 export type type_SettingsConfig = {
   params: {
-    [settingsName: string]: number;
-  };
-  models: {
-    Space: {
-      connectionType: type_ModelsConnectionTypeConfig;
-      length: {
-        col: number;
-        row: number;
-      };
+    timeLength: number;
+    maxTravelCoeff: number;
+
+    spaceConnectionType: "partial";
+    spaceLength: {
+      col: number;
+      row: number;
     };
-    People: {
-      initialPopulation: { [key: string]: number };
-      EI_transCoeff: number;
+
+    birthRate: number;
+    initialInfectiousRate: number; //いらない
+    initialFatarity: number;
+    feedbackRate: number; //R -> before Rへの遷移
+    initialPopulationMaxSize: number;
+    initialPopulationRange: {
+      min: number;
+      max: number;
     };
   };
   io: {

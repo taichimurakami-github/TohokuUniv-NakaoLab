@@ -1,11 +1,10 @@
-import { type_VaccineEffects } from "../../../@types/config";
+import { type_AllConfig, type_VaccineEffects } from "../../../@types/config";
 import { Config } from "../Config/Config";
 import { PeopleStateTransition } from "../LifeCycleEvents/PeopleStateTransition";
 import { PeopleTravel } from "../LifeCycleEvents/PeopleTravel";
 import { PeopleVaccination } from "../LifeCycleEvents/PeopleVaccination";
 import { VirusMutation } from "../LifeCycleEvents/VirusMutation";
 import { People, type_PeopleSumTemplate } from "../People/People";
-import { Virus } from "../Virus/Virus";
 
 export type type_ModelResult = type_PeopleSumTemplate[][];
 
@@ -23,7 +22,7 @@ export type type_SpaceState = {
 };
 
 export type type_ModelResultTemplate = {
-  config: any;
+  config: type_AllConfig;
   axisNames: string[];
   data: number[][][];
 };
@@ -39,7 +38,6 @@ export class Space {
   public result: type_ModelResult;
   public t: number;
   public Config: Config;
-  public VirusModel: Virus;
 
   constructor(config: Config) {
     this.state = [];
@@ -49,9 +47,6 @@ export class Space {
     this.Config = config;
 
     //空間内のウイルスを定義
-    const virus = new Virus(config.getVirusSettings());
-    this.VirusModel = virus; //Spaceモデルに記録
-    // this.strainTypesArr = v.getStrainTypesArr(); //ウイルス情報を記録
 
     //ワクチンモデルを起動
 
@@ -62,7 +57,7 @@ export class Space {
       //初期状態を定義
       //各空間に属するインスタンスを作成
       this.state.push({
-        people: new People(config, virus),
+        people: new People(config),
         vaccinated: {},
       });
     }
@@ -72,11 +67,11 @@ export class Space {
     //時間を進める
     this.t += 1;
 
-    //ワクチン接種を実行
-    new PeopleVaccination(this);
-
     //人流移動を実行
     new PeopleTravel(this);
+
+    //ワクチン接種を実行
+    new PeopleVaccination(this);
 
     //ウイルス変異を実行
     new VirusMutation(this);
@@ -91,7 +86,8 @@ export class Space {
     //1. 計算結果を反映
     //2. 該当インスタンスの死亡率を算出して適用
     //3. ライフサイクルの最終計算結果を記録
-    for (const state of this.state) state.people.updateWithCycleEnd();
+    for (const state of this.state)
+      state.people.updateWithCycleEnd(state.vaccinated);
   }
 
   /**
@@ -113,7 +109,7 @@ export class Space {
    * @returns {[{[String]: Array}]}
    */
   getResults() {
-    const result: any = {
+    const result: type_ModelResultTemplate = {
       config: { ...this.Config.getAllConfig() },
       axisNames: ["S", "R"],
       data: [],

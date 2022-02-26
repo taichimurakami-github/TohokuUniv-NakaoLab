@@ -77,14 +77,14 @@ export class PeopleTravel {
         node_outflowTo.NI.p += NI_outflow;
 
         if ("E" in node_outflowFrom && "E" in node_outflowTo) {
-          for (const key of Object.keys(node_outflowFrom.E)) {
+          for (const strainType of Object.keys(node_outflowFrom.E)) {
             //phase4: E系の移動 (Iは移動しないものとする)
-            const I_outflowFrom_instance = node_outflowFrom.E[key];
-            const I_outflowTo_instance = node_outflowTo.E[key];
-            const I_outflow = I_outflowFrom_instance.p * mvCoeff;
+            const E_outflowFrom_instance = node_outflowFrom.E[strainType];
+            const E_outflowTo_instance = node_outflowTo.E[strainType];
+            const E_outflow = E_outflowFrom_instance.p * mvCoeff;
 
-            I_outflowFrom_instance.p -= I_outflow;
-            I_outflowTo_instance.p += I_outflow;
+            E_outflowFrom_instance.p -= E_outflow;
+            E_outflowTo_instance.p += E_outflow;
           }
         }
       }

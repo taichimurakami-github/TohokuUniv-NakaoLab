@@ -1,23 +1,13 @@
 export class BasicPeopleState {
   public immunizedType: string[];
   public _p: number;
-  public diff: number;
+  public _diff: number;
 
-  constructor(options: any) {
+  constructor(options: { immunizedType: string[] }) {
     this._p = 0;
     this.immunizedType = options.immunizedType;
-    this.diff = 0;
-
-    // if (eqConsts) {
-    //   for (const [key, val] of Object.entries(eqConsts)) {
-    //     this[key] = val;
-    //   }
-    // }
+    this._diff = 0;
   }
-
-  // vaccinate(vaccineConfig) {
-  //   this.vaccinated.push(vaccineConfig.name);
-  // }
 
   applyDiff() {
     //diffとdeathsをpopulationに反映し、リセットする
@@ -25,6 +15,19 @@ export class BasicPeopleState {
 
     //diffをリセット
     this.diff = 0;
+  }
+
+  /**
+   * setter/getterを定義：整数値で計算結果を格納する
+   * 正負のそれぞれの値に対する挙動が一貫しているMath.round()を使用
+   */
+
+  set diff(val: number) {
+    this._diff = Math.round(val);
+  }
+
+  get diff() {
+    return this._diff;
   }
 
   //pのsetter
@@ -36,29 +39,4 @@ export class BasicPeopleState {
   get p() {
     return this._p;
   }
-
-  // setDiff(diffVal, activateMu = true) {
-  //   if (isNaN(diffVal))
-  //     throw new Error(
-  //       `error at ${this.type}.setDiff() : diffVal が NaN です。`
-  //     );
-
-  //   //本フェーズの死者数
-  //   const deaths = this.mu * this.p;
-
-  //   //計算結果チェック
-  //   if (diffVal + this.p < 0)
-  //     throw new Error(
-  //       `error at ${this.type}.setDiff() : diffVal + this.pop が負になりました。`
-  //     );
-
-  //   if (diffVal - deaths + this.p < 0)
-  //     throw new Error(
-  //       `error at ${this.type}.setDiff() : diffVal - deaths + this.pop が負になりました。`
-  //     );
-
-  //   //ライフサイクルにおける死亡者数を計算し、自動的に差分に反映
-  //   //return value: diff
-  //   return (this.diff = diffVal - deaths);
-  // }
 }
