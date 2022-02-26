@@ -1,7 +1,11 @@
 import { type_AllConfig, type_VariantConfig } from "../../../@types/config";
 
+/**
+ * Config getter
+ */
 export class Config {
   private config: type_AllConfig;
+
   constructor(config: type_AllConfig) {
     this.config = config;
   }
@@ -18,9 +22,10 @@ export class Config {
   //params
   public getTimeLength = () => this.config.params.timeLength;
 
-  public getMaxTravelCoeffConst = () => this.config.params.maxCoeffConst;
+  public getMaxTravelCoeffConst = () => this.config.params.maxTravelCoeff;
 
-  public getMaxPopulationSize = () => this.config.params.maxPopulationSize;
+  public getMaxPopulationSize = () =>
+    this.config.params.initialPopulationMaxSize;
 
   public getInitialBirthRate = () => this.config.params.birthRate;
 
@@ -32,12 +37,11 @@ export class Config {
   public getFeedbackRate = () => this.config.params.feedbackRate;
 
   //models
-  public getSpaceConnectionType = () => this.config.models.Space.connectionType;
+  public getSpaceConnectionType = () => this.config.params.spaceConnectionType;
 
-  public getSpaceLength = () => this.config.models.Space.length;
+  public getSpaceLength = () => this.config.params.spaceLength;
 
-  public getInitialPopulation = () =>
-    this.config.models.People.initialPopulation;
+  public getInitialPopulation = () => this.config.params.initialPopulationRange;
 
   public getEI_transCoeff = (strainType: string) =>
     this.getVirusConfig()[strainType].EI_transCoeff;

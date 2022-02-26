@@ -42,19 +42,23 @@ export type type_ModelsConnectionTypeConfig = "partial" | "full";
 
 export type type_SettingsConfig = {
   params: {
-    [settingsName: string]: number;
-  };
-  models: {
-    Space: {
-      connectionType: type_ModelsConnectionTypeConfig;
-      length: {
-        col: number;
-        row: number;
-      };
+    timeLength: number;
+    maxTravelCoeff: number;
+
+    spaceConnectionType: "partial";
+    spaceLength: {
+      col: number;
+      row: number;
     };
-    People: {
-      initialPopulation: { [key: string]: number };
-      EI_transCoeff: number;
+
+    birthRate: number;
+    initialInfectiousRate: number; //いらない
+    initialFatarity: number;
+    feedbackRate: number; //R -> before Rへの遷移
+    initialPopulationMaxSize: number;
+    initialPopulationRange: {
+      min: number;
+      max: number;
     };
   };
   io: {
