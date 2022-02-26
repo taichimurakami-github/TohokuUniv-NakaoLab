@@ -2,7 +2,7 @@ import { type_SettingsConfig } from "../../../../@types/config";
 
 const settings: type_SettingsConfig = {
   params: {
-    timeLength: 1000,
+    timeLength: 3000,
     maxCoeffConst: 0.1,
     maxPopulationSize: 1000000,
     birthRate: 0,

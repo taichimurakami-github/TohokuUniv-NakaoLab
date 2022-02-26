@@ -46,12 +46,13 @@ export class I extends BasicPeopleState {
 
   //gammaが可変になる可能性があるので、ゲッターを定義しておく
   getGamma(VaccineLog: type_VaccineLog, Config: Config) {
+    const MAX_GAMMA_CONST = 1;
     const calcResult =
-      (1 - this.getImmunizedEffectCoeff(Config)) *
+      (2 - this.getImmunizedEffectCoeff(Config)) *
       this.getVaccinatedEffectCoeff("gamma", VaccineLog) *
       this.gamma;
 
-    return calcResult > 1 ? 1 : calcResult;
+    return calcResult > MAX_GAMMA_CONST ? MAX_GAMMA_CONST : calcResult;
   }
 
   //muが可変になる可能性があるので、ゲッターを定義しておく
@@ -63,8 +64,9 @@ export class I extends BasicPeopleState {
     );
   }
 
-  applyDeathByInfection() {
-    // this.p -= this.p * this.getMu();
+  applyDeathByInfection(VaccineLog: type_VaccineLog, Config: Config) {
+    const a = this.getMu(VaccineLog, Config);
+    this.p -= this.p * this.getMu(VaccineLog, Config);
   }
 
   /**

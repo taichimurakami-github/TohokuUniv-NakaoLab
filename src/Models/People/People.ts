@@ -1,5 +1,6 @@
 import { calcCombination, getRandomFloat } from "../../lib";
 import { Config } from "../Config/Config";
+import { type_VaccineLog } from "../Space/Space";
 import { I, E } from "./Infected";
 import { NI } from "./NotInfected";
 
@@ -64,8 +65,8 @@ export type type_PeopleResult = type_PeopleSumTemplate[];
 export class People {
   public state: type_PeopleStateNodeTree;
   public result: type_PeopleResult;
-  public Config: Config;
-  public t: number;
+  private Config: Config;
+  private t: number;
   public sum: any;
   public nodeTree: type_NodeTreeStructure<string>;
 
@@ -214,7 +215,7 @@ export class People {
     return;
   }
 
-  updateWithCycleEnd() {
+  updateWithCycleEnd(VaccineLog: type_VaccineLog) {
     //計算結果を適用したのち、死亡数を計算して適用する
     for (const layer of this.state) {
       for (const node of layer) {
@@ -225,18 +226,18 @@ export class People {
         //layer内のI探索 & 感染による死亡の反映
         for (const strainType of Object.keys(node.E)) {
           node.E[strainType].applyDiff();
-          // node.E[strainType].applyDeathByInfection();
+          // node.E[strainType].applyDeathByInfection(VaccineLog, this.Config);
           node.I[strainType].applyDiff();
-          // node.I[strainType].applyDeathByInfection();
+          // node.I[strainType].applyDeathByInfection(VaccineLog, this.Config);
         }
 
         //layer内のRI探索 & 感染による死亡の反映
         for (const strainType of Object.keys(node.R_E)) {
           node.R_I[strainType].applyDiff();
-          // node.R_I[strainType].applyDeathByInfection();
+          // node.R_I[strainType].applyDeathByInfection(VaccineLog, this.Config);
 
           node.R_E[strainType].applyDiff();
-          // node.R_E[strainType].applyDeathByInfection();
+          // node.R_E[strainType].applyDeathByInfection(VaccineLog, this.Config);
         }
       }
     }

@@ -86,7 +86,8 @@ export class Space {
     //1. 計算結果を反映
     //2. 該当インスタンスの死亡率を算出して適用
     //3. ライフサイクルの最終計算結果を記録
-    for (const state of this.state) state.people.updateWithCycleEnd();
+    for (const state of this.state)
+      state.people.updateWithCycleEnd(state.vaccinated);
   }
 
   /**

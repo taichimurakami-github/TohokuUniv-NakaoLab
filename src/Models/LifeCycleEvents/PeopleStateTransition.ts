@@ -155,6 +155,19 @@ export class PeopleStateTransition {
     for (const thisNode of layer_this) {
       const NI_this = thisNode.NI;
 
+      for (const E_this of Object.values(thisNode.E)) {
+        // https://www.niid.go.jp/niid/ja/2019-ncov/2484-idsc/10969-covid19-72.html
+        // 無症状者33例中5例のみが、入院後に症状を認めた
+        const RECOVER_WITHOUT_SYMPTOM_RATE = 5 / 33;
+        const diff =
+          E_this.p *
+          RECOVER_WITHOUT_SYMPTOM_RATE *
+          E_this.getGamma(VaccineLog, Config);
+
+        E_this.diff -= diff;
+        NI_this.diff += diff;
+      }
+
       //各I -> 各NIにそのまま遷移
       //Iは複数のstrainTypeをキーとして含んでいる可能性があるので、forループですべて処理しておく
       for (const I_this of Object.values(thisNode.I)) {

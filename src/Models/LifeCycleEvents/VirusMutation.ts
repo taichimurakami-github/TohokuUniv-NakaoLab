@@ -36,43 +36,16 @@ export class VirusMutation {
           const people = s.state[i].people;
           const strainType = variantConfig.strainType;
 
-          //layer 1 の合致するstrainTypeを持つEに人口発生
+          //初期感染者数を定義: layer 1 の合致するstrainTypeを持つEに人口発生
           for (const node of people.state[1]) {
             if (node.E[strainType]) {
-              node.E[strainType].p += 1000;
+              const infectible = people.sum.NI + people.sum.E.ALL;
+              node.E[strainType].p += infectible / 10000;
               break;
             }
           }
         }
       }
     }
-  }
-
-  private mutationInfectorAppearance(
-    strainType: string,
-    initialInfectorRate: number,
-    PeopleModel: People
-  ) {
-    //初期感染者数を定義
-    // const initialInfectorPopulation = PeopleModel.sum.S * initialInfectorRate;
-    //ノード内を全探索
-    //layer 1 の合致するstrainTypeを持つEに人口発生
-    for (const node of PeopleModel.state[1]) {
-      if (node.E[strainType]) {
-        node.E[strainType].p += 1000;
-        return;
-      }
-    }
-
-    // for (const layer of PeopleModel.state) {
-    //   for (const node of layer) {
-    //     for (const E of Object.values(node.E)) {
-    //       if (E.strainType === strainType) {
-    //         // E.p += node.NI.p * 0.0001;
-    //         // E.p += 1000;
-    //       }
-    //     }
-    //   }
-    // }
   }
 }

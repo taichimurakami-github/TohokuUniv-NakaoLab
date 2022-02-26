@@ -1,6 +1,6 @@
 import { type_VariantConfig } from "../../../../@types/config";
 
-export const strainTypesArray = ["v_alpha", "v_beta", "v_gamma"];
+export const strainTypesArray = ["v_alpha", "v_beta", "v_gamma", "v_delta"];
 
 const variantConfig: { variantConfig: type_VariantConfig } = {
   variantConfig: {
