@@ -97,7 +97,7 @@ export const isValidAsCoeff = (target: any) => {
     target < 0 ||
     target > 1
   ) {
-    console.log("invalid coeff: " + target);
+    // console.log("invalid coeff: " + target);
     return false;
   } else {
     return true;

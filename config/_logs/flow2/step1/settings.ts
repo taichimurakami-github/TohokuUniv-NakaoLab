@@ -2,11 +2,11 @@ import { type_SettingsConfig } from "../../../../@types/config";
 
 const settings: type_SettingsConfig = {
   params: {
-    timeLength: 1000,
+    timeLength: 3000,
     maxCoeffConst: 0.1,
     maxPopulationSize: 1000000,
     birthRate: 0,
-    initialInfectiousRate: 0.001, //いらない
+    initialInfectiousRate: 0.001,
     initialFatarity: 0,
     feedbackRate: 0.001, //R -> before Rへの遷移
   },
@@ -14,8 +14,8 @@ const settings: type_SettingsConfig = {
     Space: {
       connectionType: "partial",
       length: {
-        col: 1,
-        row: 1,
+        col: 10,
+        row: 10,
       },
     },
     People: {
@@ -23,7 +23,7 @@ const settings: type_SettingsConfig = {
         min: 1.0,
         max: 1.0,
       },
-      EI_transCoeff: 0.4, //いらない
+      EI_transCoeff: 0.4,
     },
   },
   io: {

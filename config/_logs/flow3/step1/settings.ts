@@ -6,7 +6,7 @@ const settings: type_SettingsConfig = {
     maxCoeffConst: 0.1,
     maxPopulationSize: 1000000,
     birthRate: 0,
-    initialInfectiousRate: 0.001, //いらない
+    initialInfectiousRate: 0.001,
     initialFatarity: 0,
     feedbackRate: 0.001, //R -> before Rへの遷移
   },
@@ -23,7 +23,7 @@ const settings: type_SettingsConfig = {
         min: 1.0,
         max: 1.0,
       },
-      EI_transCoeff: 0.4, //いらない
+      EI_transCoeff: 0.4,
     },
   },
   io: {

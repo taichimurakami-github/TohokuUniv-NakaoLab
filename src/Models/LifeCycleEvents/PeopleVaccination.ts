@@ -24,6 +24,7 @@ export class PeopleVaccination {
       //特定の空間に対する処理
       for (const spaceID of settings.target) {
         const s_target = state[spaceID];
+        if (!s_target) break;
         this.beginOrRestartEffect(t, s_target, v_name, v_data);
       }
     }

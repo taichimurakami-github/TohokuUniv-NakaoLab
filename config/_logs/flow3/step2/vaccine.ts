@@ -3,8 +3,8 @@ import { strainTypesArray } from "./variant";
 
 const targetArray = [];
 let i = 0;
-while (i < 100) {
-  if (i % 10 === 0) targetArray.push(i++);
+while (targetArray.length < 99) {
+  targetArray.push(i++);
 }
 
 const vaccineConfig: { vaccine: type_VaccineConfig } = {
