@@ -2,28 +2,26 @@ import { type_SettingsConfig } from "../../../../@types/config";
 
 const settings: type_SettingsConfig = {
   params: {
+    //パラメータ
     timeLength: 3000,
-    maxCoeffConst: 0.1,
-    maxPopulationSize: 1000000,
+    maxTravelCoeff: 0.1,
     birthRate: 0,
     initialInfectiousRate: 0.001,
     initialFatarity: 0,
     feedbackRate: 0.001, //R -> before Rへの遷移
-  },
-  models: {
-    Space: {
-      connectionType: "partial",
-      length: {
-        col: 10,
-        row: 10,
-      },
+
+    //初期人口
+    initialPopulationMaxSize: 1000000,
+    initialPopulationRange: {
+      min: 1.0,
+      max: 1.0,
     },
-    People: {
-      initialPopulation: {
-        min: 1.0,
-        max: 1.0,
-      },
-      EI_transCoeff: 0.4,
+
+    //空間
+    spaceConnectionType: "partial",
+    spaceLength: {
+      col: 10,
+      row: 10,
     },
   },
   io: {

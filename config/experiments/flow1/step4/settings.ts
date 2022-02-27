@@ -3,12 +3,12 @@ import { type_SettingsConfig } from "../../../../@types/config";
 const settings: type_SettingsConfig = {
   params: {
     //パラメータ
-    timeLength: 1000,
+    timeLength: 3000,
     maxTravelCoeff: 0.1,
     birthRate: 0,
     initialInfectiousRate: 0.001,
     initialFatarity: 0,
-    feedbackRate: 0.001, //R -> before Rへの遷移
+    feedbackRate: 0.1, //R -> before Rへの遷移
 
     //初期人口
     initialPopulationMaxSize: 1000000,
