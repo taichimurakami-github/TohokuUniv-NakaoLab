@@ -11,7 +11,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       resilience: 0.18,
       fatality: 0.001,
       appearanceAt: [0],
-      appearanceTime: 1,
+      appearanceTime: 100,
       crossImmunity: {
         [strainTypesArray[0]]: 0.5,
         [strainTypesArray[1]]: 0.9,
@@ -25,7 +25,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       infectivity: 0.3,
       resilience: 0.18,
       fatality: 0.001,
-      appearanceTime: 200,
+      appearanceTime: 100,
       appearanceAt: [0],
       crossImmunity: {
         [strainTypesArray[0]]: 0.9,
@@ -41,7 +41,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       infectivity: 0.3,
       resilience: 0.18,
       fatality: 0.002,
-      appearanceTime: 300,
+      appearanceTime: 100,
       appearanceAt: [0],
       crossImmunity: {
         [strainTypesArray[0]]: 0.8,

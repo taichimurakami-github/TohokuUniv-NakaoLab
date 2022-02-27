@@ -1,12 +1,12 @@
 import { type_VariantConfig } from "../../../../@types/config";
 
-export const strainTypesArray = ["v_alpha", "v_beta", "v_gamma"];
+export const strainTypesArray = ["v_alpha", "v_beta", "v_gamma", "v_delta"];
 
 const variantConfig: { variantConfig: type_VariantConfig } = {
   variantConfig: {
     [strainTypesArray[0]]: {
       strainType: strainTypesArray[0],
-      EI_transCoeff: 0.5,
+      EI_transCoeff: 0.7,
       infectivity: 0.2,
       resilience: 0.2,
       fatality: 0.001,
@@ -22,10 +22,10 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
     [strainTypesArray[1]]: {
       strainType: strainTypesArray[1],
       EI_transCoeff: 0.5,
-      infectivity: 0.25,
+      infectivity: 0.2,
       resilience: 0.2,
       fatality: 0.05,
-      appearanceTime: 200,
+      appearanceTime: 500,
       appearanceAt: [0],
       crossImmunity: {
         [strainTypesArray[0]]: 0.9,
@@ -37,15 +37,15 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
 
     [strainTypesArray[2]]: {
       strainType: strainTypesArray[2],
-      EI_transCoeff: 0.5,
-      infectivity: 0.35,
+      EI_transCoeff: 0.3,
+      infectivity: 0.2,
       resilience: 0.2,
       fatality: 0.0001,
-      appearanceTime: 400,
+      appearanceTime: 1000,
       appearanceAt: [0],
       crossImmunity: {
-        [strainTypesArray[0]]: 0.8,
-        [strainTypesArray[1]]: 0.8,
+        [strainTypesArray[0]]: 0.9,
+        [strainTypesArray[1]]: 0.9,
         [strainTypesArray[2]]: 0.5,
         [strainTypesArray[3]]: 0.9,
       },
