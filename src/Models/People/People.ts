@@ -221,23 +221,23 @@ export class People {
       for (const node of layer) {
         //layer内のNI探索 & 死亡と出生の反映
         node.NI.applyDiff();
-        // node.NI.applyBirthAndDeath();
+        node.NI.applyBirthAndDeath();
 
         //layer内のI探索 & 感染による死亡の反映
         for (const strainType of Object.keys(node.E)) {
           node.E[strainType].applyDiff();
-          // node.E[strainType].applyDeathByInfection(VaccineLog, this.Config);
+          node.E[strainType].applyDeathByInfection(VaccineLog, this.Config);
           node.I[strainType].applyDiff();
-          // node.I[strainType].applyDeathByInfection(VaccineLog, this.Config);
+          node.I[strainType].applyDeathByInfection(VaccineLog, this.Config);
         }
 
         //layer内のRI探索 & 感染による死亡の反映
         for (const strainType of Object.keys(node.R_E)) {
           node.R_I[strainType].applyDiff();
-          // node.R_I[strainType].applyDeathByInfection(VaccineLog, this.Config);
+          node.R_I[strainType].applyDeathByInfection(VaccineLog, this.Config);
 
           node.R_E[strainType].applyDiff();
-          // node.R_E[strainType].applyDeathByInfection(VaccineLog, this.Config);
+          node.R_E[strainType].applyDeathByInfection(VaccineLog, this.Config);
         }
       }
     }

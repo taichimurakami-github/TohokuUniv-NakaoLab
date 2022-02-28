@@ -41,6 +41,7 @@ export class VirusMutation {
             if (node.E[strainType]) {
               const infectible = people.sum.NI + people.sum.E.ALL;
               node.E[strainType].p += infectible / 10000;
+              // node.E[strainType].p += 1;
               break;
             }
           }

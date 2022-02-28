@@ -6,7 +6,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
   variantConfig: {
     [strainTypesArray[0]]: {
       strainType: strainTypesArray[0],
-      EI_transCoeff: 0.5,
+      EI_transCoeff: 0.7,
       infectivity: 0.2,
       resilience: 0.3,
       fatality: 0.001,
@@ -23,7 +23,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       strainType: strainTypesArray[1],
       EI_transCoeff: 0.5,
       infectivity: 0.2,
-      resilience: 0.5,
+      resilience: 0.3,
       fatality: 0.001,
       appearanceAt: [0],
       appearanceTime: 410,
@@ -37,9 +37,9 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
 
     [strainTypesArray[2]]: {
       strainType: strainTypesArray[2],
-      EI_transCoeff: 0.5,
+      EI_transCoeff: 0.3,
       infectivity: 0.2,
-      resilience: 0.7,
+      resilience: 0.3,
       fatality: 0.001,
       appearanceTime: 810,
       appearanceAt: [0],

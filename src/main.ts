@@ -37,4 +37,6 @@ export const main = async (
 
     console.log("\n....done!");
   }
+
+  return;
 };

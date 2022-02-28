@@ -24,9 +24,9 @@ export class NI extends BasicPeopleState {
     this.mu = options.config.params.initialFatarity;
   }
 
-  applyBirth() {
-    this.p += this.p * this.birthRate;
-  }
+  // applyBirth() {
+  //   this.p += this.p * this.birthRate;
+  // }
 
   applyBirthAndDeath() {
     if (this.immunizedType.length === 0) {

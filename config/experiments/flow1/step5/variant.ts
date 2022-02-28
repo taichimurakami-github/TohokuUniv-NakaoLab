@@ -23,8 +23,8 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       strainType: strainTypesArray[1],
       EI_transCoeff: 0.5,
       infectivity: 0.2,
-      resilience: 0.5,
-      fatality: 0.001,
+      resilience: 0.3,
+      fatality: 0.005,
       appearanceAt: [0],
       appearanceTime: 410,
       crossImmunity: {
@@ -39,8 +39,8 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       strainType: strainTypesArray[2],
       EI_transCoeff: 0.5,
       infectivity: 0.2,
-      resilience: 0.7,
-      fatality: 0.001,
+      resilience: 0.3,
+      fatality: 0.01,
       appearanceTime: 810,
       appearanceAt: [0],
       crossImmunity: {

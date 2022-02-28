@@ -42,7 +42,7 @@ const execute = async () => {
       };
 
       //取得したconfigデータに基づいて計算実行
-      main(configData, expFlowDirName, expStepDirName);
+      await main(configData, expFlowDirName, expStepDirName);
     }
   }
 };
