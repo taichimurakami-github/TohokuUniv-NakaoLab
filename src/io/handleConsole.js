@@ -2,7 +2,7 @@
 const readline = require("readline");
 
 //lib import
-const { getIntArrayAmount, getMaxAndMinFromIntArray } = require("../calc/lib");
+const { getIntArrayAmount, getMaxAndMinFromIntArray } = require("../lib");
 
 /**
  * 計算の進捗バーをコンソールに表示する

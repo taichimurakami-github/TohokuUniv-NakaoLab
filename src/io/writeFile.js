@@ -8,45 +8,52 @@ const XLSX = require("xlsx");
  * @param {array of array} data
  * @returns
  */
-const writeFile = async (writeFiletypes, result, config) => {
-  const resultAsObjectTemplate = Object.values(result[0].asObject);
-  const axisNames = Object.keys(resultAsObjectTemplate[0]);
-  const parsedResult = result.map((PeopleResult) => PeopleResult.asArray);
+const writeFile = async (writeFiletypes, result, flowName, stepName) => {
+  const now = new Date();
+  const dateString = `${now.getFullYear()}.${
+    now.getMonth() + 1
+  }.${now.getDate()}`;
 
   //ファイル生成
   for (const fileType of writeFiletypes) {
+    const writeFileRootDir = path.resolve(
+      __dirname,
+      "../../result/" + fileType + "/" + dateString
+    );
+    //書き出しフォルダを生成
+    await handleMakeDir(writeFileRootDir); //日付のフォルダが無ければ作成
+    const writeFileDir = writeFileRootDir + `/${flowName}/`;
+    await handleMakeDir(writeFileDir);
+    const writeFileName = `${flowName}_${stepName}.${fileType}`;
+
+    //ファイル拡張子ごとに処理
     switch (fileType) {
       case "xlsx": {
-        //XLSXファイル書き出し設定
-        const [writeFileName, writeFilePath] = getFileNameAndPath("xlsx");
-        //フォルダが存在するか確認
-        handleCheckFolder(writeFilePath);
         //書き出し
-        await handleWriteFileAsXLSX(writeFileName, parsedResult, axisNames);
+        await handleWriteFileAsXLSX(writeFileName, result.data);
 
         break;
       }
 
       case "json": {
-        //XLSXファイル書き出し設定
-        const [writeFileName, writeFilePath] = getFileNameAndPath("json");
-        //フォルダが存在するか確認
-        handleCheckFolder(writeFilePath);
+        console.log("\n\n\n\n\n\n" + writeFileName);
         //書き出し
-        await handleWriteFileAsJSON(
-          writeFileName,
-          parsedResult,
-          axisNames,
-          config
+        return await fs.writeFile(
+          writeFileDir + writeFileName,
+          JSON.stringify(result)
         );
-
-        break;
       }
 
       default:
         break;
     }
   }
+};
+
+const handleMakeDir = async (pathlike) => {
+  await fs.access(pathlike).catch(async (e) => {
+    await fs.mkdir(pathlike).catch((e) => {});
+  });
 };
 
 const getFileNameAndPath = (writeFileType) => {
@@ -65,35 +72,6 @@ const getFileNameAndPath = (writeFileType) => {
   );
 
   return [writeFileName, writeFilePath];
-};
-
-const handleCheckFolder = async (writeFilePath) => {
-  //書き込み対象のディレクトリが存在するか確認
-  try {
-    await fs.lstat(writeFilePath);
-  } catch (e) {
-    /**
-     * no such file or directory Error no
-     * mac: -2 / windows: -4058
-     */
-    if (e.errno === -4058 || e.errno === -2) fs.mkdir(writeFilePath);
-    else throw new Error(e);
-  }
-};
-
-const handleWriteFileAsJSON = async (
-  writeFileName,
-  data,
-  axisNames,
-  config
-) => {
-  const dataObject = {
-    axisNames: axisNames,
-    config: config,
-    data: data,
-  };
-
-  return await fs.writeFile(writeFileName, JSON.stringify(dataObject));
 };
 
 const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
