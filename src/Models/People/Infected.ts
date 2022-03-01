@@ -44,7 +44,6 @@ export class I extends BasicPeopleState {
     );
   }
 
-  //gammaが可変になる可能性があるので、ゲッターを定義しておく
   getGamma(VaccineLog: type_VaccineLog, Config: Config) {
     const MAX_GAMMA_CONST = 1;
     const calcResult =
@@ -52,10 +51,10 @@ export class I extends BasicPeopleState {
       this.getVaccinatedEffectCoeff("gamma", VaccineLog) *
       this.gamma;
 
+    //gammaのオーバーフローチェック
     return calcResult > MAX_GAMMA_CONST ? MAX_GAMMA_CONST : calcResult;
   }
 
-  //muが可変になる可能性があるので、ゲッターを定義しておく
   getMu(VaccineLog: type_VaccineLog, Config: Config) {
     return (
       this.getImmunizedEffectCoeff(Config) *
@@ -65,7 +64,6 @@ export class I extends BasicPeopleState {
   }
 
   applyDeathByInfection(VaccineLog: type_VaccineLog, Config: Config) {
-    const a = this.getMu(VaccineLog, Config);
     this.p -= this.p * this.getMu(VaccineLog, Config);
   }
 
