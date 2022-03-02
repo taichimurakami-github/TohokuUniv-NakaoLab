@@ -44,7 +44,6 @@ export class I extends BasicPeopleState {
     );
   }
 
-  //gammaが可変になる可能性があるので、ゲッターを定義しておく
   getGamma(VaccineLog: type_VaccineLog, Config: Config) {
     const MAX_GAMMA_CONST = 1;
     const calcResult =
@@ -52,10 +51,10 @@ export class I extends BasicPeopleState {
       this.getVaccinatedEffectCoeff("gamma", VaccineLog) *
       this.gamma;
 
+    //gammaのオーバーフローチェック
     return calcResult > MAX_GAMMA_CONST ? MAX_GAMMA_CONST : calcResult;
   }
 
-  //muが可変になる可能性があるので、ゲッターを定義しておく
   getMu(VaccineLog: type_VaccineLog, Config: Config) {
     return (
       this.getImmunizedEffectCoeff(Config) *
@@ -65,7 +64,6 @@ export class I extends BasicPeopleState {
   }
 
   applyDeathByInfection(VaccineLog: type_VaccineLog, Config: Config) {
-    const a = this.getMu(VaccineLog, Config);
     this.p -= this.p * this.getMu(VaccineLog, Config);
   }
 
@@ -104,15 +102,30 @@ export class I extends BasicPeopleState {
         const effect = vaccinated.effect[this.strainType][paramName];
         const attenuationCoeff = vaccinated.attenuationCoeff;
 
-        const vaccineEffect = effect * attenuationCoeff;
-        vaccinated.effect[this.strainType][paramName] *
-          vaccinated.attenuationCoeff;
+        //attenuationCoeff == 0の場合、ワクチン効果切れ
+        //これ以降の計算が無駄なので、終了する
+        if (attenuationCoeff === 0) return prevResult;
 
-        //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
-        //計算結果が不正な場合、積を求めない
-        return isValidAsCoeff(vaccineEffect)
-          ? prevResult * vaccineEffect
-          : prevResult;
+        //gammaパラメータの場合
+        if (paramName === "gamma") {
+          const vaccineEffect = effect * attenuationCoeff;
+
+          //gammaはワクチン効果が強いほど大きくなる
+          //したがって、1を下回ったら逆に免疫ないときよりナイーブになってしまうので、
+          //1を下回ったら強制的に1を返す
+          return vaccineEffect > 1 ? vaccineEffect : 1;
+        }
+
+        //beta, muパラメータの場合
+        else {
+          const vaccineEffect = 1 - (1 - effect) * attenuationCoeff;
+
+          //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
+          //計算結果が不正な場合、積を求めない
+          return isValidAsCoeff(vaccineEffect)
+            ? prevResult * vaccineEffect
+            : prevResult;
+        }
       },
       1
     );
