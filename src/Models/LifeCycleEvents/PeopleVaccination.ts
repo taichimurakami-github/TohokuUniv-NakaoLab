@@ -70,7 +70,7 @@ export class PeopleVaccination {
     const attenuationRate =
       t - vaccinatedAt < v_data.duration
         ? 1 - (t - vaccinatedAt) / v_data.duration
-        : 1;
+        : 0;
     //次回計算フェーズでのワクチン効果減衰率
     vaccinated[v_name].attenuationCoeff = attenuationRate;
   }

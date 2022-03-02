@@ -4,7 +4,7 @@ import { strainTypesArray } from "./variant";
 const vaccineConfig: { vaccine: type_VaccineConfig } = {
   vaccine: {
     begin: {
-      10: {
+      120: {
         name: "fizer",
         target: [0],
       },

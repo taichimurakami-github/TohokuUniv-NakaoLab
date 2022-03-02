@@ -103,8 +103,8 @@ export class I extends BasicPeopleState {
         const attenuationCoeff = vaccinated.attenuationCoeff;
 
         const vaccineEffect = effect * attenuationCoeff;
-        vaccinated.effect[this.strainType][paramName] *
-          vaccinated.attenuationCoeff;
+
+        if (attenuationCoeff === 0) return prevResult;
 
         //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
         //計算結果が不正な場合、積を求めない
