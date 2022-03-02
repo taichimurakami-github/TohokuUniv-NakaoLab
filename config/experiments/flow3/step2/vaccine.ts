@@ -18,17 +18,17 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
         duration: 300,
         effect: {
           [strainTypesArray[0]]: {
-            beta: 0.8,
+            beta: 0.5,
             gamma: 1.02,
             mu: 0.5,
           },
           [strainTypesArray[1]]: {
-            beta: 0.8,
+            beta: 0.5,
             gamma: 1.02,
             mu: 0.5,
           },
           [strainTypesArray[2]]: {
-            beta: 0.8,
+            beta: 0.5,
             gamma: 1.02,
             mu: 0.5,
           },
@@ -43,8 +43,9 @@ const MAX_TIME = 3000;
 const spaceArray = [];
 
 while (t < MAX_TIME) {
-  if (t % 200 === 0)
+  if (t % 10 === 0)
     vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
+
   t++;
 }
 

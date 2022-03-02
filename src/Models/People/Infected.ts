@@ -102,15 +102,30 @@ export class I extends BasicPeopleState {
         const effect = vaccinated.effect[this.strainType][paramName];
         const attenuationCoeff = vaccinated.attenuationCoeff;
 
-        const vaccineEffect = effect * attenuationCoeff;
-
+        //attenuationCoeff == 0の場合、ワクチン効果切れ
+        //これ以降の計算が無駄なので、終了する
         if (attenuationCoeff === 0) return prevResult;
 
-        //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
-        //計算結果が不正な場合、積を求めない
-        return isValidAsCoeff(vaccineEffect)
-          ? prevResult * vaccineEffect
-          : prevResult;
+        //gammaパラメータの場合
+        if (paramName === "gamma") {
+          const vaccineEffect = effect * attenuationCoeff;
+
+          //gammaはワクチン効果が強いほど大きくなる
+          //したがって、1を下回ったら逆に免疫ないときよりナイーブになってしまうので、
+          //1を下回ったら強制的に1を返す
+          return vaccineEffect > 1 ? vaccineEffect : 1;
+        }
+
+        //beta, muパラメータの場合
+        else {
+          const vaccineEffect = 1 - (1 - effect) * attenuationCoeff;
+
+          //ワクチンが複数存在する場合、すべてのattenuationRateの積を返す
+          //計算結果が不正な場合、積を求めない
+          return isValidAsCoeff(vaccineEffect)
+            ? prevResult * vaccineEffect
+            : prevResult;
+        }
       },
       1
     );

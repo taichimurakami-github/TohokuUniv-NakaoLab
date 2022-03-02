@@ -51,7 +51,7 @@ export class PeopleVaccination {
   ) {
     state.vaccinated[v_name] = {
       vaccinatedAt: t,
-      attenuationCoeff: 0,
+      attenuationCoeff: 1,
       effect: { ...v_data.effect },
     };
   }
