@@ -3,7 +3,7 @@ import { type_SettingsConfig } from "../../../../@types/config";
 const settings: type_SettingsConfig = {
   params: {
     //パラメータ
-    timeLength: 3000,
+    timeLength: 2000,
     maxTravelCoeff: 0.1,
     birthRate: 0,
     initialInfectiousRate: 0.0001,

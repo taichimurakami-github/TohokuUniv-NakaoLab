@@ -39,19 +39,24 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
   },
 };
 
-//auto space settings
+const SPACE_SIZE =
+  settings.params.spaceLength.row * settings.params.spaceLength.col;
 const spaceArray = [];
-const Slen = settings.params.spaceLength.row * settings.params.spaceLength.col;
-for (let i = 0; i < Slen; i++) i % 10 === 0 && spaceArray.push(i);
+let i = 0;
+while (i < SPACE_SIZE) {
+  i % 10 === 0 && spaceArray.push(i);
+  i++;
+}
 
-//auto time settings
-vaccineConfig.vaccine.begin[200] = { name: "fizer", target: [0] };
-// let t = 0;
-// const MAX_TIME = 3000;
-// while (t < MAX_TIME) {
-//   if (t % 200 === 0)
-//     vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
-//   t++;
-// }
+let t = 0;
+const MAX_TIME = 3000;
+
+vaccineConfig.vaccine.begin[10] = { name: "fizer", target: spaceArray };
+
+while (t < MAX_TIME) {
+  if (t % 200 === 0)
+    vaccineConfig.vaccine.begin[t] = { name: "fizer", target: spaceArray };
+  t++;
+}
 
 export default vaccineConfig;

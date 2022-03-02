@@ -1,5 +1,4 @@
 import { type_VaccineConfig } from "../../../../@types/config";
-import settings from "./settings";
 import { strainTypesArray } from "./variant";
 
 const vaccineConfig: { vaccine: type_VaccineConfig } = {
@@ -39,19 +38,15 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
   },
 };
 
-//auto space settings
-const spaceArray = [];
-const Slen = settings.params.spaceLength.row * settings.params.spaceLength.col;
-for (let i = 0; i < Slen; i++) spaceArray.push(i);
+let t = 0;
+const MAX_TIME = 3000;
 
-//auto time settings
-vaccineConfig.vaccine.begin[200] = { name: "fizer", target: [0] };
-// let t = 0;
-// const MAX_TIME = 3000;
-// while (t < MAX_TIME) {
-//   if (t % 200 === 0)
-//     vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
-//   t++;
-// }
+vaccineConfig.vaccine.begin[10] = { name: "fizer", target: [0] };
+
+while (t < MAX_TIME) {
+  if (t % 200 === 0)
+    vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
+  t++;
+}
 
 export default vaccineConfig;
