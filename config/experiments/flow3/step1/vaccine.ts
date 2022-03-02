@@ -4,10 +4,10 @@ import { strainTypesArray } from "./variant";
 const vaccineConfig: { vaccine: type_VaccineConfig } = {
   vaccine: {
     begin: {
-      120: {
-        name: "fizer",
-        target: [0],
-      },
+      // 10: {
+      //   name: "fizer",
+      //   target: [0],
+      // },
       // 210: {
       //   name: "fizer",
       //   target: [11],
@@ -38,14 +38,16 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
   },
 };
 
-// let t = 0;
-// const MAX_TIME = 3000;
+let t = 0;
+const MAX_TIME = 3000;
+const spaceArray = [];
 
 vaccineConfig.vaccine.begin[200] = { name: "fizer", target: [0] };
 
 // while (t < MAX_TIME) {
-//   if (t % 200 === 0)
+//   if (t % 10 === 0)
 //     vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
+
 //   t++;
 // }
 

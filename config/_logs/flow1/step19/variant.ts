@@ -14,9 +14,9 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       appearanceTime: 10,
       crossImmunity: {
         [strainTypesArray[0]]: 0.8,
-        // [strainTypesArray[1]]: 0.9,
-        // [strainTypesArray[2]]: 0.9,
-        // [strainTypesArray[3]]: 0.9,
+        [strainTypesArray[1]]: 0.9,
+        [strainTypesArray[2]]: 0.9,
+        [strainTypesArray[3]]: 0.9,
       },
     },
     [strainTypesArray[1]]: {
@@ -28,10 +28,10 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       appearanceAt: [0],
       appearanceTime: 410,
       crossImmunity: {
-        // [strainTypesArray[0]]: 0.9,
+        [strainTypesArray[0]]: 0.9,
         [strainTypesArray[1]]: 0.8,
-        // [strainTypesArray[2]]: 0.9,
-        // [strainTypesArray[3]]: 0.9,
+        [strainTypesArray[2]]: 0.9,
+        [strainTypesArray[3]]: 0.9,
       },
     },
 
@@ -44,10 +44,10 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       appearanceTime: 810,
       appearanceAt: [0],
       crossImmunity: {
-        // [strainTypesArray[0]]: 0.9,
-        // [strainTypesArray[1]]: 0.9,
+        [strainTypesArray[0]]: 0.9,
+        [strainTypesArray[1]]: 0.9,
         [strainTypesArray[2]]: 0.8,
-        // [strainTypesArray[3]]: 0.9,
+        [strainTypesArray[3]]: 0.9,
       },
     },
     //   {

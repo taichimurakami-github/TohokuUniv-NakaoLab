@@ -38,15 +38,17 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
   },
 };
 
-vaccineConfig.vaccine.begin[200] = { name: "fizer", target: [0] };
+let t = 0;
+const MAX_TIME = 3000;
+const spaceArray = [];
 
-// let t = 0;
-// const MAX_TIME = 3000;
+vaccineConfig.vaccine.begin[10] = { name: "fizer", target: [0] };
 
-// while (t < MAX_TIME) {
-//   if (t % 200 === 0)
-//     vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
-//   t++;
-// }
+while (t < MAX_TIME) {
+  if (t % 200 === 0)
+    vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
+
+  t++;
+}
 
 export default vaccineConfig;

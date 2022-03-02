@@ -20,8 +20,8 @@ const settings: type_SettingsConfig = {
     //空間
     spaceConnectionType: "partial",
     spaceLength: {
-      col: 10,
-      row: 10,
+      col: 1,
+      row: 1,
     },
   },
   io: {

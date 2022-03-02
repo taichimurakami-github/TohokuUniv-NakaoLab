@@ -40,14 +40,12 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
 
 let t = 0;
 const MAX_TIME = 3000;
-const spaceArray = [];
 
 vaccineConfig.vaccine.begin[10] = { name: "fizer", target: [0] };
 
 // while (t < MAX_TIME) {
 //   if (t % 200 === 0)
 //     vaccineConfig.vaccine.begin[t] = { name: "fizer", target: [0] };
-
 //   t++;
 // }
 

@@ -3,10 +3,10 @@ import { type_SettingsConfig } from "../../../../@types/config";
 const settings: type_SettingsConfig = {
   params: {
     //パラメータ
-    timeLength: 3000,
+    timeLength: 2000,
     maxTravelCoeff: 0.1,
     birthRate: 0,
-    initialInfectiousRate: 0.001,
+    initialInfectiousRate: 0.0001,
     initialFatarity: 0,
     feedbackRate: 0.001, //R -> before Rへの遷移
 
@@ -20,8 +20,8 @@ const settings: type_SettingsConfig = {
     //空間
     spaceConnectionType: "partial",
     spaceLength: {
-      col: 10,
-      row: 10,
+      col: 1,
+      row: 1,
     },
   },
   io: {
