@@ -6,7 +6,7 @@ const settings: type_SettingsConfig = {
     timeLength: 3000,
     maxTravelCoeff: 0.1,
     birthRate: 0,
-    initialInfectiousRate: 0.001,
+    initialInfectiousRate: 0.0001,
     initialFatarity: 0,
     feedbackRate: 0.001, //R -> before Rへの遷移
 
