@@ -3,7 +3,7 @@ import { type_SettingsConfig } from "../../../../@types/config";
 const settings: type_SettingsConfig = {
   params: {
     //パラメータ
-    timeLength: 2000,
+    timeLength: 1000,
     maxTravelCoeff: 0.1,
     birthRate: 0,
     initialInfectiousRate: 0.0001,
@@ -14,18 +14,18 @@ const settings: type_SettingsConfig = {
     initialPopulationMaxSize: 1000000,
     initialPopulationRange: {
       min: 1.0,
-      max: 1.0,
+      max: 0.1,
     },
 
     //空間
     spaceConnectionType: "partial",
     spaceLength: {
-      col: 1,
-      row: 1,
+      col: 5,
+      row: 5,
     },
   },
   io: {
-    writeResultAsXLSX: false,
+    writeResultAsXLSX: true,
     writeResultAsJSON: true,
     writeResultAsPNG: false,
     showProgressBar: true,

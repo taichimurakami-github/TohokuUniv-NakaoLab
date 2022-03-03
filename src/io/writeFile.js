@@ -30,7 +30,11 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
     switch (fileType) {
       case "xlsx": {
         //書き出し
-        await handleWriteFileAsXLSX(writeFileName, result.data);
+        await handleWriteFileAsXLSX(
+          writeFileDir + writeFileName,
+          result.data,
+          result.axisNames
+        );
 
         break;
       }
@@ -38,10 +42,12 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
       case "json": {
         console.log("\n\n\n\n\n\n" + writeFileName);
         //書き出し
-        return await fs.writeFile(
+        await fs.writeFile(
           writeFileDir + writeFileName,
           JSON.stringify(result)
         );
+
+        break;
       }
 
       default:
@@ -80,10 +86,34 @@ const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
     //XLSXのworkbookオブジェクト準備
     const wb = XLSX.utils.book_new();
 
+    //感染者のみ抜き出し
+    //ラベル生成とデータ整形
+    const I_only_result = [];
+    const I_SUM_SHEET_AXIS_NAME = [];
+    const timeLength = data[0].length;
+    const spaceLength = data.length;
+
+    for (let i = 0; i < spaceLength; i++) {
+      I_SUM_SHEET_AXIS_NAME.push(`Space${i}`);
+    }
+
+    for (let t = 0; t < timeLength; t++) {
+      I_only_result.push([]);
+      for (let i = 0; i < data.length; i++) {
+        I_only_result[t].push(data[i][t][2]);
+      }
+    }
+    wb.SheetNames.push("analysis");
+    wb.Sheets["analysis"] = XLSX.utils.aoa_to_sheet([
+      I_SUM_SHEET_AXIS_NAME,
+      ...I_only_result,
+    ]);
+
+    //データ書き出し
     for (let i = 0; i < data.length; i++) {
       const thisSpaceArrayOfPop = data[i];
       const parsedResult = [axisNames, ...thisSpaceArrayOfPop];
-      const sheetName = `Space no.${i}`;
+      const sheetName = `Space${i}`;
       wb.SheetNames.push(sheetName);
       wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(parsedResult);
     }
