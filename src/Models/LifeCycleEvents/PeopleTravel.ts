@@ -2,6 +2,7 @@ import { getRandomFloat } from "../../lib";
 import { Space } from "../Space/Space";
 import { type_ModelsConnectionTypeConfig } from "../../../@types/config";
 import { People } from "../People/People";
+import { Config } from "../Config/Config";
 
 export class PeopleTravel {
   private connectionType: type_ModelsConnectionTypeConfig;
@@ -53,12 +54,17 @@ export class PeopleTravel {
         const P_outflowTo = s.state[i_to].people;
 
         //移動計算を実行（全探索）
-        this.calcMove(P_outflowFrom, P_outflowTo, mvCoeff);
+        this.calcMove(P_outflowFrom, P_outflowTo, mvCoeff, s.Config);
       }
     }
   }
 
-  calcMove(P_outflowFrom: People, P_outflowTo: People, mvCoeff: number) {
+  calcMove(
+    P_outflowFrom: People,
+    P_outflowTo: People,
+    mvCoeff: number,
+    Config: Config
+  ) {
     //Space内で定義されたウイルス株設定は全空間で共通のものとなると仮定しているので、
     //Spaceが保持するすべてのPeopleインスタンス内のlayeredNodeの構造は同じになる
     for (let i = 0; i < P_outflowFrom.state.length; i++) {
@@ -76,17 +82,42 @@ export class PeopleTravel {
         node_outflowFrom.NI.p -= NI_outflow;
         node_outflowTo.NI.p += NI_outflow;
 
-        if ("E" in node_outflowFrom && "E" in node_outflowTo) {
-          for (const strainType of Object.keys(node_outflowFrom.E)) {
-            //phase4: E系の移動 (Iは移動しないものとする)
-            const E_outflowFrom_instance = node_outflowFrom.E[strainType];
-            const E_outflowTo_instance = node_outflowTo.E[strainType];
-            const E_outflow = E_outflowFrom_instance.p * mvCoeff;
+        /**
+         * Eだけでなく、Iの移動も定義
+         */
+        for (const strainType of Object.keys(node_outflowFrom.E)) {
+          //phase4: E系の移動
+          const E_outflowFrom_instance = node_outflowFrom.E[strainType];
+          const E_outflowTo_instance = node_outflowTo.E[strainType];
+          const E_outflow = E_outflowFrom_instance.p * mvCoeff;
 
-            E_outflowFrom_instance.p -= E_outflow;
-            E_outflowTo_instance.p += E_outflow;
-          }
+          E_outflowFrom_instance.p -= E_outflow;
+          E_outflowTo_instance.p += E_outflow;
+
+          //phase5: I系の移動
+          //I系の移動は制限をかけられるようにする
+          const I_outflowFrom_instance = node_outflowFrom.I[strainType];
+          const I_outflowTo_instance = node_outflowTo.I[strainType];
+          const I_outflow =
+            I_outflowFrom_instance.p *
+            mvCoeff *
+            Config.getInfectiousActivityRate();
+
+          I_outflowFrom_instance.p -= I_outflow;
+          I_outflowTo_instance.p += I_outflow;
         }
+
+        // if ("E" in node_outflowFrom && "E" in node_outflowTo) {
+        //   for (const strainType of Object.keys(node_outflowFrom.E)) {
+        //     //phase4: E系の移動 (Iは移動しないものとする)
+        //     const E_outflowFrom_instance = node_outflowFrom.E[strainType];
+        //     const E_outflowTo_instance = node_outflowTo.E[strainType];
+        //     const E_outflow = E_outflowFrom_instance.p * mvCoeff;
+
+        //     E_outflowFrom_instance.p -= E_outflow;
+        //     E_outflowTo_instance.p += E_outflow;
+        //   }
+        // }
       }
     }
   }

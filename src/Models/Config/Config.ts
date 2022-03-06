@@ -36,6 +36,9 @@ export class Config {
 
   public getFeedbackRate = () => this.config.params.feedbackRate;
 
+  public getInfectiousActivityRate = () =>
+    this.config.params?.infectiousActivityRate || 1.0;
+
   //models
   public getSpaceConnectionType = () => this.config.params.spaceConnectionType;
 

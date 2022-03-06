@@ -245,9 +245,12 @@ export class People {
   }
 
   getInfectedRate(strainType: string) {
-    const infected_sum = this.sum.I[strainType] + this.sum.E[strainType];
-    const all = this.sum.ALL;
-    return infected_sum / all;
+    //IはactivityRateの定義に従って感染への寄与率を変化させる
+    const infected_sum =
+      this.sum.I[strainType] * this.Config.getInfectiousActivityRate() +
+      this.sum.E[strainType];
+
+    return infected_sum / this.sum.ALL;
   }
 
   getInitializedSumTemplate() {
