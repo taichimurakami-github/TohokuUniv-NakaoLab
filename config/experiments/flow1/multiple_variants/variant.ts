@@ -50,7 +50,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
     },
 
     [strainTypesArray[3]]: {
-      strainType: strainTypesArray[2],
+      strainType: strainTypesArray[3],
       EI_transCoeff: 0.5,
       infectivity: 0.4,
       resilience: 0.3,
@@ -63,7 +63,7 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
     },
 
     [strainTypesArray[4]]: {
-      strainType: strainTypesArray[2],
+      strainType: strainTypesArray[4],
       EI_transCoeff: 0.5,
       infectivity: 0.55,
       resilience: 0.3,
