@@ -89,17 +89,19 @@ export const calcCombination = (source: string[], m: number) => {
   return getCombination([], 0, source.length - (m - 1));
 };
 
-export const isValidAsCoeff = (target: any) => {
+export const isValidAsCoeff = (target: any, overflowMode: boolean = false) => {
   //targetは数字であり、かつ0以上1以下でなければならない
-  if (
+  const no_overflow = () =>
     typeof target !== "number" ||
     Number.isNaN(target) ||
     target < 0 ||
-    target > 1
-  ) {
-    // console.log("invalid coeff: " + target);
-    return false;
-  } else {
-    return true;
-  }
+    target > 1;
+
+  //targetは数字であり、かつ0以上でなければならない
+  const overflow = () =>
+    typeof target !== "number" || Number.isNaN(target) || target < 0;
+
+  const isInvalid = overflowMode ? overflow() : no_overflow();
+
+  return isInvalid ? false : true;
 };
