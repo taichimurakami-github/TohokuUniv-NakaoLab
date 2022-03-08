@@ -9,12 +9,6 @@ export const strainTypesArray = [
   "v_epsilon",
 ];
 
-const defaultImmunity = {
-  beta: 0.8,
-  mu: 0.8,
-  gamma: 1.01,
-};
-
 const variantConfig: { variantConfig: type_VariantConfig } = {
   variantConfig: {
     [strainTypesArray[0]]: {
@@ -24,14 +18,12 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       resilience: 0.3,
       fatality: 0.001,
       appearanceAt: [0],
-      appearanceTime: 10,
+      appearanceTime: 100,
       crossImmunity: {
-        [strainTypesArray[1]]: defaultImmunity,
-        [strainTypesArray[2]]: defaultImmunity,
         [strainTypesArray[0]]: {
           beta: 0.5,
-          gamma: 1.1,
           mu: 0.3,
+          gamma: 1.1,
         },
       },
     },
@@ -43,10 +35,8 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       resilience: 0.3,
       fatality: 0.001,
       appearanceAt: [0],
-      appearanceTime: 100,
+      appearanceTime: 350,
       crossImmunity: {
-        [strainTypesArray[0]]: defaultImmunity,
-        [strainTypesArray[2]]: defaultImmunity,
         [strainTypesArray[1]]: {
           beta: 0.5,
           mu: 0.3,
@@ -62,10 +52,8 @@ const variantConfig: { variantConfig: type_VariantConfig } = {
       resilience: 0.3,
       fatality: 0.001,
       appearanceAt: [0],
-      appearanceTime: 100,
+      appearanceTime: 600,
       crossImmunity: {
-        [strainTypesArray[0]]: defaultImmunity,
-        [strainTypesArray[1]]: defaultImmunity,
         [strainTypesArray[2]]: {
           beta: 0.5,
           mu: 0.3,
