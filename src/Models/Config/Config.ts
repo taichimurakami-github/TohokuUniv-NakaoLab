@@ -76,22 +76,19 @@ export class Config {
     immunizedStrainType: string,
     reinfectedStrainType: string
   ): number {
+    const a = 0;
     //免疫を獲得済みの変異株の交差免疫情報の中から、
     //再感染した変異株に対する交差免疫性をセットする
-    const result =
+    const crossImmunityObject =
       this.getVariantSetting(immunizedStrainType).crossImmunity[
         reinfectedStrainType
-      ][param];
+      ];
 
-    if (!result)
-      throw new Error(
-        "invalid variant settings: cannot get " +
-          param +
-          " of " +
-          immunizedStrainType +
-          " to " +
-          reinfectedStrainType
-      );
-    return result;
+    //交差免疫が設定されていない場合、crossImmunityObjectはundefinedになる
+    //undefined[XXX]はエラーになるので、一旦undefinedチェックをはさむ
+    const result = crossImmunityObject ? crossImmunityObject[param] : 1;
+
+    //resultが0ではないfalthyな値だったら無効(0はセーフとする)
+    return result && result !== 0 ? result : 1;
   }
 }
