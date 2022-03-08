@@ -9,6 +9,7 @@ export const main = async (
   stepName: string
 ) => {
   //計算準備
+  config.io.writeResultAsXLSX = true;
   const c = new Config(config);
   const s = new Space(c);
 
@@ -31,11 +32,11 @@ export const main = async (
 
   //ファイル書き出し
   if (writeFileTypes.length > 0) {
-    console.log("\nwriting result...\n");
+    console.log("\nwriting result...");
 
     await IO.writeFile(writeFileTypes, result, flowName, stepName);
 
-    console.log("\n....done!");
+    console.log("\n....done!\n\n\n");
   }
 
   return;

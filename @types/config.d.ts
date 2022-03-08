@@ -67,7 +67,7 @@ export type type_SettingsConfig = {
       max: number;
     };
 
-    infectiousActivityRate?: number;
+    infectiousActivityRate: number;
   };
   io: {
     [key: string]: boolean;

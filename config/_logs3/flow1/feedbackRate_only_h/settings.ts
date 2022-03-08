@@ -8,7 +8,8 @@ const settings: type_SettingsConfig = {
     birthRate: 0,
     initialInfectiousRate: 0.001,
     initialFatarity: 0,
-    feedbackRate: 0, //R -> before Rへの遷移
+    feedbackRate: 0.8, //R -> before Rへの遷移
+    infectiousActivityRate: 0.5,
 
     //初期人口
     initialPopulationMaxSize: 1000000,

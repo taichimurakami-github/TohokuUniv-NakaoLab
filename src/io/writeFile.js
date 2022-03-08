@@ -14,6 +14,8 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
     now.getMonth() + 1
   }.${now.getDate()}`;
 
+  console.log("\n");
+
   //ファイル生成
   for (const fileType of writeFiletypes) {
     const writeFileRootDir = path.resolve(
@@ -29,6 +31,7 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
     //ファイル拡張子ごとに処理
     switch (fileType) {
       case "xlsx": {
+        console.log(writeFileName);
         //書き出し
         await handleWriteFileAsXLSX(
           writeFileDir + writeFileName,
@@ -40,7 +43,7 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
       }
 
       case "json": {
-        console.log("\n\n\n\n\n\n" + writeFileName);
+        console.log(writeFileName);
         //書き出し
         await fs.writeFile(
           writeFileDir + writeFileName,
@@ -86,10 +89,11 @@ const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
     //XLSXのworkbookオブジェクト準備
     const wb = XLSX.utils.book_new();
 
-    //感染者のみ抜き出し
+    //発症者のみ抜き出し
     //ラベル生成とデータ整形
     const I_only_result = [];
     const I_SUM_SHEET_AXIS_NAME = [];
+    const I_POSITION = 3;
     const timeLength = data[0].length;
     const spaceLength = data.length;
 
@@ -100,7 +104,7 @@ const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
     for (let t = 0; t < timeLength; t++) {
       I_only_result.push([]);
       for (let i = 0; i < data.length; i++) {
-        I_only_result[t].push(data[i][t][2]);
+        I_only_result[t].push(data[i][t][I_POSITION]);
       }
     }
     wb.SheetNames.push("analysis");
