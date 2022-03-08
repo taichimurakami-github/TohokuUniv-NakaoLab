@@ -72,6 +72,7 @@ export class Config {
     this.getVariantSetting(strainType).fatality;
 
   public getCrossImmunity(
+    param: "beta" | "gamma" | "mu",
     immunizedStrainType: string,
     reinfectedStrainType: string
   ): number {
@@ -80,7 +81,17 @@ export class Config {
     const result =
       this.getVariantSetting(immunizedStrainType).crossImmunity[
         reinfectedStrainType
-      ];
-    return result || 1.0;
+      ][param];
+
+    if (!result)
+      throw new Error(
+        "invalid variant settings: cannot get " +
+          param +
+          " of " +
+          immunizedStrainType +
+          " to " +
+          reinfectedStrainType
+      );
+    return result;
   }
 }

@@ -38,7 +38,7 @@ export class I extends BasicPeopleState {
    */
   getBeta(VaccineLog: type_VaccineLog, Config: Config) {
     return (
-      this.getImmunizedEffectCoeff(Config) *
+      this.getImmunizedEffectCoeff("beta", Config) *
       this.getVaccinatedEffectCoeff("beta", VaccineLog) *
       this.beta
     );
@@ -47,17 +47,18 @@ export class I extends BasicPeopleState {
   getGamma(VaccineLog: type_VaccineLog, Config: Config) {
     const MAX_GAMMA_CONST = 1;
     const calcResult =
-      (2 - this.getImmunizedEffectCoeff(Config)) *
+      this.getImmunizedEffectCoeff("gamma", Config) *
       this.getVaccinatedEffectCoeff("gamma", VaccineLog) *
       this.gamma;
 
     //gammaのオーバーフローチェック
+    //（gammaのみ, 免疫の効果で1.x倍されていくため、1を上回ると計算がおかしくなる）
     return calcResult > MAX_GAMMA_CONST ? MAX_GAMMA_CONST : calcResult;
   }
 
   getMu(VaccineLog: type_VaccineLog, Config: Config) {
     return (
-      this.getImmunizedEffectCoeff(Config) *
+      this.getImmunizedEffectCoeff("mu", Config) *
       this.getVaccinatedEffectCoeff("mu", VaccineLog) *
       this.mu
     );
@@ -73,16 +74,17 @@ export class I extends BasicPeopleState {
    * @param {Array} immunizedType
    * @returns
    */
-  getImmunizedEffectCoeff(Config: Config) {
+  getImmunizedEffectCoeff(param: "beta" | "gamma" | "mu", Config: Config) {
     return this.immunizedType.reduce((prevResult, currentValue): number => {
       const immunizedEffect = Config.getCrossImmunity(
+        param,
         currentValue, //獲得済み免疫
         this.strainType //現在感染しているウイルスタイプ
       );
 
       //獲得免疫効果との積を出す
       //無効な値だったらprevResultを返す
-      return isValidAsCoeff(immunizedEffect)
+      return isValidAsCoeff(immunizedEffect, true)
         ? prevResult * immunizedEffect
         : prevResult;
     }, 1);

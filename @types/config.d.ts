@@ -7,7 +7,13 @@ export type type_VariantSetting = {
   fatality: number;
   appearanceAt: number[];
   appearanceTime: number;
-  crossImmunity: { [strainType: string]: number };
+  crossImmunity: {
+    [strainType: string]: {
+      beta: number;
+      gamma: number;
+      mu: number;
+    };
+  };
 };
 
 export type type_VariantConfig = {
