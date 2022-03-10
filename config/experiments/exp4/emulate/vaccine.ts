@@ -7,7 +7,7 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
     begin: {},
     data: {
       vax_01: {
-        duration: 300,
+        duration: 400,
         effect: {
           [strainTypesArray[0]]: {
             beta: 0.8,
@@ -20,6 +20,16 @@ const vaccineConfig: { vaccine: type_VaccineConfig } = {
             mu: 0.5,
           },
           [strainTypesArray[2]]: {
+            beta: 0.8,
+            gamma: 1.02,
+            mu: 0.5,
+          },
+          [strainTypesArray[3]]: {
+            beta: 0.8,
+            gamma: 1.02,
+            mu: 0.5,
+          },
+          [strainTypesArray[4]]: {
             beta: 0.8,
             gamma: 1.02,
             mu: 0.5,
@@ -38,6 +48,6 @@ while (i < SPACE_SIZE) {
   spaceArray.push(i++);
 }
 
-vaccineConfig.vaccine.begin[200] = { name: "vax_01", target: spaceArray };
+vaccineConfig.vaccine.begin[500] = { name: "vax_01", target: spaceArray };
 
 export default vaccineConfig;

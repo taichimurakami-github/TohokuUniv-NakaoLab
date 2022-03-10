@@ -25,6 +25,7 @@ export type type_ModelResultTemplate = {
   config: type_AllConfig;
   axisNames: string[];
   data: number[][][];
+  newInfectious: number[][];
 };
 
 /**
@@ -113,6 +114,7 @@ export class Space {
       config: { ...this.Config.getAllConfig() },
       axisNames: ["S", "R"],
       data: [],
+      newInfectious: [],
     };
 
     //axisNames(label)を設定
@@ -142,7 +144,11 @@ export class Space {
         this_p_result.push(tmp);
       }
 
+      //結果を記録
       result.data.push(this_p_result);
+
+      //新規感染者数を記録
+      result.newInfectious.push(p.newInfectiousLog);
     }
 
     return result;

@@ -69,12 +69,14 @@ export class People {
   private t: number;
   public sum: any;
   public nodeTree: type_NodeTreeStructure<string>;
+  public newInfectiousLog: number[];
 
   constructor(config: Config) {
     this.state = [];
     this.result = [];
     this.Config = config;
     this.t = 0;
+    this.newInfectiousLog = [0]; //t=0の時は0確定なので入れておく
 
     /**
      * sumを計算
@@ -210,6 +212,9 @@ export class People {
     //時間を進める
     this.t += 1;
 
+    //新規感染者数のログを準備
+    this.newInfectiousLog.push(0);
+
     //イベント実行後のsumを求める -> 計算にて使用
     this.getSum();
     return;
@@ -324,6 +329,12 @@ export class People {
     }
 
     return (this.sum = { ...tmp });
+  }
+
+  //新規感染者（I）を記録
+  //四捨五入しておく
+  setNewInfectiousLog(n: number) {
+    return (this.newInfectiousLog[this.t] += Math.round(n));
   }
 
   recordResult() {

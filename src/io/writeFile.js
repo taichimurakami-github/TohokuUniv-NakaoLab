@@ -35,7 +35,7 @@ const writeFile = async (writeFiletypes, result, flowName, stepName) => {
         //書き出し
         await handleWriteFileAsXLSX(
           writeFileDir + writeFileName,
-          result.data,
+          result,
           result.axisNames
         );
 
@@ -83,7 +83,8 @@ const getFileNameAndPath = (writeFileType) => {
   return [writeFileName, writeFilePath];
 };
 
-const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
+const handleWriteFileAsXLSX = async (writeFileName, result, axisNames) => {
+  const data = result.data; //:resultTemplate
   const now = new Date();
   try {
     //XLSXのworkbookオブジェクト準備
@@ -91,28 +92,66 @@ const handleWriteFileAsXLSX = async (writeFileName, data, axisNames) => {
 
     //発症者のみ抜き出し
     //ラベル生成とデータ整形
-    const I_only_result = [];
+
     const I_SUM_SHEET_AXIS_NAME = [];
-    const I_POSITION = 3;
     const timeLength = data[0].length;
     const spaceLength = data.length;
 
+    /**
+     * 特定のデータのみを１つのシートにまとめて書き出す
+     */
+    const I_only_result = [];
+    const I_POSITION = 3;
+
+    //Iのみを抜き出す(for exp2)
+
+    // for (let i = 0; i < spaceLength; i++) {
+    //   I_SUM_SHEET_AXIS_NAME.push(`Space${i}`);
+    // }
+
+    // for (let t = 0; t < timeLength; t++) {
+    //   I_only_result.push([]);
+    //   for (let i = 0; i < data.length; i++) {
+    //     I_only_result[t].push(data[i][t][I_POSITION]);
+    //   }
+    // }
+    // wb.SheetNames.push("analysis");
+    // wb.Sheets["I_only"] = XLSX.utils.aoa_to_sheet([
+    //   I_SUM_SHEET_AXIS_NAME,
+    //   ...I_only_result,
+    // ]);
+
+    //新規感染者のみ抜き出す(for exp4)
+    const newInfectiousLog = result.newInfectious; //:number[][]
+    const I_new_only_result = [];
+
+    const specifySpaceID = (i) => {
+      const valid = [0, 8, 12, 18, 21];
+      return valid.includes(i);
+    };
+
     for (let i = 0; i < spaceLength; i++) {
-      I_SUM_SHEET_AXIS_NAME.push(`Space${i}`);
+      specifySpaceID(i) && I_SUM_SHEET_AXIS_NAME.push(`Space${i}`);
     }
 
     for (let t = 0; t < timeLength; t++) {
-      I_only_result.push([]);
-      for (let i = 0; i < data.length; i++) {
-        I_only_result[t].push(data[i][t][I_POSITION]);
+      I_new_only_result.push([]);
+
+      for (let i = 0; i < spaceLength; i++) {
+        const new_I_data = newInfectiousLog[i];
+        specifySpaceID(i) && I_new_only_result[t].push(new_I_data[t]);
       }
     }
-    wb.SheetNames.push("analysis");
-    wb.Sheets["analysis"] = XLSX.utils.aoa_to_sheet([
+
+    wb.SheetNames.push("new_I_only");
+    wb.Sheets["new_I_only"] = XLSX.utils.aoa_to_sheet([
       I_SUM_SHEET_AXIS_NAME,
-      ...I_only_result,
+      ...I_new_only_result,
     ]);
 
+    /**
+     * 全てのデータを、空間ごとにシートを分けて行う
+     */
     //データ書き出し
     for (let i = 0; i < data.length; i++) {
       const thisSpaceArrayOfPop = data[i];

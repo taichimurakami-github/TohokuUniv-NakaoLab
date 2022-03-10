@@ -3,15 +3,15 @@ import { People, StateNode } from "../People/People";
 import { Space, type_SpaceState, type_VaccineLog } from "../Space/Space";
 
 export class PeopleStateTransition {
-  private EI_transCoeff: number;
+  private newInfectiousNumber: number;
 
   constructor(SpaceModel: Space) {
     const s = SpaceModel;
     const c = s.Config;
-    // this.EI_transCoeff = s.Config.getEI_transCoeff();
-    this.EI_transCoeff = 0.4;
+    this.newInfectiousNumber = 0;
 
     for (const state of s.state) {
+      this.newInfectiousNumber = 0;
       this.calcByPhaseLoop(state, c, s.t);
     }
   }
@@ -56,6 +56,9 @@ export class PeopleStateTransition {
        */
       this.calcFeedback(layer_prev, layer_this, Config.getFeedbackRate());
     }
+
+    //新規感染者数を記録
+    PeopleModel.setNewInfectiousLog(this.newInfectiousNumber);
   }
 
   calcInfection(
@@ -80,6 +83,7 @@ export class PeopleStateTransition {
         //記録
         E_this.diff -= diff_E_to_I;
         I_this.diff += diff_E_to_I;
+        this.newInfectiousNumber += diff_E_to_I;
       }
 
       //感染経験のあるウイルス株に対する再感染
@@ -95,6 +99,7 @@ export class PeopleStateTransition {
         const diff_RE_to_RI = RE_this.p * Config.getEI_transCoeff(strainType);
         RE_this.p -= diff_RE_to_RI;
         RI_this.p += diff_RE_to_RI;
+        this.newInfectiousNumber += diff_RE_to_RI;
 
         //該当するウイルス株に感染している人の割合の定義
         const rate_I = PeopleModel.getInfectedRate(strainType);
@@ -103,11 +108,11 @@ export class PeopleStateTransition {
         const beta = RE_this.getBeta(VaccineLog, Config);
 
         //計算
-        const diff = NI_this.p * beta * rate_I;
+        const diff_NI_to_RE = NI_this.p * beta * rate_I;
 
         //記録
-        NI_this.diff -= diff;
-        RE_this.diff += diff;
+        NI_this.diff -= diff_NI_to_RE;
+        RE_this.diff += diff_NI_to_RE;
       }
     }
 
